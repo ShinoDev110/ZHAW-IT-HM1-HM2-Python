@@ -14,16 +14,16 @@ import sympy as sp
 # ============================================================
 # PART 1 — Inputs
 # ============================================================
-x, y = sp.symbols('x y')
+x, y = sp.symbols('x y')      # symbolische Variablen
 
 # List of implicit equations f_i(x, y) = 0
 equations = [
-    x**2 / 186**2 - y**2 / (300**2 - 186**2) - 1,
-    (y - 500)**2 / 279**2 - (x - 300)**2 / (500**2 - 279**2) - 1
+    x**2 / 186**2 - y**2 / (300**2 - 186**2) - 1,                 # erste implizite Gleichung
+    (y - 500)**2 / 279**2 - (x - 300)**2 / (500**2 - 279**2) - 1  # zweite implizite Gleichung
 ]
 
-x_range = (x, -2000, 2000)
-y_range = (y, -2000, 2000)
+x_range = (x, -2000, 2000)   # x-Bereich für die Darstellung
+y_range = (y, -2000, 2000)   # y-Bereich für die Darstellung
 
 # ============================================================
 # PART 2 — Method selection

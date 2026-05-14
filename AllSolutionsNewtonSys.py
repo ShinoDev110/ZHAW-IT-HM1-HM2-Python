@@ -15,24 +15,24 @@ import sympy as sp
 # ============================================================
 # PART 1 — Inputs
 # ============================================================
-x, y = sp.symbols('x y')
-X = sp.Matrix([x, y])
+x, y = sp.symbols('x y')          # symbolische Variablen
+X = sp.Matrix([x, y])             # Vektor der Unbekannten
 
 f_sym = sp.Matrix([
-    x**2 / 186**2 - y**2 / (300**2 - 186**2) - 1,
-    (y - 500)**2 / 279**2 - (x - 300)**2 / (500**2 - 279**2) - 1
+    x**2 / 186**2 - y**2 / (300**2 - 186**2) - 1,              # erste implizite Gleichung
+    (y - 500)**2 / 279**2 - (x - 300)**2 / (500**2 - 279**2) - 1  # zweite implizite Gleichung
 ])
 
 # Approximations from the implicit plot (one per expected intersection point)
 start_vectors = [
-    np.array([-200,  200], dtype=float),
-    np.array([-300, -800], dtype=float),
-    np.array([ 200, -800], dtype=float),
-    np.array([ 700,  700], dtype=float),
+    np.array([-200,  200], dtype=float),  # Startvektor 1
+    np.array([-300, -800], dtype=float),  # Startvektor 2
+    np.array([ 200, -800], dtype=float),   # Startvektor 3
+    np.array([ 700,  700], dtype=float),   # Startvektor 4
 ]
 
-tol      = 1e-5
-max_iter = 100
+tol      = 1e-5                         # Abbruchschwelle für ||f(x)||
+max_iter = 100                          # maximale Iterationszahl
 
 # ============================================================
 # PART 2 — Method selection

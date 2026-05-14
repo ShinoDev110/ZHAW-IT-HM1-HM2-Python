@@ -22,10 +22,10 @@ t_range = (-5, 5)                      # t interval
 n_points = 50                          # grid resolution per axis
 
 # Define the candidate functions
-def w(x, t):
+def w(x, t):                            # erste vorgegebene Funktion
     return np.sin(x + c*t)
 
-def v(x, t):
+def v(x, t):                            # zweite vorgegebene Funktion
     return np.sin(x + c*t) + np.cos(2*x + 2*c*t)
 
 # ============================================================

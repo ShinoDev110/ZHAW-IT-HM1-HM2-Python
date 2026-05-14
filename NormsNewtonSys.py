@@ -16,18 +16,18 @@ import sympy as sp
 # ============================================================
 # PART 1 — Inputs
 # ============================================================
-x1, x2 = sp.symbols('x1 x2')
-X = sp.Matrix([x1, x2])
+x1, x2 = sp.symbols('x1 x2')    # symbolische Variablen
+X = sp.Matrix([x1, x2])         # Vektor der Unbekannten
 
 f_sym = sp.Matrix([
-    20 - 18*x1 - 2*x2**2,
-    -4*x2*(x1 - x2**2)
+    20 - 18*x1 - 2*x2**2,                         # erste Gleichung
+    -4*x2*(x1 - x2**2)                            # zweite Gleichung
 ])
 
-x0       = np.array([1.1, 0.9], dtype=float)
-tol      = 1e-5
-max_iter = 100
-n_steps  = 2          # exact number of steps for method "fixed_steps"
+x0       = np.array([1.1, 0.9], dtype=float)      # Startvektor
+tol      = 1e-5                                   # Abbruchschwelle für ||f(x)||
+max_iter = 100                                    # maximale Iterationszahl
+n_steps  = 2                                      # exakte Schrittzahl für "fixed_steps"
 
 # ============================================================
 # PART 2 — Method selection

@@ -16,24 +16,24 @@ import sympy as sp
 # PART 1 — Inputs
 # ============================================================
 # Symbolic variables (add more here if you need higher dimensions)
-x1, x2, x3 = sp.symbols('x1 x2 x3')
+x1, x2, x3 = sp.symbols('x1 x2 x3')   # symbolische Variablen
 
 # Variable vector (order must match the function arguments)
 X = sp.Matrix([x1,
                x2,
-               x3])
+               x3])                  # Variablenvektor
 
 # Function f(x) as a sympy Matrix — works for any number of components m
 f = sp.Matrix([
-    x1 + x2**2 - x3**2 - 13,
-    sp.ln(x2 / 4) + sp.exp(0.5*x3 - 1) - 1,
-    (x2 - 3)**2 - x3**3 + 7
+    x1 + x2**2 - x3**2 - 13,                 # erste Funktionskomponente
+    sp.ln(x2 / 4) + sp.exp(0.5*x3 - 1) - 1,  # zweite Funktionskomponente
+    (x2 - 3)**2 - x3**3 + 7                  # dritte Funktionskomponente
 ])
 
 # Evaluation point x^(0)
-x0 = sp.Matrix([1.5,
-                3, 
-                2.5])
+x0 = sp.Matrix([1.5,                        # erste Koordinate von x^(0)
+                3,                          # zweite Koordinate von x^(0)
+                2.5])                       # dritte Koordinate von x^(0)
 
 # ============================================================
 # PART 2 — Method selection

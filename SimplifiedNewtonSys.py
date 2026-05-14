@@ -15,17 +15,17 @@ import sympy as sp
 # ============================================================
 # PART 1 — Inputs
 # ============================================================
-x1, x2 = sp.symbols('x1 x2')
-X = sp.Matrix([x1, x2])
+x1, x2 = sp.symbols('x1 x2')    # symbolische Variablen
+X = sp.Matrix([x1, x2])         # Vektor der Unbekannten
 
 f_sym = sp.Matrix([
-    2*x1 + 4*x2,
-    4*x1 + 8*x2**3
+    2*x1 + 4*x2,                  # erste Gleichung
+    4*x1 + 8*x2**3                # zweite Gleichung
 ])
 
-x0       = np.array([4.0, 2.0], dtype=float)
-tol      = 1e-5
-max_iter = 200
+x0       = np.array([4.0, 2.0], dtype=float)          # Startvektor
+tol      = 1e-5                                       # Abbruchschwelle für ||f(x)||
+max_iter = 200                                        # maximale Iterationszahl
 
 # ============================================================
 # PART 2 — Method selection

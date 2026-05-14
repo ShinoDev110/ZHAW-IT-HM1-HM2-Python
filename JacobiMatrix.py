@@ -16,24 +16,24 @@ import sympy as sp
 # PART 1 — Inputs
 # ============================================================
 # Symbolic variables (add more here if needed)
-x1, x2, x3 = sp.symbols('x1 x2 x3')
+x1, x2, x3 = sp.symbols('x1 x2 x3')   # symbolische Variablen
 
 # --- Problem a) ---
 X_a  = sp.Matrix([x1,
-                  x2])
-f_a  = sp.Matrix([5*x1*x2,
+                  x2])                  # Variablenvektor für Aufgabe a)
+f_a  = sp.Matrix([5*x1*x2,              # Funktion für Aufgabe a)
                   x1**2 * x2**2 + x1 + 2*x2])
-x0_a = sp.Matrix([1,
+x0_a = sp.Matrix([1,                    # Auswertungspunkt für Aufgabe a)
                   2])
 
 # --- Problem b) ---
 X_b  = sp.Matrix([x1,
                   x2,
-                  x3])
-f_b  = sp.Matrix([sp.ln(x1**2 + x2**2) + x3**2,
+                  x3])                 # Variablenvektor für Aufgabe b)
+f_b  = sp.Matrix([sp.ln(x1**2 + x2**2) + x3**2,      # Funktion für Aufgabe b)
                   sp.exp(x2**2 + x3**2) + x1**2,
                   1/(x3**2 + x1**2) + x2**2])
-x0_b = sp.Matrix([1,
+x0_b = sp.Matrix([1,                   # Auswertungspunkt für Aufgabe b)
                   2,
                   3])
 

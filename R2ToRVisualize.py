@@ -17,12 +17,12 @@ from matplotlib import cm
 # ============================================================
 # PART 1 — Inputs
 # ============================================================
-def f(x, y):
-    return x**2 + y**2   # change this for a different function
+def f(x, y):                         # skalare Funktion f(x,y)
+    return x**2 + y**2               # change this for a different function
 
-x_range  = (-5, 5)
-y_range  = (-5, 5)
-n_points = 50
+x_range  = (-5, 5)                   # x-Bereich
+y_range  = (-5, 5)                   # y-Bereich
+n_points = 50                        # Auflösung des Gitters
 
 # ============================================================
 # PART 2 — Method selection

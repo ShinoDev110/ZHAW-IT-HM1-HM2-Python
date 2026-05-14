@@ -16,17 +16,17 @@ import sympy as sp
 # ============================================================
 # PART 1 — Inputs
 # ============================================================
-x1, x2 = sp.symbols('x1 x2')
-X = sp.Matrix([x1, x2])
+x1, x2 = sp.symbols('x1 x2')    # symbolische Variablen
+X = sp.Matrix([x1, x2])         # Vektor der Unbekannten
 
 f_sym = sp.Matrix([
-    2*x1 + 4*x2,
-    4*x1 + 8*x2**3
+    2*x1 + 4*x2,                  # erste Gleichung
+    4*x1 + 8*x2**3                # zweite Gleichung
 ])
 
-x_range  = (-3, 3)
-y_range  = (-3, 3)
-n_points = 200
+x_range  = (-3, 3)              # x-Achsenbereich
+y_range  = (-3, 3)              # y-Achsenbereich
+n_points = 200                  # Auflösung des Gitters
 
 # ============================================================
 # PART 2 — Method selection
