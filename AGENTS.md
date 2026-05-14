@@ -114,9 +114,10 @@ They should not be treated as guaranteed correct exam solutions.
 
 ## Repository-specific observations
 Based on the scripts currently in this repository:
-- The repository contains 12 standalone `.py` scripts in the root folder.
+- The repository contains 12 standalone `.py` scripts organized into topic folders.
+- The current folder structure groups scripts into `visualization/`, `differentiation/`, `linearization/`, `newton_methods/`, and `systems_of_equations/`.
 - The scripts focus on HM2-style math and engineering exercises, especially nonlinear systems, Newton methods, Jacobian matrices, linearization, and visualization.
-- Newton-related scripts include standard Newton’s method, simplified Newton, damped Newton, comparing variants, listing all solutions from multiple start vectors, and reporting norms per iteration.
+- Newton-related scripts include standard Newton’s method, simplified Newton, a frozen-Jacobian Newton variant, comparing variants, listing all solutions from multiple start vectors, and reporting norms per iteration.
 - Visualization scripts use `numpy`, `sympy`, and `matplotlib` to plot implicit curves, nonlinear system zero contours, 3D wireframes, surfaces, and contour plots.
 - The scripts are self-contained and typically end with a direct function call.
 - The current scripts use clear topic headers and comment-separated sections, often labeled in English while some titles and outputs are in German.
