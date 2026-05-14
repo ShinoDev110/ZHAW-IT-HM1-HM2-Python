@@ -114,14 +114,22 @@ They should not be treated as guaranteed correct exam solutions.
 
 ## Repository-specific observations
 Based on the scripts currently in this repository:
-- The repository contains 12 standalone `.py` scripts organized into topic folders.
-- The current folder structure groups scripts into `visualization/`, `differentiation/`, `linearization/`, `newton_methods/`, and `systems_of_equations/`.
-- The scripts focus on HM2-style math and engineering exercises, especially nonlinear systems, Newton methods, Jacobian matrices, linearization, and visualization.
+- The currently available scripts live under the `nonlinear_systems/` top-level category folder.
+- The current subfolders under `nonlinear_systems/` are `newton_methods/`, `linearization/`, and `visualization/`.
+- The scripts focus on the numerical solution of nonlinear systems of equations and closely related HM2 topics such as Newton methods, Jacobian matrices, linearization, and visualization.
 - Newton-related scripts include standard Newton’s method, simplified Newton, a frozen-Jacobian Newton variant, comparing variants, listing all solutions from multiple start vectors, and reporting norms per iteration.
 - Visualization scripts use `numpy`, `sympy`, and `matplotlib` to plot implicit curves, nonlinear system zero contours, 3D wireframes, surfaces, and contour plots.
 - The scripts are self-contained and typically end with a direct function call.
 - The current scripts use clear topic headers and comment-separated sections, often labeled in English while some titles and outputs are in German.
 - No classes or package structure are used in the current scripts; the code is organized as single-file exercises with small helper functions.
+
+## Repository organization guidance
+- `nonlinear_systems/` is the current top-level category folder.
+- All currently existing scripts belong under the current nonlinear systems category unless the repository already contains other top-level category folders.
+- New scripts should only be placed inside `nonlinear_systems/` if they clearly belong to the numerical solution of nonlinear systems of equations or the closely related topics already present there.
+- Future unrelated HM2 topics must be placed in new top-level sibling folders, not inside `nonlinear_systems/`.
+- Example future top-level folders should use clear topic names if they are added later as sibling folders.
+- Do not assume any future sibling folders already exist unless they are actually present in the repository.
 
 ## Practical guidance for future agents
 - Treat each script as a teaching example first and a software module second.
