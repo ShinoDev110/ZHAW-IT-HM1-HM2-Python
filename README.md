@@ -15,16 +15,20 @@ All currently available scripts are organized below `nonlinear_systems/` and gro
 - `nonlinear_systems/newton_methods/compare_newton_methods.py` — Compares standard, simplified, and frozen-Jacobian Newton variants.
 - `nonlinear_systems/newton_methods/solve_newton_with_iteration_norms.py` — Prints residual and step norms during Newton iteration.
 - `nonlinear_systems/newton_methods/solve_all_newton_solutions.py` — Runs Newton from multiple start vectors and lists all found solutions.
+- `nonlinear_systems/newton_methods/solve_3d_nonlinear_system_damped_newton.py` — Solves a 3D nonlinear system with the damped Newton method and prints residual/step norms per iteration.
+- `nonlinear_systems/newton_methods/fit_soil_pressure_model_damped_newton.py` — Fits the soil-pressure model parameters via damped Newton from measurement points and bisects for the minimum disc radius.
 
 ### `nonlinear_systems/linearization/`
 - `nonlinear_systems/linearization/calculate_jacobian_matrix.py` — Computes symbolic Jacobian matrices and evaluates them at a point.
 - `nonlinear_systems/linearization/linearize_multivariable_function.py` — Linearizes a multivariable function at a chosen point.
+- `nonlinear_systems/linearization/compute_partial_derivatives_and_linearize.py` — Computes symbolic first-order partial derivatives at given points and linearizes multivariable functions via the Jacobian.
 
 ### `nonlinear_systems/visualization/`
 - `nonlinear_systems/visualization/plot_implicit_equations.py` — Plots implicit equations with `sympy.plot_implicit()`.
 - `nonlinear_systems/visualization/plot_nonlinear_system_contours.py` — Visualizes the zero contours of a nonlinear 2D system.
 - `nonlinear_systems/visualization/plot_wave_equation_wireframe.py` — Plots one or more given wave-equation-style functions as 3D wireframes.
 - `nonlinear_systems/visualization/visualize_2d_scalar_function.py` — Visualizes a scalar function of two variables as surface, wireframe, and contour plots.
+- `nonlinear_systems/visualization/plot_projectile_range_and_ideal_gas.py` — Plots projectile range and ideal-gas relations as 3D wireframes, surfaces, and contour diagrams.
 
 Future HM2 topic categories should be added as new top-level folders next to `nonlinear_systems/`, not inside it.
 

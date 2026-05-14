@@ -116,9 +116,10 @@ They should not be treated as guaranteed correct exam solutions.
 Based on the scripts currently in this repository:
 - The currently available scripts live under the `nonlinear_systems/` top-level category folder.
 - The current subfolders under `nonlinear_systems/` are `newton_methods/`, `linearization/`, and `visualization/`.
-- The scripts focus on the numerical solution of nonlinear systems of equations and closely related HM2 topics such as Newton methods, Jacobian matrices, linearization, and visualization.
-- Newton-related scripts include standard Newton’s method, simplified Newton, a frozen-Jacobian Newton variant, comparing variants, listing all solutions from multiple start vectors, and reporting norms per iteration.
-- Visualization scripts use `numpy`, `sympy`, and `matplotlib` to plot implicit curves, nonlinear system zero contours, 3D wireframes, surfaces, and contour plots.
+- The scripts focus on the numerical solution of nonlinear systems of equations and closely related HM2 topics such as Newton methods, Jacobian matrices, partial derivatives, linearization, and visualization.
+- Newton-related scripts include standard Newton’s method, simplified Newton, a frozen-Jacobian Newton variant, a damped Newton variant for 3D systems, comparing variants, listing all solutions from multiple start vectors, reporting norms per iteration, and applied parameter-fitting with damped Newton plus a bisection follow-up.
+- Linearization scripts cover the symbolic Jacobian matrix, linearization of a single multivariable function, and combined first-order partial derivatives with multi-function linearization.
+- Visualization scripts use `numpy`, `sympy`, and `matplotlib` to plot implicit curves, nonlinear system zero contours, 3D wireframes, surfaces, contour plots, and 3D representations of physical relations such as projectile range and the ideal gas equation.
 - The scripts are self-contained and typically end with a direct function call.
 - The current scripts use clear topic headers and comment-separated sections, often labeled in English while some titles and outputs are in German.
 - No classes or package structure are used in the current scripts; the code is organized as single-file exercises with small helper functions.
