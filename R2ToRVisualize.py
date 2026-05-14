@@ -1,5 +1,13 @@
 # ============================================================
 # TOPIC: Visualisierung — Funktion f: R^2 -> R (Surface / Wireframe / Höhenlinien)
+# DESCRIPTION:
+# Stellt eine skalare Funktion f: R^2 -> R grafisch dar.
+# Verwenden, wenn eine Funktion zweier Variablen als Surface, Wireframe
+# oder als Höhenlinien in 2D bzw. 3D untersucht werden soll.
+# USE WHEN:
+# Wenn eine Funktion zweier Variablen visuell verglichen oder analysiert werden soll.
+# EXAMPLE:
+# f(x,y)=x^2+y^2 als Fläche und Höhenlinien.
 # ============================================================
 
 import numpy as np

@@ -1,5 +1,13 @@
 # ============================================================
 # TOPIC: Partial differentiation — Wave equation (3D wireframe plot)
+# DESCRIPTION:
+# Plottet eine oder mehrere gegebene Funktionen f(x,t) als 3D-Wireframe.
+# Verwenden, wenn eine Lösung einer partiellen Differentialgleichung wie
+# der Wellengleichung räumlich-zeitlich dargestellt werden soll.
+# USE WHEN:
+# Wenn vorgegebene Funktionen in x und t visualisiert werden sollen.
+# EXAMPLE:
+# w(x,t)=sin(x+ct), v(x,t)=sin(x+ct)+cos(2x+2ct) bei c=1.
 # ============================================================
 
 import numpy as np

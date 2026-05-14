@@ -1,5 +1,12 @@
 # ============================================================
 # TOPIC: Vergleich — Standard / Vereinfachtes / Gedämpftes Newton-Verfahren
+# DESCRIPTION:
+# Führt Standard-, vereinfachtes und gedämpftes Newton-Verfahren mit demselben
+# Startvektor aus und vergleicht Iterationszahl und Restfehler tabellarisch.
+# USE WHEN:
+# Wenn ausdrücklich ein Vergleich der Newton-Varianten verlangt wird.
+# EXAMPLE:
+# Vergleich der drei Verfahren für das gegebene System bei x^(0)=(1,1)^T.
 # ============================================================
 
 import numpy as np

@@ -1,5 +1,12 @@
 # ============================================================
 # TOPIC: Vereinfachtes Newton-Verfahren für Systeme (linear konvergent)
+# DESCRIPTION:
+# Löst ein nichtlineares Gleichungssystem mit dem vereinfachten Newton-Verfahren.
+# Die Jacobi-Matrix wird nur einmal am Startvektor ausgewertet und dann festgehalten.
+# USE WHEN:
+# Wenn das vereinfachte Newton-Verfahren ausdrücklich verlangt wird.
+# EXAMPLE:
+# System mit f1=2x1+4x2 und f2=4x1+8x2^3.
 # ============================================================
 
 import numpy as np

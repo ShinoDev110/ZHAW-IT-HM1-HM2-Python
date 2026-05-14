@@ -1,5 +1,13 @@
 # ============================================================
 # TOPIC: Jacobi-Matrix einer Funktion f: R^n -> R^m (symbolisch + an x0 ausgewertet)
+# DESCRIPTION:
+# Berechnet die Jacobi-Matrix einer Funktion f: R^n -> R^m symbolisch und
+# wertet sie an einem Punkt x0 aus.
+# USE WHEN:
+# Wenn die Jacobi-Matrix einer Funktion gesucht ist, zum Beispiel zur Kontrolle
+# einer handgerechneten Lösung.
+# EXAMPLE:
+# Jacobi-Matrix von f(x1,x2,x3) am Punkt (1,2,3)^T.
 # ============================================================
 
 import sympy as sp

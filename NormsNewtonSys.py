@@ -1,5 +1,13 @@
 # ============================================================
 # TOPIC: Newton-Verfahren — mit ||f(x)||_2 und ||x^(k) - x^(k-1)||_2 pro Iteration
+# DESCRIPTION:
+# Führt das Newton-Verfahren mit zusätzlicher Ausgabe von ||f(x^(k))||_2 und
+# ||x^(k) - x^(k-1)||_2 pro Iteration aus.
+# USE WHEN:
+# Wenn in einer Klausur oder Übung die ersten Newton-Schritte mit Normen angegeben
+# oder kontrolliert werden sollen.
+# EXAMPLE:
+# Die ersten zwei Schritte für das gegebene System ab x^(0)=(1.1,0.9)^T berechnen.
 # ============================================================
 
 import numpy as np

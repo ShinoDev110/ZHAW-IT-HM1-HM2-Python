@@ -1,5 +1,13 @@
 # ============================================================
 # TOPIC: Newton-Verfahren für Systeme — Standard (quadratisch konvergent)
+# DESCRIPTION:
+# Löst ein nichtlineares Gleichungssystem f(x)=0 mit dem Standard-Newton-Verfahren.
+# Verwenden, wenn eine quadratisch konvergente Nullstellensuche mit gutem
+# Startvektor benötigt wird.
+# USE WHEN:
+# Wenn das Newton-Verfahren für ein System mit einer Näherungslösung gesucht ist.
+# EXAMPLE:
+# System mit f1=5x1^2-x2^2 und f2=x2-0.25(sin(x1)+cos(x2)).
 # ============================================================
 
 import numpy as np

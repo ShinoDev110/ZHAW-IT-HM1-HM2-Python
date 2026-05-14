@@ -1,5 +1,12 @@
 # ============================================================
 # TOPIC: Newton-Verfahren — alle Lösungen aus einer Liste von Startvektoren finden
+# DESCRIPTION:
+# Wendet das Standard-Newton-Verfahren auf eine Liste von Startvektoren an und
+# gibt alle gefundenen Lösungen tabellarisch aus.
+# USE WHEN:
+# Wenn ein System mehrere Nullstellen besitzt und alle gefunden werden sollen.
+# EXAMPLE:
+# Mit Startvektoren aus einer grafischen Voranalyse die vier Lösungen bestimmen.
 # ============================================================
 
 import numpy as np

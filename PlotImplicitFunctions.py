@@ -1,5 +1,12 @@
 # ============================================================
 # TOPIC: Implizite Funktionen plotten — mit sympy.plot_implicit
+# DESCRIPTION:
+# Plottet implizite Gleichungen f_i(x,y)=0 gemeinsam in ein Fenster mit
+# sympy.plot_implicit().
+# USE WHEN:
+# Wenn implizite Kurven wie Hyperbeln oder Ellipsen grafisch dargestellt werden sollen.
+# EXAMPLE:
+# Das LORAN-System zuerst grafisch mit sympy.plot_implicit() untersuchen.
 # ============================================================
 
 import sympy as sp

@@ -1,5 +1,13 @@
 # ============================================================
 # TOPIC: Linearisierung — beliebige Funktion f: R^n -> R^m an Stelle x0
+# DESCRIPTION:
+# Linearisiert eine Funktion f: R^n -> R^m an einer Stelle x^(0) mit der
+# verallgemeinerten Tangentengleichung g(x) = f(x^(0)) + Df(x^(0)) · (x - x^(0)).
+# USE WHEN:
+# Wenn eine Linearisierung oder eine Tangentialapproximation einer mehrdimensionalen
+# Funktion benötigt wird.
+# EXAMPLE:
+# Linearisierung von f(x1,x2,x3) an x^(0)=(1.5,3,2.5)^T.
 # ============================================================
 
 import sympy as sp

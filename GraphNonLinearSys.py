@@ -1,5 +1,12 @@
 # ============================================================
 # TOPIC: Nichtlineares System grafisch — Nullstellen von f: R^2 -> R^2 visualisieren
+# DESCRIPTION:
+# Visualisiert die Nullstellen eines 2D-Systems f: R^2 -> R^2 als Contour-Linien
+# für f1=0 und f2=0 in einem gemeinsamen Plot.
+# USE WHEN:
+# Wenn die Schnittpunkte zweier Konturlinien grafisch als Lösungen bestimmt werden sollen.
+# EXAMPLE:
+# Erst grafisch Näherungen für das System 2x1+4x2=0 und 4x1+8x2^3=0 bestimmen.
 # ============================================================
 
 import numpy as np
