@@ -1,5 +1,6 @@
 # ZHAW-IT-HM2-Python
-A collection of standalone Python scripts covering exercise topics from HM1 and HM2 (Höhere Mathematik).
+A collection of standalone Python scripts covering exercise topics from the HM1 and HM2 lectures.
+This repoitory includes all versions of exercises from the script and all exercise-sheets used in the HM1 and HM2 Lecture.
 Scripts are grouped into two top-level course folders (`HM1/` and `HM2/`), each split into chapter folders.
 Correctness is not guaranteed, so results should always be verified before they are relied on.
 
