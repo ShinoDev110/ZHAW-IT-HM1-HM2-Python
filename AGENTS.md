@@ -1,8 +1,8 @@
 # AGENTS.md
 
 ## Repository purpose
-This repository contains standalone Python scripts for exercises derived from HM2 lecture material.
-The scripts are educational support material for students.
+This repository contains standalone Python scripts for exercises derived from HM1 and HM2 lecture material.
+The scripts live under two course folders, `HM1/` and `HM2/`, and are educational support material for students.
 They are meant to be readable, easy to adapt, and easy to combine into larger files if needed.
 Correctness is not guaranteed, and the scripts must not be treated as authoritative exam solutions.
 
@@ -24,10 +24,10 @@ This structure must never be broken.
 
 Every generated or modified Python script must follow exactly this structure:
 
-1. Topic header at the very top
+1. Topic header at the very top (with TOPIC, DESCRIPTION, USE WHEN, EXAMPLE labels)
 2. Import statements directly below the topic header
 3. Part 1 — Inputs
-4. Part 2 — Method selection, if applicable
+4. Part 2 — Method selection (always present; if there is only one method, fill with a `# Only one method here.` comment)
 5. Part 3 — Implementation
 6. Part 4 — Call
 
@@ -36,6 +36,12 @@ All four parts must be separated using clear comment-header dividers, for exampl
 ```python
 # ============================================================
 # TOPIC: Partial differentiation — Wave equation 3D wireframe plot
+# DESCRIPTION:
+# One- or two-line summary of what the script does.
+# USE WHEN:
+# One- or two-line description of the kind of problem this solves.
+# EXAMPLE:
+# Concrete Aufgabe / problem instance that this script applies to.
 # ============================================================
 
 import numpy as np
@@ -60,8 +66,11 @@ import matplotlib.pyplot as plt
 
 ### Topic header
 - Place a single comment block at the very top of the file or script block.
-- State the math or engineering topic and the specific task clearly.
-- Example: `TOPIC: Partial differentiation — Wave equation 3D wireframe plot`
+- It must contain four labeled sections: `TOPIC:`, `DESCRIPTION:`, `USE WHEN:`, `EXAMPLE:`.
+- `TOPIC` states the math or engineering topic and the specific task. Example: `TOPIC: Partial differentiation — Wave equation 3D wireframe plot`.
+- `DESCRIPTION` is a 1–2 line summary of what the script does.
+- `USE WHEN` is a 1–2 line description of the kind of problem this script solves.
+- `EXAMPLE` is one concrete Aufgabe / problem instance to which this script applies.
 - This helps students quickly identify the script when multiple files or blocks are combined.
 
 ### Imports
@@ -76,9 +85,9 @@ import matplotlib.pyplot as plt
 - Every input must have a short comment explaining what it represents when the meaning is not obvious.
 
 ### Part 2 — Method selection
-- If a problem can be solved in more than one way, expose a selector variable such as `method = "x"` that controls which path the implementation takes.
-- Add a comment above the selector listing the available options.
-- If there is genuinely only one method, explicitly state that in a comment and skip the selector variable.
+- This section is ALWAYS present, even when there is only one method.
+- If a problem can be solved in more than one way, expose a selector variable such as `method = "x"` that controls which path the implementation takes, and list the available options in a comment above the selector.
+- If there is genuinely only one method, fill the section with a `# Only one method here.` comment (and optionally a short note describing the chosen method). Do NOT skip the section.
 
 ### Part 3 — Implementation
 - Use a single function named after what it does and its topic, for example `plot_wave_wireframe` or `solve_linear_system_gauss`.
@@ -114,23 +123,21 @@ They should not be treated as guaranteed correct exam solutions.
 
 ## Repository-specific observations
 Based on the scripts currently in this repository:
-- The currently available scripts live under the `nonlinear_systems/` top-level category folder.
-- The current subfolders under `nonlinear_systems/` are `newton_methods/`, `linearization/`, and `visualization/`.
-- The scripts focus on the numerical solution of nonlinear systems of equations and closely related HM2 topics such as Newton methods, Jacobian matrices, partial derivatives, linearization, and visualization.
-- Newton-related scripts include standard Newton’s method, simplified Newton, a frozen-Jacobian Newton variant, a damped Newton variant for 3D systems, comparing variants, listing all solutions from multiple start vectors, reporting norms per iteration, and applied parameter-fitting with damped Newton plus a bisection follow-up.
-- Linearization scripts cover the symbolic Jacobian matrix, linearization of a single multivariable function, and combined first-order partial derivatives with multi-function linearization.
-- Visualization scripts use `numpy`, `sympy`, and `matplotlib` to plot implicit curves, nonlinear system zero contours, 3D wireframes, surfaces, contour plots, and 3D representations of physical relations such as projectile range and the ideal gas equation.
-- The scripts are self-contained and typically end with a direct function call.
-- The current scripts use clear topic headers and comment-separated sections, often labeled in English while some titles and outputs are in German.
-- No classes or package structure are used in the current scripts; the code is organized as single-file exercises with small helper functions.
+- All scripts live under two course folders: `HM1/` (Höhere Mathematik 1) and `HM2/` (Höhere Mathematik 2). Both follow identical script-structure conventions.
+- Inside each course folder, scripts are grouped by chapter into snake_case English subfolders, often with topic-level subfolders below that.
+- `HM1/` chapter folders: `machine_numbers/`, `functions/` (`basic_operations/`, `root_finding/`, `visualization/`), `matrices/` (`basic_operations/`, `decompositions/`, `linear_systems/`, `iterative_methods/`, `error_estimation/`), `interpolation/`, `eigenvalue_problems/` (`basic_operations/`, `spectral_properties/`, `diagonalization/`, `iterative_methods/`), and `complex_dynamics/`.
+- `HM2/` chapter folders: `nonlinear_systems/` (`newton_methods/`, `linearization/`, `visualization/`), `interpolation_and_least_squares/` (`polynomial_interpolation/`, `spline_interpolation/`, `linear_least_squares/`, `nonlinear_least_squares/`), `numerical_integration/` (`newton_cotes/`, `gauss_quadrature/`, `romberg_extrapolation/`, `error_and_comparison/`), and `ordinary_differential_equations/` (`direction_fields/`, `single_step_methods/`, `higher_order_systems/`, `applications/`).
+- Filenames follow `verb_object_method.py` (e.g. `solve_linear_system_with_jacobi.py`, `interpolate_value_with_lagrange.py`, `find_root_with_bisection.py`).
+- Scripts are self-contained, typically end with a direct function call, use clear topic headers with comment-separated sections, often labeled in English while some titles and outputs are in German.
+- No classes or package structure are used; the code is organized as single-file exercises with small helper functions.
+- See [README.md](README.md) for the complete per-file index of both course folders.
 
 ## Repository organization guidance
-- `nonlinear_systems/` is the current top-level category folder.
-- All currently existing scripts belong under the current nonlinear systems category unless the repository already contains other top-level category folders.
-- New scripts should only be placed inside `nonlinear_systems/` if they clearly belong to the numerical solution of nonlinear systems of equations or the closely related topics already present there.
-- Future unrelated HM2 topics must be placed in new top-level sibling folders, not inside `nonlinear_systems/`.
-- Example future top-level folders should use clear topic names if they are added later as sibling folders.
-- Do not assume any future sibling folders already exist unless they are actually present in the repository.
+- New scripts belong under the appropriate course folder (`HM1/` or `HM2/`) inside an existing chapter subfolder if the topic already exists.
+- Chapter folder names are snake_case English (e.g. `machine_numbers/`, `nonlinear_systems/`). Subtopic folders follow the same casing.
+- If a new chapter is needed, add it as a new top-level subfolder of the appropriate course folder; never nest a new chapter inside an existing one.
+- Filenames must follow `verb_object_method.py` and make the script's purpose recognizable at a glance.
+- Update [README.md](README.md) when adding a new chapter or script so the index stays in sync.
 
 ## Practical guidance for future agents
 - Treat each script as a teaching example first and a software module second.

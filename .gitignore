@@ -120,9 +120,6 @@ ipython_config.py
 .pdm-python
 .pdm-build/
 
-# claude
-.claude/
-
 # pixi
 #   Similar to Pipfile.lock, it is generally recommended to include pixi.lock in version control.
 # pixi.lock
@@ -172,6 +169,15 @@ venv.bak/
 
 # mkdocs documentation
 /site
+
+# Claude
+.claude/
+.claude/settings.local.json
+CLAUDE.md
+CLAUDE.local.md
+.claudeignore
+*.claude-session
+.anthropic/
 
 # mypy
 .mypy_cache/
