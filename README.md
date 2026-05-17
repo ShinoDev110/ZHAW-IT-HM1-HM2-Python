@@ -4,7 +4,7 @@ This repoitory includes all versions of exercises from the script and all exerci
 Scripts are grouped into two top-level course folders (`HM1/` and `HM2/`), each split into chapter folders.
 Correctness is not guaranteed, so results should always be verified before they are relied on.
 
-Every script follows the same four-part structure (TOPIC header + PART 1 Inputs / PART 2 Method selection / PART 3 Implementation / PART 4 Call). See [AGENTS.md](AGENTS.md) for the exact convention.
+Every script follows the same four-part structure (TOPIC header + PART 1 Inputs / PART 2 Method selection / PART 3 Implementation / PART 4 Call).
 
 ## HM1 — Höhere Mathematik 1
 
