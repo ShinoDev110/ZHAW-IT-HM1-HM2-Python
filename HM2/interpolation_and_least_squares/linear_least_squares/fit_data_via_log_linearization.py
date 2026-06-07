@@ -1,15 +1,15 @@
 # ============================================================
-# TOPIC: Log-Linearisierung — nichtlinearen Exponential-Fit auf linearen Fit reduzieren
+# TOPIC: Log Linearization — reduce nonlinear exponential fit to a linear fit
 # DESCRIPTION:
-# Transformiert ein Exponential-Modell durch Logarithmieren in ein lineares
-# Ausgleichsproblem und löst es via Normalgleichungen. Optional Extrapolation
-# auf eine zukünftige x-Stelle. Halblogarithmische Darstellung.
+# Transforms an exponential model by taking the logarithm into a linear
+# least-squares problem and solves it via normal equations. Optional extrapolation
+# to a future x-point. Semi-logarithmic plot.
 # USE WHEN:
-# Wenn die zu fittende Funktion eine exponentielle Form hat (f(x) = a·exp(b·x)
-# oder N(t) = 10^(θ1+θ2·t)) und sich durch Logarithmieren linearisieren lässt.
+# When the function to be fitted has an exponential form (f(x) = a·exp(b·x)
+# or N(t) = 10^(θ1+θ2·t)) and can be linearized by taking the logarithm.
 # EXAMPLE:
-# Moore'sches Gesetz: log10(N) = θ1 + (t-1970)·θ2 an Transistorzahlen fitten
-# und auf 2015 extrapolieren.
+# Moore's Law: fit log10(N) = θ1 + (t-1970)·θ2 to transistor counts
+# and extrapolate to 2015.
 # ============================================================
 
 import numpy as np
@@ -54,7 +54,7 @@ def fit_via_log_linearization(x_data, y_data, x_shift, x_extrapolate, method):
         theta1, theta2 = lam
         print(f"theta1 = {theta1:.6f}, theta2 = {theta2:.6f}")
         if theta2 > 0:
-            print(f"Verdopplungszeit = log10(2)/theta2 = {np.log10(2)/theta2:.3f} Jahre")
+            print(f"Doubling time = log10(2)/theta2 = {np.log10(2)/theta2:.3f} years")
         def f(xv):
             return 10**(theta1 + theta2 * (xv - x_shift))
         label = f'log10(N) = {theta1:.4g}+{theta2:.4g}·(t-{x_shift})'
@@ -62,15 +62,15 @@ def fit_via_log_linearization(x_data, y_data, x_shift, x_extrapolate, method):
         raise ValueError("method must be 'exp' or 'power_10'")
 
     x_dense = np.linspace(x_data.min(), x_extrapolate, 500)
-    print(f"Extrapolation bei x = {x_extrapolate}: y = {f(x_extrapolate):.4e}")
+    print(f"Extrapolation at x = {x_extrapolate}: y = {f(x_extrapolate):.4e}")
     print(f"E(f) = {np.linalg.norm(y_data - f(x_data), 2)**2:.4e}")
 
     plt.figure(figsize=(10, 6))
-    plt.semilogy(x_data, y_data, 'ko', markersize=8, label='Datenpunkte')
+    plt.semilogy(x_data, y_data, 'ko', markersize=8, label='Data points')
     plt.semilogy(x_dense, f(x_dense), 'b-', label=label)
     plt.semilogy(x_extrapolate, f(x_extrapolate), 'r*', markersize=14, label=f'Extrapolation @ {x_extrapolate}')
     plt.xlabel('x'); plt.ylabel('y (log)'); plt.legend(); plt.grid(True, which='both')
-    plt.title('Log-Linearisierter Fit')
+    plt.title('Log-Linearized Fit')
     plt.show()
 
 # ============================================================

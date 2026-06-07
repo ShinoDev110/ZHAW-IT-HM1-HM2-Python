@@ -1,11 +1,11 @@
 # ============================================================
-# TOPIC: Matrix-Zerlegung — QR-Zerlegung via numpy.linalg.qr
+# TOPIC: Matrix decomposition — QR decomposition via numpy.linalg.qr
 # DESCRIPTION:
-# Berechnet A = Q·R mit numpy.linalg.qr (intern Householder/Givens)
-# und löst Ax = b via x = R^-1 · Q^T · b (Rückwärtseinsetzen).
+# Computes A = Q·R with numpy.linalg.qr (internally Householder/Givens)
+# and solves Ax = b via x = R^-1 · Q^T · b (backward substitution).
 # USE WHEN:
-# Wenn eine stabile Zerlegung gebraucht wird; insbesondere für
-# Ausgleichsprobleme oder schlecht konditionierte Matrizen.
+# When a stable decomposition is needed; in particular for
+# least-squares problems or poorly conditioned matrices.
 # EXAMPLE:
 # A = [[2,2,-1],[1,-1,0],[2,0,1]], b = [-1/3, -11/3, 2/3].
 # ============================================================
@@ -28,7 +28,7 @@ b = np.array([[-1.0  / 3.0],
 # ============================================================
 # PART 2 — Method selection
 # ============================================================
-# Only one method here. Verwendet wird die in numpy eingebaute QR.
+# Only one method here. Uses the QR decomposition built into numpy.
 
 # ============================================================
 # PART 3 — Implementation

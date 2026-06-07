@@ -1,13 +1,13 @@
 # ============================================================
 # TOPIC: Partial differentiation — Wave equation (3D wireframe plot)
 # DESCRIPTION:
-# Plottet eine oder mehrere gegebene Funktionen f(x,t) als 3D-Wireframe.
-# Verwenden, wenn eine Lösung einer partiellen Differentialgleichung wie
-# der Wellengleichung räumlich-zeitlich dargestellt werden soll.
+# Plots one or more given functions f(x,t) as a 3D wireframe.
+# Use when a solution of a partial differential equation such as
+# the wave equation needs to be visualized in space and time.
 # USE WHEN:
-# Wenn vorgegebene Funktionen in x und t visualisiert werden sollen.
+# When given functions in x and t need to be visualized.
 # EXAMPLE:
-# w(x,t)=sin(x+ct), v(x,t)=sin(x+ct)+cos(2x+2ct) bei c=1.
+# w(x,t)=sin(x+ct), v(x,t)=sin(x+ct)+cos(2x+2ct) at c=1.
 # ============================================================
 
 import numpy as np
@@ -22,10 +22,10 @@ t_range = (-5, 5)                      # t interval
 n_points = 50                          # grid resolution per axis
 
 # Define the candidate functions
-def w(x, t):                            # erste vorgegebene Funktion
+def w(x, t):                            # first given function
     return np.sin(x + c*t)
 
-def v(x, t):                            # zweite vorgegebene Funktion
+def v(x, t):                            # second given function
     return np.sin(x + c*t) + np.cos(2*x + 2*c*t)
 
 # ============================================================

@@ -1,12 +1,12 @@
 # ============================================================
-# TOPIC: Vergleich — Standard / Vereinfachtes / Gedämpftes Newton-Verfahren
+# TOPIC: Comparison — Standard / Simplified / Damped Newton Method
 # DESCRIPTION:
-# Führt Standard-, vereinfachtes und gedämpftes Newton-Verfahren mit demselben
-# Startvektor aus und vergleicht Iterationszahl und Restfehler tabellarisch.
+# Runs the standard, simplified, and damped Newton methods with the same
+# initial vector and compares the number of iterations and residual error in a table.
 # USE WHEN:
-# Wenn ausdrücklich ein Vergleich der Newton-Varianten verlangt wird.
+# When an explicit comparison of the Newton variants is requested.
 # EXAMPLE:
-# Vergleich der drei Verfahren für das gegebene System bei x^(0)=(1,1)^T.
+# Comparison of the three methods for the given system at x^(0)=(1,1)^T.
 # ============================================================
 
 import numpy as np
@@ -15,18 +15,18 @@ import sympy as sp
 # ============================================================
 # PART 1 — Inputs
 # ============================================================
-x1, x2 = sp.symbols('x1 x2')    # symbolische Variablen
-X = sp.Matrix([x1, x2])         # Vektor der Unbekannten
+x1, x2 = sp.symbols('x1 x2')    # symbolic variables
+X = sp.Matrix([x1, x2])         # vector of unknowns
 
 f_sym = sp.Matrix([
-    5*x1**2 - x2**2,                                  # erste Gleichung
-    x2 - 0.25*(sp.sin(x1) + sp.cos(x2))               # zweite Gleichung
+    5*x1**2 - x2**2,                                  # first equation
+    x2 - 0.25*(sp.sin(x1) + sp.cos(x2))               # second equation
 ])
 
-x0       = np.array([1.0, 1.0], dtype=float)          # Startvektor
-tol      = 1e-5                                       # Abbruchschwelle für ||f(x)||
-max_iter = 100                                        # maximale Iterationszahl
-k_max    = 4                                          # maximale Dämpfungsstufe
+x0       = np.array([1.0, 1.0], dtype=float)          # initial vector
+tol      = 1e-5                                       # stop threshold for ||f(x)||
+max_iter = 100                                        # maximum number of iterations
+k_max    = 4                                          # maximum damping level
 
 # ============================================================
 # PART 2 — Method selection
@@ -84,13 +84,13 @@ def compare_newton_methods_systems(f_sym, X, x0, tol, max_iter, k_max):
             n += 1
         return x, n, np.linalg.norm(f_eval(x), 2)
 
-    print(f"Startvektor x^(0) = {x0}")
-    print(f"Toleranz = {tol}\n")
-    print(f"{'Methode':<22} {'Iter':<6} {'x':<35} {'||f(x)||':<12}")
+    print(f"Initial vector x^(0) = {x0}")
+    print(f"Tolerance = {tol}\n")
+    print(f"{'Method':<22} {'Iter':<6} {'x':<35} {'||f(x)||':<12}")
     print("-" * 82)
-    for name, runner in [("Standard Newton",      run_standard),
-                         ("Vereinfachtes Newton", run_simplified),
-                         ("Gedämpftes Newton",    run_damped)]:
+    for name, runner in [("Standard Newton",   run_standard),
+                         ("Simplified Newton", run_simplified),
+                         ("Damped Newton",     run_damped)]:
         x_sol, n_iter, err = runner(x0)
         print(f"{name:<22} {n_iter:<6} {str(x_sol):<35} {err:.6e}")
 

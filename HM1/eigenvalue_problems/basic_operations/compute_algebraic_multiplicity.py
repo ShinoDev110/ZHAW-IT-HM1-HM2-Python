@@ -1,12 +1,12 @@
 # ============================================================
-# TOPIC: Eigenwerte — algebraische Vielfachheit jedes Eigenwerts
+# TOPIC: Eigenvalues — algebraic multiplicity of each eigenvalue
 # DESCRIPTION:
-# Berechnet alle Eigenwerte einer Matrix, rundet sie auf eine wählbare
-# Anzahl Dezimalstellen, sortiert (reell vor komplex) und zählt
-# Wiederholungen als algebraische Vielfachheit.
+# Computes all eigenvalues of a matrix, rounds them to a selectable
+# number of decimal places, sorts them (real before complex) and counts
+# repetitions as algebraic multiplicity.
 # USE WHEN:
-# Wenn beurteilt werden soll, ob ein Eigenwert mehrfach auftritt und ob
-# A diagonalisierbar sein könnte.
+# When it needs to be assessed whether an eigenvalue occurs multiple times
+# and whether A could be diagonalizable.
 # EXAMPLE:
 # A = [[1,1,1],[0,2,0],[1,-1,1]].
 # ============================================================
@@ -30,18 +30,18 @@ decimals = 10
 # ============================================================
 # PART 3 — Implementation
 # ============================================================
-def _algebraische_vielfachheit(matrix, decimals=10):
-    ew = np.linalg.eigvals(matrix)
-    ew = np.round(ew, decimals)
-    ew = [val.real if np.isclose(val.imag, 0, atol=10**(-decimals)) else val for val in ew]
-    return dict(Counter(ew))
+def _algebraic_multiplicity(matrix, decimals=10):
+    eigenvalues = np.linalg.eigvals(matrix)
+    eigenvalues = np.round(eigenvalues, decimals)
+    eigenvalues = [val.real if np.isclose(val.imag, 0, atol=10**(-decimals)) else val for val in eigenvalues]
+    return dict(Counter(eigenvalues))
 
 def compute_algebraic_multiplicity(matrix, decimals=10):
-    mult = _algebraische_vielfachheit(matrix, decimals)
+    mult = _algebraic_multiplicity(matrix, decimals)
     print("Matrix A:")
     print(matrix)
     print("--------------------------------------------------")
-    print("Eigenwerte ->  Vielfachheit:")
+    print("Eigenvalues ->  Multiplicity:")
     def sort_key(x):
         if isinstance(x, complex):
             return (1, x.real, x.imag)

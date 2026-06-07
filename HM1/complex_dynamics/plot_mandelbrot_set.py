@@ -1,14 +1,14 @@
 # ============================================================
-# TOPIC: Komplexe Dynamik — Mandelbrot-Menge
+# TOPIC: Complex dynamics — Mandelbrot set
 # DESCRIPTION:
-# Berechnet ein 2D-Array mit Iterationszahlen für die Mandelbrot-Menge
-# Z_{n+1} = Z_n^2 + C, Z_0 = 0, C ∈ ℂ. Bricht ab, sobald |Z_n| > 2,
-# und plottet die Fluchtgeschwindigkeit als Bild (imshow).
+# Computes a 2D array of iteration counts for the Mandelbrot set
+# Z_{n+1} = Z_n^2 + C, Z_0 = 0, C in C. Stops as soon as |Z_n| > 2,
+# and plots the escape time as an image (imshow).
 # USE WHEN:
-# Wenn die Mandelbrot-Menge als anschauliches Beispiel komplexer
-# Dynamik / iterativer Verfahren gerendert werden soll.
+# When the Mandelbrot set should be rendered as an illustrative example
+# of complex dynamics / iterative methods.
 # EXAMPLE:
-# 1500 px in jeder Richtung, 200 Iterationen, Standard-Ausschnitt.
+# 1500 px in each direction, 200 iterations, standard view window.
 # ============================================================
 
 import numpy as np
@@ -17,12 +17,12 @@ import matplotlib.pyplot as plt
 # ============================================================
 # PART 1 — Inputs
 # ============================================================
-anzahl_pixel = 1500   # Auflösung in x- und y-Richtung
-max_iter     = 200    # max. Iterationen pro Punkt
-x_min        = -2.0
-x_max        =  0.7
-y_min        = -1.4
-y_max        =  1.4
+num_pixels = 1500   # resolution in x- and y-direction
+max_iter   = 200    # max. iterations per point
+x_min      = -2.0
+x_max      =  0.7
+y_min      = -1.4
+y_max      =  1.4
 
 # ============================================================
 # PART 2 — Method selection
@@ -32,9 +32,9 @@ y_max        =  1.4
 # ============================================================
 # PART 3 — Implementation
 # ============================================================
-def plot_mandelbrot_set(anzahl_pixel, max_iter, x_min, x_max, y_min, y_max):
-    re_axis = np.linspace(x_min, x_max, anzahl_pixel, dtype=np.float64)
-    im_axis = np.linspace(y_min, y_max, anzahl_pixel, dtype=np.float64)
+def plot_mandelbrot_set(num_pixels, max_iter, x_min, x_max, y_min, y_max):
+    re_axis = np.linspace(x_min, x_max, num_pixels, dtype=np.float64)
+    im_axis = np.linspace(y_min, y_max, num_pixels, dtype=np.float64)
     Re, Im = np.meshgrid(re_axis, im_axis)
     C = Re + 1j * Im
     Z = np.zeros_like(C, dtype=np.complex128)
@@ -51,8 +51,8 @@ def plot_mandelbrot_set(anzahl_pixel, max_iter, x_min, x_max, y_min, y_max):
     plt.imshow(iters, extent=(x_min, x_max, y_min, y_max), origin="lower")
     plt.xlabel("Re(C)")
     plt.ylabel("Im(C)")
-    plt.title("Mandelbrot-Menge (Iterationen bis |Z| > 2)")
-    plt.colorbar(label="Iterationen")
+    plt.title("Mandelbrot set (iterations until |Z| > 2)")
+    plt.colorbar(label="Iterations")
     plt.tight_layout()
     plt.show()
     return iters
@@ -60,4 +60,4 @@ def plot_mandelbrot_set(anzahl_pixel, max_iter, x_min, x_max, y_min, y_max):
 # ============================================================
 # PART 4 — Call
 # ============================================================
-plot_mandelbrot_set(anzahl_pixel, max_iter, x_min, x_max, y_min, y_max)
+plot_mandelbrot_set(num_pixels, max_iter, x_min, x_max, y_min, y_max)

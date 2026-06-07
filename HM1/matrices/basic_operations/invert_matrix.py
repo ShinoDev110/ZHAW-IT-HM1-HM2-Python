@@ -1,13 +1,13 @@
 # ============================================================
-# TOPIC: Matrizen — Inverse einer Matrix
+# TOPIC: Matrices — inverse of a matrix
 # DESCRIPTION:
-# Berechnet die Inverse A^-1 einer quadratischen Matrix mit
+# Computes the inverse A^-1 of a square matrix using
 # numpy.linalg.inv.
 # USE WHEN:
-# Wenn ausnahmsweise wirklich die Inverse benötigt wird; sonst lieber
-# A x = b direkt lösen statt explizit zu invertieren.
+# When the inverse is genuinely needed; otherwise prefer
+# solving A x = b directly rather than inverting explicitly.
 # EXAMPLE:
-# 3x3-Matrix [[-4,1,0],[3,-2,1],[5,2,-1]] -> Inverse.
+# 3x3 matrix [[-4,1,0],[3,-2,1],[5,2,-1]] -> inverse.
 # ============================================================
 
 import numpy as np

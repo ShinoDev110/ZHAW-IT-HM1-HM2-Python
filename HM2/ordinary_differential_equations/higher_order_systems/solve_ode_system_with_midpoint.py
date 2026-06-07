@@ -1,14 +1,14 @@
 # ============================================================
-# TOPIC: DGL — System 1. Ordnung mit Mittelpunkt-Verfahren lösen
+# TOPIC: ODE — Solve a first-order system with the midpoint method
 # DESCRIPTION:
-# Löst ein vektorwertiges Anfangswertproblem z'(t) = f(t, z), z(t0) = z0
-# mit dem Mittelpunkt-Verfahren komponentenweise. Geeignet auch für DGL
-# höherer Ordnung, die zuvor in ein System 1. Ordnung umgewandelt wurden.
+# Solves a vector-valued initial value problem z'(t) = f(t, z), z(t0) = z0
+# with the midpoint method component-wise. Also suitable for higher-order
+# ODEs that have been previously converted to a first-order system.
 # USE WHEN:
-# Wenn eine DGL 2. (oder höherer) Ordnung numerisch gelöst werden soll.
+# When a second-order (or higher-order) ODE is to be solved numerically.
 # EXAMPLE:
-# Boeing-Landung: m * x'' = -5 * x'^2 - 570000, x(0) = 0, x'(0) = 100,
-# umgeschrieben als z1' = z2, z2' = (-5*z2^2 - 570000) / m.
+# Boeing landing: m * x'' = -5 * x'^2 - 570000, x(0) = 0, x'(0) = 100,
+# rewritten as z1' = z2, z2' = (-5*z2^2 - 570000) / m.
 # ============================================================
 
 import numpy as np
@@ -57,7 +57,7 @@ def solve_ode_system_midpoint(f, t0, t_end, z0, n):
     ax2.set_ylabel('v(t) [m/s]', color='r')
     ax2.tick_params(axis='y', labelcolor='r')
 
-    plt.title("System 1. Ordnung — Mittelpunkt")
+    plt.title("First-order system — midpoint method")
     fig.tight_layout()
     plt.grid(True); plt.show()
     return t, Z

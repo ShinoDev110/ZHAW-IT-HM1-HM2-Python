@@ -1,14 +1,14 @@
 # ============================================================
-# TOPIC: Kubische Spline-Interpolation mit scipy.interpolate.CubicSpline
+# TOPIC: Cubic spline interpolation with scipy.interpolate.CubicSpline
 # DESCRIPTION:
-# Verwendet scipy.interpolate.CubicSpline für schnelles Spline-Fitten.
-# Randbedingungen wählbar via bc_type: 'natural', 'clamped', 'not-a-knot',
-# 'periodic'.
+# Uses scipy.interpolate.CubicSpline for fast spline fitting.
+# Boundary conditions selectable via bc_type: 'natural', 'clamped',
+# 'not-a-knot', 'periodic'.
 # USE WHEN:
-# Wenn die Spline-Interpolation mit einer fertigen Library gemacht werden
-# darf — z.B. als Vergleich zur eigenen Implementation.
+# When spline interpolation may be done with a ready-made library —
+# e.g. as a comparison to the own implementation.
 # EXAMPLE:
-# US-Bevölkerung 1900-2010 mit natürlichem kubischem Spline interpolieren.
+# Interpolate US population 1900-2010 with a natural cubic spline.
 # ============================================================
 
 import numpy as np
@@ -29,8 +29,8 @@ xx = np.linspace(x_data[0], x_data[-1], 500)
 # Options for bc_type:
 #   "natural"     -> S''(x_0) = S''(x_n) = 0
 #   "clamped"     -> S'(x_0) = S'(x_n) = 0
-#   "not-a-knot"  -> S''' stetig in x_1, x_{n-1}
-#   "periodic"    -> periodische Splinefunktion
+#   "not-a-knot"  -> S''' continuous at x_1, x_{n-1}
+#   "periodic"    -> periodic spline function
 bc_type = "natural"
 
 # ============================================================
@@ -42,9 +42,9 @@ def cubic_spline_scipy(x_data, y_data, xx, bc_type):
 
     plt.figure(figsize=(9, 6))
     plt.plot(xx, yy, 'b-', label=f'scipy.CubicSpline ({bc_type})')
-    plt.plot(x_data, y_data, 'ro', markersize=8, label='Datenpunkte')
+    plt.plot(x_data, y_data, 'ro', markersize=8, label='Data points')
     plt.xlabel('x'); plt.ylabel('y'); plt.legend(); plt.grid(True)
-    plt.title('Kubische Spline-Interpolation mit scipy')
+    plt.title('Cubic spline interpolation with scipy')
     plt.show()
     return yy
 

@@ -1,17 +1,17 @@
 # ============================================================
-# TOPIC: Lineares Ausgleichsproblem — Polynom-Fit via Normalgleichungen / QR / polyfit
+# TOPIC: Linear least-squares problem — polynomial fit via normal equations / QR / polyfit
 # DESCRIPTION:
-# Löst min ||A·lambda - y||^2 für einen Polynom-Ansatz, einmal über die
-# Normalgleichungen (A^T A·lambda = A^T y), einmal stabil via QR-Zerlegung,
-# und einmal mit numpy.polyfit. Berechnet Konditionszahlen von A^T A und R
-# sowie das Fehlerfunktional E(f) = ||y - A·lambda||^2.
+# Solves min ||A·lambda - y||^2 for a polynomial approach, once via the
+# normal equations (A^T A·lambda = A^T y), once stably via QR decomposition,
+# and once with numpy.polyfit. Computes condition numbers of A^T A and R
+# as well as the error functional E(f) = ||y - A·lambda||^2.
 # USE WHEN:
-# Wenn ein Polynom (oder allgemein eine Linearkombination von Basisfunktionen)
-# im Sinne der kleinsten Fehlerquadrate an Daten angepasst werden soll und
-# Konditionsfragen relevant sind.
+# When a polynomial (or generally a linear combination of basis functions)
+# is to be fitted to data in the least-squares sense and
+# conditioning questions are relevant.
 # EXAMPLE:
-# Wasserdichte rho(T) durch ein Polynom 2. Grades f(T) = aT^2 + bT + c fitten,
-# Konditionszahlen vergleichen.
+# Fit water density rho(T) with a degree-2 polynomial f(T) = aT^2 + bT + c,
+# compare condition numbers.
 # ============================================================
 
 import numpy as np
@@ -31,7 +31,7 @@ degree = 2
 #   "normal_equations" -> A^T A·lambda = A^T y
 #   "qr_decomposition" -> A = QR, R·lambda = Q^T y
 #   "numpy_polyfit"    -> np.polyfit
-#   "all"              -> alle drei
+#   "all"              -> all three
 method = "all"
 
 # ============================================================
@@ -42,7 +42,7 @@ def fit_polynomial_least_squares(x_data, y_data, degree, method):
     xs = np.linspace(x_data.min(), x_data.max(), 500)
 
     plt.figure(figsize=(10, 6))
-    plt.plot(x_data, y_data, 'ko', markersize=8, label='Datenpunkte')
+    plt.plot(x_data, y_data, 'ko', markersize=8, label='Data points')
 
     runs = ["normal_equations", "qr_decomposition", "numpy_polyfit"] if method == "all" else [method]
 
@@ -51,15 +51,15 @@ def fit_polynomial_least_squares(x_data, y_data, degree, method):
             AtA = A.T @ A
             lam = np.linalg.solve(AtA, A.T @ y_data)
             cond = np.linalg.cond(AtA)
-            style = '--'; key = 'Normalgleichungen'; cond_str = f'cond(A^T A) = {cond:.4e}'
+            style = '--'; key = 'Normal equations'; cond_str = f'cond(A^T A) = {cond:.4e}'
         elif m == "qr_decomposition":
             Q, R = np.linalg.qr(A)
             lam = np.linalg.solve(R, Q.T @ y_data)
             cond = np.linalg.cond(R)
-            style = '-.'; key = 'QR-Zerlegung'; cond_str = f'cond(R) = {cond:.4e}'
+            style = '-.'; key = 'QR decomposition'; cond_str = f'cond(R) = {cond:.4e}'
         elif m == "numpy_polyfit":
             lam = np.polyfit(x_data, y_data, degree)
-            style = ':'; key = 'numpy.polyfit'; cond_str = '(keine Matrix exponiert)'
+            style = ':'; key = 'numpy.polyfit'; cond_str = '(no matrix exposed)'
         else:
             raise ValueError("method invalid")
 
@@ -70,9 +70,9 @@ def fit_polynomial_least_squares(x_data, y_data, degree, method):
         print(f"E(f) = ||y - A·lambda||^2 = {err:.6e}\n")
         plt.plot(xs, np.polyval(lam, xs), style, label=key)
 
-    plt.xlabel('T [°C]'); plt.ylabel('Dichte [g/l]')
+    plt.xlabel('T [°C]'); plt.ylabel('Density [g/l]')
     plt.legend(); plt.grid(True)
-    plt.title(f'Polynom-Fit Grad {degree}')
+    plt.title(f'Polynomial Fit Degree {degree}')
     plt.show()
 
 # ============================================================

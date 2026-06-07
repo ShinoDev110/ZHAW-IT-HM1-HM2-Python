@@ -1,13 +1,13 @@
 # ============================================================
-# TOPIC: DGL — klassisches vierstufiges Runge-Kutta-Verfahren
+# TOPIC: ODE — classical four-stage Runge-Kutta method
 # DESCRIPTION:
-# Standard-RK4: gewichtetes Mittel der Steigungen k1, k2, k3, k4 gemäss
-# y_{i+1} = y_i + h/6 * (k1 + 2k2 + 2k3 + k4). Konvergenzordnung p = 4.
+# Standard RK4: weighted average of slopes k1, k2, k3, k4 per
+# y_{i+1} = y_i + h/6 * (k1 + 2k2 + 2k3 + k4). Convergence order p = 4.
 # USE WHEN:
-# Wenn eine DGL 1. Ordnung mit hoher Genauigkeit gelöst werden soll, ohne
-# Schrittweitensteuerung oder implizite Verfahren zu benötigen.
+# When a first-order ODE needs to be solved with high accuracy, without
+# step-size control or implicit methods.
 # EXAMPLE:
-# Löse y' = 1 - y/t mit y(1) = 5 auf [1, 6] mit h = 0.01.
+# Solve y' = 1 - y/t with y(1) = 5 on [1, 6] with h = 0.01.
 # ============================================================
 
 import numpy as np
@@ -47,18 +47,18 @@ def solve_ode_classical_rk4(f, a, b, y0, n, y_exact=None):
         k4 = f(x[i] + h,     y[i] + h * k3)
         y[i + 1] = y[i] + h / 6 * (k1 + 2*k2 + 2*k3 + k4)
 
-    print(f"Endwert: y({x[-1]}) = {y[-1]:.10f}")
+    print(f"Final value: y({x[-1]}) = {y[-1]:.10f}")
     if y_exact is not None:
-        print(f"Exakt:   y({x[-1]}) = {y_exact(x[-1]):.10f}")
-        print(f"|Fehler| am Endpunkt = {abs(y_exact(x[-1]) - y[-1]):.6e}")
+        print(f"Exact:       y({x[-1]}) = {y_exact(x[-1]):.10f}")
+        print(f"|Error| at endpoint = {abs(y_exact(x[-1]) - y[-1]):.6e}")
 
     plt.figure(figsize=(10, 6))
     plt.plot(x, y, 'g-', label='RK4')
     if y_exact is not None:
         xs = np.linspace(a, b, 500)
-        plt.plot(xs, y_exact(xs), 'r--', label='Exakt')
+        plt.plot(xs, y_exact(xs), 'r--', label='Exact')
     plt.xlabel('x'); plt.ylabel('y'); plt.legend(); plt.grid(True)
-    plt.title("Klassisches vierstufiges Runge-Kutta")
+    plt.title("Classical Four-Stage Runge-Kutta")
     plt.show()
     return x, y
 

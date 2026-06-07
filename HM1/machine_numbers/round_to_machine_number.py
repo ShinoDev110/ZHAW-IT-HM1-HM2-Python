@@ -1,14 +1,14 @@
 # ============================================================
-# TOPIC: Maschinenzahlen — Dezimalzahl in IEEE-artige Bitdarstellung
+# TOPIC: Machine numbers — decimal number to IEEE-like bit representation
 # DESCRIPTION:
-# Wandelt eine reelle Zahl in das Format |Vorzeichen|Exponent (biased)|
-# Mantisse| mit wählbarer Anzahl Exponenten- und Mantissenbits um.
-# Subnormale / Inf werden nicht behandelt.
+# Converts a real number into the format |sign|exponent (biased)|
+# mantissa| with a selectable number of exponent and mantissa bits.
+# Subnormals / Inf are not handled.
 # USE WHEN:
-# Wenn aus einer Dezimalzahl die binäre Maschinenzahl-Darstellung
-# nachgerechnet werden soll (z.B. fiktives 12-Bit-Format).
+# When the binary machine-number representation of a decimal number
+# should be recalculated (e.g. a fictitious 12-bit format).
 # EXAMPLE:
-# value = 2.0, 4 Exponentenbits, 7 Mantissenbits -> Bitstring.
+# value = 2.0, 4 exponent bits, 7 mantissa bits -> bit string.
 # ============================================================
 
 import math
@@ -16,9 +16,9 @@ import math
 # ============================================================
 # PART 1 — Inputs
 # ============================================================
-value  = 2.0  # zu konvertierende Dezimalzahl
-e_bits = 4    # Anzahl Exponentenbits (biased)
-m_bits = 7    # Anzahl Mantissenbits
+value  = 2.0  # decimal number to convert
+e_bits = 4    # number of exponent bits (biased)
+m_bits = 7    # number of mantissa bits
 
 # ============================================================
 # PART 2 — Method selection
@@ -61,9 +61,9 @@ def round_to_machine_number(val, exp_bits, man_bits):
     mantissa = "".join(bits)
 
     result = (
-        f"Vorzeichen: {sign}\n"
+        f"Sign: {sign}\n"
         f"Exponent (biased): {exponent}\n"
-        f"Mantisse: 0.{mantissa}\n"
+        f"Mantissa: 0.{mantissa}\n"
         f"|{sign}|{exponent}|{mantissa}|"
     )
     print(result)

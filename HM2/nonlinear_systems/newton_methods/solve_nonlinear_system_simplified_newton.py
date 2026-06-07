@@ -1,12 +1,12 @@
 # ============================================================
-# TOPIC: Vereinfachtes Newton-Verfahren für Systeme (linear konvergent)
+# TOPIC: Simplified Newton method for systems (linearly convergent)
 # DESCRIPTION:
-# Löst ein nichtlineares Gleichungssystem mit dem vereinfachten Newton-Verfahren.
-# Die Jacobi-Matrix wird nur einmal am Startvektor ausgewertet und dann festgehalten.
+# Solves a nonlinear system of equations with the simplified Newton method.
+# The Jacobian matrix is evaluated only once at the initial vector and then kept fixed.
 # USE WHEN:
-# Wenn das vereinfachte Newton-Verfahren ausdrücklich verlangt wird.
+# When the simplified Newton method is explicitly required.
 # EXAMPLE:
-# System mit f1=2x1+4x2 und f2=4x1+8x2^3.
+# System with f1=2x1+4x2 and f2=4x1+8x2^3.
 # ============================================================
 
 import numpy as np
@@ -15,17 +15,17 @@ import sympy as sp
 # ============================================================
 # PART 1 — Inputs
 # ============================================================
-x1, x2 = sp.symbols('x1 x2')    # symbolische Variablen
-X = sp.Matrix([x1, x2])         # Vektor der Unbekannten
+x1, x2 = sp.symbols('x1 x2')    # symbolic variables
+X = sp.Matrix([x1, x2])         # vector of unknowns
 
 f_sym = sp.Matrix([
-    2*x1 + 4*x2,                  # erste Gleichung
-    4*x1 + 8*x2**3                # zweite Gleichung
+    2*x1 + 4*x2,                  # first equation
+    4*x1 + 8*x2**3                # second equation
 ])
 
-x0       = np.array([4.0, 2.0], dtype=float)          # Startvektor
-tol      = 1e-5                                       # Abbruchschwelle für ||f(x)||
-max_iter = 200                                        # maximale Iterationszahl
+x0       = np.array([4.0, 2.0], dtype=float)          # initial vector
+tol      = 1e-5                                       # stop threshold for ||f(x)||
+max_iter = 200                                        # maximum number of iterations
 
 # ============================================================
 # PART 2 — Method selection
@@ -61,10 +61,10 @@ def simplified_newton_method_systems(f_sym, X, x0, tol, max_iter):
         print(f"n = {n}   x = {x}   ||f(x)|| = {err:.6e}")
 
     if err <= tol:
-        print(f"\nKonvergiert nach {n} Iterationen.")
+        print(f"\nConverged after {n} iterations.")
     else:
-        print(f"\nMax. Iterationen erreicht ({max_iter}). Letzter Fehler: {err}")
-    print(f"Näherungslösung: x = {x}")
+        print(f"\nMax. iterations reached ({max_iter}). Last error: {err}")
+    print(f"Approximate solution: x = {x}")
     return x, n
 
 # ============================================================

@@ -1,13 +1,13 @@
 # ============================================================
-# TOPIC: Fehlerabschätzung — gestörte Matrix A UND gestörte rechte Seite b
+# TOPIC: Error estimation — perturbed matrix A AND perturbed right-hand side b
 # DESCRIPTION:
-# Vergleicht die Lösung x von Ax = b mit der Lösung x̃ des gestörten
-# Systems Ã x̃ = b̃, berechnet beobachteten absoluten/relativen Fehler
-# und obere Fehlerschranke via cond(A)/(1 - cond(A)·relA)·(relA + relb).
-# Unterstützt zusätzlich symbolische Störungen für b über sympy.
+# Compares the solution x of Ax = b with the solution x̃ of the perturbed
+# system Ã x̃ = b̃, computes the observed absolute/relative error
+# and an upper error bound via cond(A)/(1 - cond(A)·relA)·(relA + relb).
+# Also supports symbolic perturbations for b via sympy.
 # USE WHEN:
-# Wenn die Sensitivität der LGS-Lösung gegenüber gemeinsamen Störungen
-# in Matrix UND rechter Seite quantifiziert werden soll.
+# When the sensitivity of the linear system solution to combined perturbations
+# in the matrix AND the right-hand side should be quantified.
 # EXAMPLE:
 # A=[[1,0,2],[0,1,0],[1,0,1]], b=[1,1,0]; Ã = A + 1e-7.
 # ============================================================
@@ -28,17 +28,17 @@ A = np.array([[1.0, 0.0, 2.0],
 b = np.array([1.0, 1.0, 0.0])
 
 norm      = np.inf
-max_rel_x = 0.01    # maximal tolerierbarer relativer Fehler in x
+max_rel_x = 0.01    # maximum tolerable relative error in x
 debug     = True
 
-# Optionen für gestörte Matrix Ã:
-stoerung_A = 1e-7
-A_tilde    = A + stoerung_A                              # einfache additive Störung
+# Options for perturbed matrix A:
+perturbation_A = 1e-7
+A_tilde        = A + perturbation_A                              # simple additive perturbation
 
-# Optionen für gestörte rechte Seite b̃ (numerisch):
+# Options for perturbed right-hand side b̃ (numerical):
 b_tilde = np.array([1.0, -0.2, 0.0])
 
-# Optionen für symbolisches b̃ (auskommentieren falls genutzt):
+# Options for symbolic b̃ (uncomment if used):
 # eps = sp.Symbol("eps", real=True)
 # v = np.array([0.0, 0.0, 1.0], dtype=object)
 # b_tilde_sym = b.astype(object) + eps * v
@@ -48,8 +48,8 @@ eps_sym     = None
 # ============================================================
 # PART 2 — Method selection
 # ============================================================
-# Only one method here. Es werden immer tatsächlicher und geschätzter
-# Fehler berechnet (für b_tilde_sym zusätzlich die eps-Lösung).
+# Only one method here. Both actual and estimated error are always
+# computed (for b_tilde_sym additionally the eps solution).
 
 # ============================================================
 # PART 3 — Implementation
@@ -111,10 +111,10 @@ def _rel_err(A, A_t, b, b_t, norm):
     abs_e, x, xt = _abs_err(A, A_t, b, b_t, norm)
     return abs_e / float(lin.norm(x, ord=norm)), x, xt
 
-def _A_rel_fehler(A, A_t, norm):
+def _A_rel_error(A, A_t, norm):
     return float(lin.norm(np.asarray(A) - np.asarray(A_t), ord=norm)) / float(lin.norm(np.asarray(A), ord=norm))
 
-def _b_rel_fehler(b, b_t, norm):
+def _b_rel_error(b, b_t, norm):
     b_obj   = _as_1d(b, "b").astype(object)
     b_t_obj = _as_1d(b_t, "b_tilde").astype(object)
     return _vector_norm(b_t_obj - b_obj, norm) / _vector_norm(b_obj, norm)
@@ -123,32 +123,32 @@ def _bound(A, A_t, b, b_t, norm, debug=False):
     ns = _convert_norm(norm)
     A = np.asarray(A, dtype=float)
     condA = float(lin.cond(A, p=norm))
-    relA  = _A_rel_fehler(A, A_t, norm)
-    relb  = _b_rel_fehler(b, b_t, norm)
+    relA  = _A_rel_error(A, A_t, norm)
+    relb  = _b_rel_error(b, b_t, norm)
     t = condA * relA
     if debug:
         print(f"cond(A)_{ns} = {condA}, relA = {relA}, relb = {relb}, condA*relA = {t}")
     if t >= 1:
-        if debug: print("-> Fehler NICHT begrenzt (condA*relA >= 1)")
+        if debug: print("-> error NOT bounded (condA*relA >= 1)")
         return None
     bound = (condA / (1 - t)) * (relA + relb)
-    if debug: print(f"-> Fehlerschranke rel_x <= {bound}\n")
+    if debug: print(f"-> error bound rel_x <= {bound}\n")
     return bound
 
 def estimate_error_general(A, A_tilde, b, b_tilde, b_tilde_sym, eps_sym,
                            max_rel_x, norm, debug=False):
-    # symbolisches b̃ -> eps-Lösung
+    # symbolic b̃ -> eps solution
     if b_tilde_sym is not None and eps_sym is not None:
         ns = _convert_norm(norm)
         condA = float(lin.cond(np.asarray(A, dtype=float), p=norm))
-        relA = _A_rel_fehler(A, A_tilde, norm)
+        relA = _A_rel_error(A, A_tilde, norm)
         t = condA * relA
         if t >= 1:
-            raise ValueError("condA * relA >= 1, Schranke nicht definiert.")
+            raise ValueError("condA * relA >= 1, bound not defined.")
         b_norm = float(lin.norm(np.asarray(b, dtype=float), ord=norm))
         relb_max = (max_rel_x * (1 - t) / condA) - relA
         if relb_max <= 0:
-            raise ValueError("relb_max <= 0; max_rel_x zu klein für gegebene Ã.")
+            raise ValueError("relb_max <= 0; max_rel_x too small for the given A_tilde.")
         eps_max = relb_max * b_norm
         delta_b = b.astype(object) - b_tilde_sym
         delta_norm_expr = _vector_norm(delta_b, norm)
@@ -160,7 +160,7 @@ def estimate_error_general(A, A_tilde, b, b_tilde, b_tilde_sym, eps_sym,
         print("eps solution set:", sol, "\n")
         b_tilde = _subs_to_float_array(b_tilde_sym, {eps_sym: float(eps_max)})
 
-    # numerische Fehler
+    # numerical errors
     abs_e, x, xt = _abs_err(A, A_tilde, b, b_tilde, norm)
     rel_e        = abs_e / float(lin.norm(x, ord=norm))
     if debug:
@@ -170,7 +170,7 @@ def estimate_error_general(A, A_tilde, b, b_tilde, b_tilde_sym, eps_sym,
         print(f"||x̃ - x||_{ns} = {abs_e}")
         print(f"||x̃ - x||_{ns} / ||x||_{ns} = {rel_e}\n")
 
-    # obere Schranke
+    # upper bound
     _bound(A, A_tilde, b, b_tilde, norm, debug)
     return abs_e, rel_e
 

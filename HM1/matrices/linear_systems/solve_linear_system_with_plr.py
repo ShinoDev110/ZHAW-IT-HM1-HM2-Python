@@ -1,10 +1,11 @@
 # ============================================================
-# TOPIC: Lineare Systeme — Lösen mit PLR-Zerlegung (P·A = L·R)
+# TOPIC: Linear Systems — solving with PLR decomposition (P·A = L·R)
 # DESCRIPTION:
-# Löst Ax = b über P·A = L·R mit Zeilenpivot-Suche: zuerst z = P·b,
-# dann L·y = z (vorwärts) und R·x = y (rückwärts).
+# Solves Ax = b via P·A = L·R with row-pivot search: first z = P·b,
+# then L·y = z (forward) and R·x = y (backward).
 # USE WHEN:
-# Standardweg für direkten LGS-Löser; stabiler als reine LR-Zerlegung.
+# Standard approach for a direct linear system solver; more stable than
+# pure LR decomposition.
 # EXAMPLE:
 # A = [[2,2,-1],[1,-1,0],[2,0,1]], b = [-1/3, -11/3, 2/3].
 # ============================================================
@@ -41,7 +42,7 @@ def _plr_decompose(A):
     for k in range(n - 1):
         pivot = k + int(np.argmax(np.abs(R[k:, k])))
         if R[pivot, k] == 0.0:
-            raise ValueError("PLR: Matrix singulär / Pivot 0.")
+            raise ValueError("PLR: matrix singular / pivot 0.")
         if pivot != k:
             R[[k, pivot], :]  = R[[pivot, k], :]
             L[[k, pivot], :k] = L[[pivot, k], :k]

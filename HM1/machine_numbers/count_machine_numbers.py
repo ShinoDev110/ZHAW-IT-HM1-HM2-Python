@@ -1,24 +1,24 @@
 # ============================================================
-# TOPIC: Maschinenzahlen — Anzahl darstellbarer Maschinenzahlen
+# TOPIC: Machine numbers — count of representable machine numbers
 # DESCRIPTION:
-# Berechnet die Anzahl verschiedener Maschinenzahlen in einem
-# Gleitkomma-System M(B, n, e_min, e_max) nach der Formel
-# 2 · B^(n-1) · (B - 1) · (e_max - e_min + 1) + 1, hier vereinfacht
-# über Basis, Mantissenstellen, Exponentenstellen und Vorzeichen-Bit.
+# Computes the number of distinct machine numbers in a
+# floating-point system M(B, n, e_min, e_max) per the formula
+# 2 · B^(n-1) · (B - 1) · (e_max - e_min + 1) + 1, simplified here
+# via base, mantissa digits, exponent digits, and sign bit.
 # USE WHEN:
-# Wenn die Anzahl darstellbarer Maschinenzahlen eines hypothetischen
-# Gleitkommaformats geschätzt werden soll.
+# When the count of representable machine numbers of a hypothetical
+# floating-point format should be estimated.
 # EXAMPLE:
-# Basis 2, 15 Mantissenstellen, 5 Exponentenstellen, mit Vorzeichen.
+# Base 2, 15 mantissa digits, 5 exponent digits, with sign.
 # ============================================================
 
 # ============================================================
 # PART 1 — Inputs
 # ============================================================
-basis            = 2   # Basis B
-mantisse_stellen = 15  # Anzahl Stellen für Mantisse
-exponent_stellen = 5   # Anzahl Stellen für Exponent
-vorzeichen       = 1   # Vorzeichen-Bit vorhanden? (1 = ja, 0 = nein)
+base             = 2   # base B
+mantissa_digits  = 15  # number of digits for mantissa
+exponent_digits  = 5   # number of digits for exponent
+sign             = 1   # sign bit present? (1 = yes, 0 = no)
 
 # ============================================================
 # PART 2 — Method selection
@@ -28,12 +28,12 @@ vorzeichen       = 1   # Vorzeichen-Bit vorhanden? (1 = ja, 0 = nein)
 # ============================================================
 # PART 3 — Implementation
 # ============================================================
-def count_machine_numbers(base, mantisse, exponent, vorzeichen_exp):
-    anzahl = base ** mantisse * (base ** (exponent + vorzeichen_exp) - 1) + 1
-    print(f"Anzahl verschiedener Maschinenzahlen: {anzahl}")
-    return anzahl
+def count_machine_numbers(base, mantissa, exponent, sign_exp):
+    count = base ** mantissa * (base ** (exponent + sign_exp) - 1) + 1
+    print(f"Number of distinct machine numbers: {count}")
+    return count
 
 # ============================================================
 # PART 4 — Call
 # ============================================================
-count_machine_numbers(basis, mantisse_stellen, exponent_stellen, vorzeichen)
+count_machine_numbers(base, mantissa_digits, exponent_digits, sign)

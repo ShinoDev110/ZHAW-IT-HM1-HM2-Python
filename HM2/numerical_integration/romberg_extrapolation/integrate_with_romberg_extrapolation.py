@@ -1,15 +1,15 @@
 # ============================================================
-# TOPIC: Numerische Integration — Romberg-Extrapolation
+# TOPIC: Numerical Integration — Romberg extrapolation
 # DESCRIPTION:
-# Berechnet das Romberg-Schema T_{j,k}: erste Spalte = summierte Trapezregel
-# zu Schrittweiten h_j = (b-a)/2^j, weitere Spalten via Rekursion
-# T_{j,k} = (4^k * T_{j+1,k-1} - T_{j,k-1}) / (4^k - 1). Liefert den
-# genauesten Wert T_{0,m}.
+# Computes the Romberg scheme T_{j,k}: first column = summed trapezoidal rule
+# at step sizes h_j = (b-a)/2^j, further columns via recursion
+# T_{j,k} = (4^k * T_{j+1,k-1} - T_{j,k-1}) / (4^k - 1). Returns the
+# most accurate value T_{0,m}.
 # USE WHEN:
-# Wenn aus wenigen Trapez-Näherungen via Extrapolation ein hochgenauer
-# Integralwert berechnet werden soll.
+# A highly accurate integral value is to be computed from a few trapezoidal
+# approximations via extrapolation.
 # EXAMPLE:
-# Berechne int_2^4 1/x dx mit Romberg-Extrapolation, m = 3.
+# Compute int_2^4 1/x dx with Romberg extrapolation, m = 3.
 # ============================================================
 
 import numpy as np
@@ -22,7 +22,7 @@ def f(x):
 
 a = 2.0
 b = 4.0
-m = 3       # Anzahl Halbierungen der Schrittweite (erste Spalte hat m+1 Einträge)
+m = 3       # number of step size halvings (first column has m+1 entries)
 
 # ============================================================
 # PART 2 — Method selection
@@ -35,7 +35,7 @@ m = 3       # Anzahl Halbierungen der Schrittweite (erste Spalte hat m+1 Einträ
 def integrate_romberg(f, a, b, m):
     T = np.zeros((m + 1, m + 1))
 
-    # Erste Spalte: summierte Trapezregel für h_j = (b-a) / 2^j
+    # First column: summed trapezoidal rule for h_j = (b-a) / 2^j
     for j in range(m + 1):
         n_j = 2**j
         h_j = (b - a) / n_j
@@ -43,12 +43,12 @@ def integrate_romberg(f, a, b, m):
         y   = f(x)
         T[j, 0] = h_j * ((y[0] + y[-1]) / 2 + np.sum(y[1:-1]))
 
-    # Extrapolationsspalten
+    # Extrapolation columns
     for k in range(1, m + 1):
         for j in range(m + 1 - k):
             T[j, k] = (4**k * T[j + 1, k - 1] - T[j, k - 1]) / (4**k - 1)
 
-    print("Romberg-Schema (Zeile j, Spalte k):")
+    print("Romberg scheme (row j, column k):")
     for j in range(m + 1):
         row = []
         for k in range(m + 1 - j):
@@ -56,7 +56,7 @@ def integrate_romberg(f, a, b, m):
         print("  ".join(row))
 
     best = T[0, m]
-    print(f"\nGenauester Wert: T(0, {m}) = {best}")
+    print(f"\nMost accurate value: T(0, {m}) = {best}")
     return best
 
 # ============================================================

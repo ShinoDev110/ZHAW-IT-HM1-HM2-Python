@@ -1,13 +1,13 @@
 # ============================================================
-# TOPIC: Visualisierung — Funktion f: R^2 -> R (Surface / Wireframe / Höhenlinien)
+# TOPIC: Visualization — function f: R^2 -> R (surface / wireframe / contour lines)
 # DESCRIPTION:
-# Stellt eine skalare Funktion f: R^2 -> R grafisch dar.
-# Verwenden, wenn eine Funktion zweier Variablen als Surface, Wireframe
-# oder als Höhenlinien in 2D bzw. 3D untersucht werden soll.
+# Plots a scalar function f: R^2 -> R graphically.
+# Use when a function of two variables needs to be examined as a surface,
+# wireframe, or contour lines in 2D or 3D.
 # USE WHEN:
-# Wenn eine Funktion zweier Variablen visuell verglichen oder analysiert werden soll.
+# When a function of two variables needs to be visually compared or analyzed.
 # EXAMPLE:
-# f(x,y)=x^2+y^2 als Fläche und Höhenlinien.
+# f(x,y)=x^2+y^2 as a surface and contour lines.
 # ============================================================
 
 import numpy as np
@@ -17,21 +17,21 @@ from matplotlib import cm
 # ============================================================
 # PART 1 — Inputs
 # ============================================================
-def f(x, y):                         # skalare Funktion f(x,y)
+def f(x, y):                         # scalar function f(x,y)
     return x**2 + y**2               # change this for a different function
 
-x_range  = (-5, 5)                   # x-Bereich
-y_range  = (-5, 5)                   # y-Bereich
-n_points = 50                        # Auflösung des Gitters
+x_range  = (-5, 5)                   # x range
+y_range  = (-5, 5)                   # y range
+n_points = 50                        # grid resolution
 
 # ============================================================
 # PART 2 — Method selection
 # ============================================================
 # Options:
 #   "surface"   -> coloured 3D surface plot
-#   "wireframe" -> 3D wireframe (Gitter)
-#   "contour2d" -> Höhenlinien in der x-y-Ebene
-#   "contour3d" -> Höhenlinien im 3D-Raum
+#   "wireframe" -> 3D wireframe (grid)
+#   "contour2d" -> contour lines in the x-y plane
+#   "contour3d" -> contour lines in 3D space
 #   "all"       -> all four side by side
 method = "all"
 
@@ -46,23 +46,23 @@ def visualize_2d_function(f, x_range, y_range, n_points, method):
 
     def plot_surface(ax):
         ax.plot_surface(X, Y, Z, cmap=cm.coolwarm, linewidth=0, antialiased=False)
-        ax.set_title("Fläche (Surface)")
+        ax.set_title("Surface")
         ax.set_xlabel("x"); ax.set_ylabel("y"); ax.set_zlabel("z")
 
     def plot_wireframe(ax):
         ax.plot_wireframe(X, Y, Z, rstride=2, cstride=2)
-        ax.set_title("Gitter (Wireframe)")
+        ax.set_title("Wireframe (grid)")
         ax.set_xlabel("x"); ax.set_ylabel("y"); ax.set_zlabel("z")
 
     def plot_contour2d(ax):
         cont = ax.contour(X, Y, Z, cmap=cm.coolwarm)
         ax.clabel(cont, inline=True, fontsize=8)
-        ax.set_title("Höhenlinien (2D)")
+        ax.set_title("Contour lines (2D)")
         ax.set_xlabel("x"); ax.set_ylabel("y")
 
     def plot_contour3d(ax):
         ax.contour(X, Y, Z, cmap=cm.coolwarm)
-        ax.set_title("Höhenlinien (3D)")
+        ax.set_title("Contour lines (3D)")
         ax.set_xlabel("x"); ax.set_ylabel("y"); ax.set_zlabel("z")
 
     if method == "surface":

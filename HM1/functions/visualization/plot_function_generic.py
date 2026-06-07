@@ -1,14 +1,14 @@
 # ============================================================
-# TOPIC: Visualisierung — generischer Funktionsplotter (linear/log)
+# TOPIC: Visualization — generic function plotter (linear/log)
 # DESCRIPTION:
-# Zeichnet beliebig viele Funktionen als Strings auf einem
-# linspace/logspace-Gitter; unterstützt linlin, semilogy, loglog,
-# symlog inkl. Umgang mit Polstellen und negativen y-Werten in Logplots.
+# Plots any number of functions given as strings on a
+# linspace/logspace grid; supports linlin, semilogy, loglog,
+# symlog including handling of poles and negative y-values in log plots.
 # USE WHEN:
-# Wenn mehrere Funktionen schnell auf einem gemeinsamen Achsensystem
-# verglichen werden sollen (z.B. für Konditionsanalyse).
+# When several functions should be compared quickly on a common
+# axis system (e.g. for condition number analysis).
 # EXAMPLE:
-# f(x)=x, g(x)=exp(x), h(x)=x·exp(x) auf [0, 3] linear.
+# f(x)=x, g(x)=exp(x), h(x)=x·exp(x) on [0, 3] linear.
 # ============================================================
 
 import numpy as np

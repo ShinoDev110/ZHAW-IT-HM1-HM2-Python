@@ -1,13 +1,14 @@
 # ============================================================
-# TOPIC: Eigenwerte — QR-Iteration für alle Eigenwerte
+# TOPIC: Eigenvalues — QR iteration for all eigenvalues
 # DESCRIPTION:
-# Wiederholtes A_{k+1} = R_k · Q_k (mit Q_k R_k = A_k) bis A_k
-# quasi-obere-Dreiecksform annimmt. Wahlweise mit fester Iterationszahl
-# oder Toleranz-Abbruch, ggf. mit Rayleigh-Shift. Liest die Eigenwerte
-# direkt vom (quasi-)oberen Dreieck ab.
+# Repeated A_{k+1} = R_k · Q_k (with Q_k R_k = A_k) until A_k
+# converges to quasi-upper-triangular form. Optionally uses a fixed
+# number of iterations or a tolerance-based stopping criterion, with
+# optional Rayleigh shift. Reads the eigenvalues directly from the
+# (quasi-)upper triangular result.
 # USE WHEN:
-# Wenn alle Eigenwerte einer Matrix iterativ und stabil bestimmt werden
-# sollen (oft Standardmethode in numerischen Bibliotheken).
+# When all eigenvalues of a matrix need to be determined iteratively
+# and stably (often the standard method in numerical libraries).
 # EXAMPLE:
 # A = [[1,1,0],[3,-1,2],[2,-1,3]].
 # ============================================================
@@ -24,18 +25,18 @@ A = np.array([[1.0,  1.0, 0.0],
               [3.0, -1.0, 2.0],
               [2.0, -1.0, 3.0]])
 
-iters    = 200    # für Methode "fixed"
-tol      = 1e-8   # für Methode "tol"
-max_iter = 1000   # Sicherheitslimit für "tol"
-shift    = False  # Rayleigh-Shift am Ende des Quadrats
+iters    = 200    # for method "fixed"
+tol      = 1e-8   # for method "tol"
+max_iter = 1000   # safety limit for "tol"
+shift    = False  # Rayleigh shift at the end of the square
 debug    = True
 
 # ============================================================
 # PART 2 — Method selection
 # ============================================================
 # method:
-#   "fixed" -> immer iters Schritte
-#   "tol"   -> Abbruch wenn ||offdiag||_F <= tol oder max_iter erreicht
+#   "fixed" -> always iters steps
+#   "tol"   -> stop when ||offdiag||_F <= tol or max_iter reached
 method = "fixed"
 
 # ============================================================
@@ -112,18 +113,18 @@ def _qr_tol(A, tol=1e-8, max_iter=1000, shift=False, debug=False):
     return Ak, max_iter
 
 def compute_eigenvalues_with_qr_iteration(method, A, iters, tol, max_iter, shift, debug=False):
-    _line("QR-Verfahren (Eigenwerte über QR-Iteration)")
+    _line("QR method (eigenvalues via QR iteration)")
     print("A =\n", A)
     if method == "fixed":
         A_final = _qr_fixed(A, iters, shift=shift, debug=debug)
     elif method == "tol":
         A_final, _ = _qr_tol(A, tol=tol, max_iter=max_iter, shift=shift, debug=debug)
     else:
-        raise ValueError(f"Unbekannte Methode: {method!r}")
+        raise ValueError(f"Unknown method: {method!r}")
     _line("Result")
-    print("A_final (quasi obere Dreiecksmatrix) =\n", A_final)
+    print("A_final (quasi upper triangular matrix) =\n", A_final)
     vals = _eigenvalues_from_quasitriangular(A_final)
-    print("\nEigenwerte ~=")
+    print("\nEigenvalues ~=")
     for i, v in enumerate(vals, start=1):
         print(f"  lambda{i} ~= {v}")
     print("\nnp.linalg.eigvals(A) =", lin.eigvals(A))

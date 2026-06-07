@@ -1,15 +1,15 @@
 # ============================================================
-# TOPIC: Spline-Interpolation — Ableitungen (Geschwindigkeit / Beschleunigung)
+# TOPIC: Spline interpolation — derivatives (velocity / acceleration)
 # DESCRIPTION:
-# Baut die natürliche kubische Splinefunktion s_k(t) = a_k + b_k(t-t_k)
-# + c_k(t-t_k)^2 + d_k(t-t_k)^3 und wertet an einer Stelle den Funktionswert,
-# die 1. Ableitung (Geschwindigkeit) und die 2. Ableitung (Beschleunigung) aus.
-# Zusätzlich wird der Verlauf der 1. Ableitung graphisch dargestellt.
+# Builds the natural cubic spline function s_k(t) = a_k + b_k(t-t_k)
+# + c_k(t-t_k)^2 + d_k(t-t_k)^3 and evaluates the function value,
+# the 1st derivative (velocity) and the 2nd derivative (acceleration) at a
+# given point. Additionally plots the course of the 1st derivative.
 # USE WHEN:
-# Wenn aus einer Spline-Bahn x(t) die Geschwindigkeit und Beschleunigung zu
-# einem bestimmten Zeitpunkt gefragt sind (z.B. Bewegung eines Werkstücks).
+# When velocity and acceleration must be extracted from a spline path x(t)
+# at a specific time point (e.g. motion of a workpiece).
 # EXAMPLE:
-# t = [0, 0.5, 2, 3], x = [1, 2, 2.5, 0], gesucht s, s' und s'' bei t = 1.
+# t = [0, 0.5, 2, 3], x = [1, 2, 2.5, 0], find s, s' and s'' at t = 1.
 # ============================================================
 
 import numpy as np
@@ -18,14 +18,14 @@ import matplotlib.pyplot as plt
 # ============================================================
 # PART 1 — Inputs
 # ============================================================
-t_data = np.array([0.0, 0.5, 2.0, 3.0])   # Stützstellen (Zeiten)
-x_data = np.array([1.0, 2.0, 2.5, 0.0])   # Stützwerte (Positionen)
-t_query = 1.0                              # Auswertungsstelle
+t_data = np.array([0.0, 0.5, 2.0, 3.0])   # support points (times)
+x_data = np.array([1.0, 2.0, 2.5, 0.0])   # support values (positions)
+t_query = 1.0                              # evaluation point
 
 # ============================================================
 # PART 2 — Method selection
 # ============================================================
-# Only one method: natürlicher kubischer Spline (s''(t_0) = s''(t_n) = 0).
+# Only one method: natural cubic spline (s''(t_0) = s''(t_n) = 0).
 
 # ============================================================
 # PART 3 — Implementation
@@ -63,7 +63,7 @@ def evaluate_spline_derivatives(t_data, x_data, t_query):
     a, b, c, d = _natural_cubic_coeffs(t_data, x_data)
     n = len(t_data) - 1
     print("============================================================")
-    print("Spline-Koeffizienten (a, b, c, d je Segment)")
+    print("Spline coefficients (a, b, c, d per segment)")
     print("============================================================")
     print(f"{'i':<3}{'a_i':>12}{'b_i':>12}{'c_i':>12}{'d_i':>12}")
     for i in range(n):
@@ -74,12 +74,12 @@ def evaluate_spline_derivatives(t_data, x_data, t_query):
     s   = a[i] + b[i]*dt + c[i]*dt**2 + d[i]*dt**3
     ds  = b[i] + 2*c[i]*dt + 3*d[i]*dt**2
     dds = 2*c[i] + 6*d[i]*dt
-    print(f"\nAuswertung bei t = {t_query} (Segment {i}):")
+    print(f"\nEvaluation at t = {t_query} (segment {i}):")
     print(f"  Position      s(t)   = {s:.6f}")
-    print(f"  Geschwindigkeit s'(t) = {ds:.6f}")
-    print(f"  Beschleunigung  s''(t)= {dds:.6f}")
+    print(f"  Velocity      s'(t)  = {ds:.6f}")
+    print(f"  Acceleration  s''(t) = {dds:.6f}")
 
-    # Verlauf der 1. Ableitung plotten
+    # Plot the course of the 1st derivative
     tt = np.linspace(t_data[0], t_data[-1], 400)
     dd = np.empty_like(tt)
     for k, tv in enumerate(tt):
@@ -87,10 +87,10 @@ def evaluate_spline_derivatives(t_data, x_data, t_query):
         dtj = tv - t_data[j]
         dd[k] = b[j] + 2*c[j]*dtj + 3*d[j]*dtj**2
     plt.figure(figsize=(9, 6))
-    plt.plot(tt, dd, 'b-', label="s'(t) (Geschwindigkeit)")
+    plt.plot(tt, dd, 'b-', label="s'(t) (velocity)")
     plt.plot(t_query, ds, 'ro', markersize=9, label=f"s'({t_query}) = {ds:.3f}")
     plt.xlabel('t'); plt.ylabel("s'(t)"); plt.legend(); plt.grid(True)
-    plt.title("Geschwindigkeitsverlauf des Splines")
+    plt.title("Velocity profile of the spline")
     plt.tight_layout(); plt.show()
     return s, ds, dds
 

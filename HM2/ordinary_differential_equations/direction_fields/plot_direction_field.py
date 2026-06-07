@@ -1,14 +1,14 @@
 # ============================================================
-# TOPIC: DGL — Richtungsfeld einer DGL 1. Ordnung y'(x) = f(x, y) plotten
+# TOPIC: ODE — Plot direction field of a first-order ODE y'(x) = f(x, y)
 # DESCRIPTION:
-# Zeichnet das Richtungsfeld einer DGL 1. Ordnung auf einem Gitter mit
-# Schrittweiten hx, hy via np.meshgrid und plt.quiver. Pfeile zeigen die
-# Steigung f(x, y) in jedem Gitterpunkt.
+# Draws the direction field of a first-order ODE on a grid with
+# step sizes hx, hy via np.meshgrid and plt.quiver. Arrows show the
+# slope f(x, y) at each grid point.
 # USE WHEN:
-# Wenn das Richtungsfeld einer DGL veranschaulicht werden soll, oft als
-# Grundlage für die spätere Einzeichnung numerischer Lösungen.
+# When the direction field of an ODE is to be visualised, often as a
+# basis for subsequently drawing in numerical solutions.
 # EXAMPLE:
-# Richtungsfeld für y' = x^2 / y auf [0, 1.4] x [0, 5] mit hx = hy = 0.2.
+# Direction field for y' = x^2 / y on [0, 1.4] x [0, 5] with hx = hy = 0.2.
 # ============================================================
 
 import numpy as np
@@ -49,7 +49,7 @@ def plot_direction_field(f, xmin, xmax, ymin, ymax, hx, hy, normalize):
     plt.quiver(X, Y, U, V, angles='xy')
     plt.xlim(xmin, xmax); plt.ylim(ymin, ymax)
     plt.xlabel('x'); plt.ylabel('y'); plt.grid(True)
-    plt.title("Richtungsfeld y'(x) = f(x, y)")
+    plt.title("Direction field y'(x) = f(x, y)")
     plt.show()
 
 # ============================================================

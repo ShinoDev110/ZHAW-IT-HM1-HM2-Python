@@ -1,11 +1,11 @@
 # ============================================================
-# TOPIC: Eigenwerte — Spektralradius der Jacobi- und Gauss-Seidel-Matrix
+# TOPIC: Eigenvalues — Spectral radius of the Jacobi and Gauss-Seidel iteration matrix
 # DESCRIPTION:
-# Zerlegt A in D, L, R, bildet die Iterationsmatrizen B_J = -D^-1(L+R)
-# und B_GS = -(L+D)^-1 R und druckt jeweils rho(B) = max |eigvals(B)|.
+# Decomposes A into D, L, R, forms the iteration matrices B_J = -D^-1(L+R)
+# and B_GS = -(L+D)^-1 R and prints rho(B) = max |eigvals(B)| for each.
 # USE WHEN:
-# Wenn vor dem Einsatz iterativer LGS-Löser geprüft werden soll, ob
-# Konvergenz garantiert ist (rho < 1) und welcher Löser schneller wird.
+# When checking before using iterative linear system solvers whether
+# convergence is guaranteed (rho < 1) and which solver will be faster.
 # EXAMPLE:
 # A = [[1,0,0],[2,3,0],[0,1,2]] -> rho(B_J), rho(B_GS).
 # ============================================================
@@ -24,8 +24,8 @@ debug = True
 # ============================================================
 # PART 2 — Method selection
 # ============================================================
-# Only one method here. Es werden immer rho(Jacobi) UND rho(Gauss-Seidel)
-# berechnet.
+# Only one method here. Both rho(Jacobi) AND rho(Gauss-Seidel)
+# are always computed.
 
 # ============================================================
 # PART 3 — Implementation
@@ -43,23 +43,23 @@ def _B_jacobi(L, D, R):
 def _B_gauss_seidel(L, D, R):
     return -lin.solve(L + D, R)
 
-def _spektral_radius(M, debug=False):
-    ew = lin.eigvals(M)
-    abs_ew = np.abs(ew)
+def _spectral_radius(M, debug=False):
+    eigenvalues = lin.eigvals(M)
+    abs_eigenvalues = np.abs(eigenvalues)
     if debug:
-        print("Eigenwerte:", ew)
-        print("Beträge:", abs_ew)
+        print("Eigenvalues:", eigenvalues)
+        print("Magnitudes:", abs_eigenvalues)
         print()
-    return float(np.max(abs_ew))
+    return float(np.max(abs_eigenvalues))
 
 def compute_spectral_radius(A, debug=False):
     L, D, R = _A_to_LDR(A)
     B_J  = _B_jacobi(L, D, R)
     B_GS = _B_gauss_seidel(L, D, R)
-    rho_J  = _spektral_radius(B_J, debug=debug)
-    rho_GS = _spektral_radius(B_GS, debug=debug)
-    print(f"Spektralradius Jacobi  rho(B) = {rho_J}")
-    print(f"Spektralradius GS      rho(B) = {rho_GS}")
+    rho_J  = _spectral_radius(B_J, debug=debug)
+    rho_GS = _spectral_radius(B_GS, debug=debug)
+    print(f"Spectral radius Jacobi  rho(B) = {rho_J}")
+    print(f"Spectral radius GS      rho(B) = {rho_GS}")
     return rho_J, rho_GS
 
 # ============================================================

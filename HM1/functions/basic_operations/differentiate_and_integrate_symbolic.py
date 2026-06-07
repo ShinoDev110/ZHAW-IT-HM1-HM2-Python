@@ -1,13 +1,13 @@
 # ============================================================
-# TOPIC: Funktionen — symbolisches Ableiten und Integrieren
+# TOPIC: Functions — symbolic differentiation and integration
 # DESCRIPTION:
-# Bildet die Ableitung und die Stammfunktion einer symbolisch
-# definierten Funktion und wertet diese ggf. an einer Stelle aus.
+# Computes the derivative and the antiderivative of a symbolically
+# defined function and optionally evaluates them at a given point.
 # USE WHEN:
-# Wenn zu einer gegebenen Funktion f(x) schnell f'(x) bzw. ∫f(x) dx
-# benötigt wird (z.B. zur Vorbereitung des Newton-Verfahrens).
+# When, for a given function f(x), f'(x) or ∫f(x) dx is needed quickly
+# (e.g. as preparation for Newton's method).
 # EXAMPLE:
-# f(x) = sqrt(1 - x), Ableitung und Integral, ausgewertet bei x = 0.8.
+# f(x) = sqrt(1 - x), derivative and integral, evaluated at x = 0.8.
 # ============================================================
 
 from sympy import diff, integrate, sympify
@@ -15,34 +15,34 @@ from sympy import diff, integrate, sympify
 # ============================================================
 # PART 1 — Inputs
 # ============================================================
-fx     = "sqrt(1 - x)"          # Funktion als String
-symbol = "x"                    # Variable, nach der abgeleitet/integriert wird
-werte  = {"x": 0.8, "y": 0.6}   # Werte für die Auswertung
+fx     = "sqrt(1 - x)"          # function as string
+symbol = "x"                    # variable with respect to which to differentiate/integrate
+values  = {"x": 0.8, "y": 0.6}   # values for evaluation
 
 # ============================================================
 # PART 2 — Method selection
 # ============================================================
-# Only one method here. Ableitung UND Integral werden immer ausgegeben.
+# Only one method here. Derivative AND integral are always printed.
 
 # ============================================================
 # PART 3 — Implementation
 # ============================================================
-def differentiate_and_integrate_symbolic(fx, symbol, werte):
+def differentiate_and_integrate_symbolic(fx, symbol, values):
     fx_sym = sympify(fx)
     sym = sympify(symbol)
 
-    ableitung   = diff(fx_sym, sym)
-    stammfunkt  = integrate(fx_sym, sym)
+    derivative   = diff(fx_sym, sym)
+    antiderivative  = integrate(fx_sym, sym)
 
-    print(f"Funktion:           {fx_sym}")
-    print(f"Ableitung:          {ableitung}")
-    print(f"Stammfunktion:      {stammfunkt}")
+    print(f"Function:           {fx_sym}")
+    print(f"Derivative:         {derivative}")
+    print(f"Antiderivative:     {antiderivative}")
     print()
-    print(f"f(x)  ausgewertet:  {fx_sym.subs(werte).evalf()}")
-    print(f"f'(x) ausgewertet:  {ableitung.subs(werte).evalf()}")
-    return ableitung, stammfunkt
+    print(f"f(x)  evaluated:    {fx_sym.subs(values).evalf()}")
+    print(f"f'(x) evaluated:    {derivative.subs(values).evalf()}")
+    return derivative, antiderivative
 
 # ============================================================
 # PART 4 — Call
 # ============================================================
-differentiate_and_integrate_symbolic(fx, symbol, werte)
+differentiate_and_integrate_symbolic(fx, symbol, values)

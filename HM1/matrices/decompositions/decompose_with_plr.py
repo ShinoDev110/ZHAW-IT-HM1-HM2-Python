@@ -1,12 +1,12 @@
 # ============================================================
-# TOPIC: Matrix-Zerlegung — PLR-Zerlegung mit Zeilen-Pivotisierung
+# TOPIC: Matrix decomposition — PLR decomposition with row pivoting
 # DESCRIPTION:
-# Berechnet P·A = L·R mit Permutationsmatrix P, normierter unterer
-# Dreiecksmatrix L und oberer Dreiecksmatrix R. Löst zusätzlich Ax = b
-# über z = P·b, L·y = z, R·x = y.
+# Computes P·A = L·R with permutation matrix P, normalised lower
+# triangular matrix L and upper triangular matrix R. Also solves Ax = b
+# via z = P·b, L·y = z, R·x = y.
 # USE WHEN:
-# Wenn A nicht regulär nullpivotierbar ist (Standard-Fall): PLR ist die
-# stabile LR-Zerlegung mit Pivotsuche.
+# When A cannot be decomposed without zero pivots (standard case): PLR is
+# the stable LR decomposition with pivot search.
 # EXAMPLE:
 # A = [[2,2,-1],[1,-1,0],[2,0,1]], b = [-1/3, -11/3, 2/3].
 # ============================================================
@@ -29,7 +29,7 @@ b = np.array([[-1.0  / 3.0],
 # ============================================================
 # PART 2 — Method selection
 # ============================================================
-# Only one method here. Es wird immer P·A=L·R zerlegt UND Ax=b gelöst.
+# Only one method here. P·A=L·R is always decomposed AND Ax=b is solved.
 
 # ============================================================
 # PART 3 — Implementation
@@ -62,7 +62,7 @@ def _back_sub(U, y):
 def _plr_decompose(A, eps=1e-14):
     A = np.asarray(A, dtype=float)
     if A.ndim != 2 or A.shape[0] != A.shape[1]:
-        raise ValueError("A muss quadratisch (n,n) sein.")
+        raise ValueError("A must be square (n,n).")
     n = A.shape[0]
     R = A.copy()
     L = np.eye(n, dtype=float)
@@ -70,7 +70,7 @@ def _plr_decompose(A, eps=1e-14):
     for i in range(n):
         pivot = i + int(np.argmax(np.abs(R[i:, i])))
         if abs(R[pivot, i]) < eps:
-            raise ZeroDivisionError("PLR: Matrix singulär / Pivot zu klein.")
+            raise ZeroDivisionError("PLR: matrix singular / pivot too small.")
         if pivot != i:
             R[[i, pivot], :] = R[[pivot, i], :]
             L[[i, pivot], :i] = L[[pivot, i], :i]

@@ -1,15 +1,15 @@
 # ============================================================
-# TOPIC: Numerische Integration — Trapezregel für NICHT-äquidistante Stützpunkte
+# TOPIC: Numerical Integration — trapezoidal rule for NON-equidistant nodes
 # DESCRIPTION:
-# Approximiert int_{x_0}^{x_n} f(x) dx aus einer tabellierten Wertereihe
-# (x_i, y_i) mit beliebigen Abständen via Tf_neq = sum_{i=0}^{n-1}
+# Approximates int_{x_0}^{x_n} f(x) dx from a tabulated data series
+# (x_i, y_i) with arbitrary spacing via Tf_neq = sum_{i=0}^{n-1}
 # (y_i + y_{i+1})/2 * (x_{i+1} - x_i).
 # USE WHEN:
-# Wenn die Stützstellen NICHT gleichmässig verteilt sind, z.B. bei
-# Messdaten oder physikalischen Tabellen.
+# The nodes are NOT uniformly distributed, e.g. for measurement data
+# or physical tables.
 # EXAMPLE:
-# Erdmasse aus m = int_0^6370 rho(r) * 4 pi r^2 dr mit gegebener Dichte-
-# Tabelle bei nicht-äquidistanten Radien berechnen.
+# Earth mass from m = int_0^6370 rho(r) * 4 pi r^2 dr with a given density
+# table at non-equidistant radii.
 # ============================================================
 
 import numpy as np
@@ -17,11 +17,11 @@ import numpy as np
 # ============================================================
 # PART 1 — Inputs
 # ============================================================
-# Nicht-äquidistante x-Werte und zugehörige y-Werte des Integranden
+# Non-equidistant x values and corresponding y values of the integrand
 x_data = np.array([0, 800, 1200, 1400, 2000, 3000, 3400, 3600, 4000, 5000, 5500, 6370], dtype=float)
 rho    = np.array([13000, 12900, 12700, 12000, 11650, 10600, 9900, 5500, 5300, 4750, 4500, 3300], dtype=float)
 
-# Hier: Integrand y = rho * 4 pi r^2, mit r in METERN (km -> m)
+# Here: integrand y = rho * 4 pi r^2, with r in METERS (km -> m)
 x_int  = x_data * 1000
 y_data = rho * 4 * np.pi * x_int**2
 

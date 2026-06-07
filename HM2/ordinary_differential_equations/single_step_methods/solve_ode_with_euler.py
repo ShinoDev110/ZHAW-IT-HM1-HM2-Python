@@ -1,14 +1,14 @@
 # ============================================================
-# TOPIC: DGL — klassisches Euler-Verfahren für y'(x) = f(x, y)
+# TOPIC: ODE — classical Euler method for y'(x) = f(x, y)
 # DESCRIPTION:
-# Löst das Anfangswertproblem y'(x) = f(x, y), y(a) = y0 auf [a, b] mit
-# n Schritten via y_{i+1} = y_i + h * f(x_i, y_i). Plottet die Lösung,
-# optional zusammen mit der exakten Lösung und/oder dem Richtungsfeld.
+# Solves the initial value problem y'(x) = f(x, y), y(a) = y0 on [a, b] with
+# n steps via y_{i+1} = y_i + h * f(x_i, y_i). Plots the solution,
+# optionally together with the exact solution and/or the direction field.
 # USE WHEN:
-# Wenn eine DGL 1. Ordnung mit dem einfachsten Einschrittverfahren
-# (Konvergenzordnung p = 1) gelöst werden soll.
+# When a first-order ODE needs to be solved with the simplest single-step
+# method (convergence order p = 1).
 # EXAMPLE:
-# Löse y' = t^2 + 0.1*y mit y(-1.5) = 0 auf [-1.5, 1.5] mit n = 5.
+# Solve y' = t^2 + 0.1*y with y(-1.5) = 0 on [-1.5, 1.5] with n = 5.
 # ============================================================
 
 import numpy as np
@@ -24,7 +24,7 @@ a, b = -1.5, 1.5
 y0   = 0.0
 n    = 5
 
-# Optionale exakte Lösung (auf None setzen, wenn nicht verfügbar)
+# Optional exact solution (set to None if not available)
 def y_exact(x):
     return -10*x**2 - 200*x - 2000 + 1722.5 * np.exp(0.05 * (2*x + 3))
 
@@ -52,13 +52,13 @@ def solve_ode_euler(f, a, b, y0, n, y_exact=None):
     plt.plot(x, y, 'm-+', label='Euler')
     if y_exact is not None:
         xs = np.linspace(a, b, 300)
-        plt.plot(xs, y_exact(xs), 'r-', label='Exakt')
+        plt.plot(xs, y_exact(xs), 'r-', label='Exact')
         err = np.abs(y_exact(x) - y)
-        print("\nAbsoluter Fehler |y(x_i) - y_i|:")
+        print("\nAbsolute error |y(x_i) - y_i|:")
         for i in range(n + 1):
             print(f"  i = {i}, x = {x[i]:.4f}, err = {err[i]:.6e}")
     plt.xlabel('x'); plt.ylabel('y'); plt.legend(); plt.grid(True)
-    plt.title("Euler-Verfahren")
+    plt.title("Euler Method")
     plt.show()
     return x, y
 

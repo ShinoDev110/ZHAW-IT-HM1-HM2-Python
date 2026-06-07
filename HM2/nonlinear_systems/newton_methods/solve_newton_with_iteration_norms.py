@@ -1,13 +1,13 @@
 # ============================================================
-# TOPIC: Newton-Verfahren — mit ||f(x)||_2 und ||x^(k) - x^(k-1)||_2 pro Iteration
+# TOPIC: Newton method — with ||f(x)||_2 and ||x^(k) - x^(k-1)||_2 per iteration
 # DESCRIPTION:
-# Führt das Newton-Verfahren mit zusätzlicher Ausgabe von ||f(x^(k))||_2 und
-# ||x^(k) - x^(k-1)||_2 pro Iteration aus.
+# Runs the Newton method with additional output of ||f(x^(k))||_2 and
+# ||x^(k) - x^(k-1)||_2 per iteration.
 # USE WHEN:
-# Wenn in einer Klausur oder Übung die ersten Newton-Schritte mit Normen angegeben
-# oder kontrolliert werden sollen.
+# When the first Newton steps with norms need to be listed or checked
+# in an exam or exercise.
 # EXAMPLE:
-# Die ersten zwei Schritte für das gegebene System ab x^(0)=(1.1,0.9)^T berechnen.
+# Compute the first two steps for the given system from x^(0)=(1.1,0.9)^T.
 # ============================================================
 
 import numpy as np
@@ -16,18 +16,18 @@ import sympy as sp
 # ============================================================
 # PART 1 — Inputs
 # ============================================================
-x1, x2 = sp.symbols('x1 x2')    # symbolische Variablen
-X = sp.Matrix([x1, x2])         # Vektor der Unbekannten
+x1, x2 = sp.symbols('x1 x2')    # symbolic variables
+X = sp.Matrix([x1, x2])         # vector of unknowns
 
 f_sym = sp.Matrix([
-    20 - 18*x1 - 2*x2**2,                         # erste Gleichung
-    -4*x2*(x1 - x2**2)                            # zweite Gleichung
+    20 - 18*x1 - 2*x2**2,                         # first equation
+    -4*x2*(x1 - x2**2)                            # second equation
 ])
 
-x0       = np.array([1.1, 0.9], dtype=float)      # Startvektor
-tol      = 1e-5                                   # Abbruchschwelle für ||f(x)||
-max_iter = 100                                    # maximale Iterationszahl
-n_steps  = 2                                      # exakte Schrittzahl für "fixed_steps"
+x0       = np.array([1.1, 0.9], dtype=float)      # initial vector
+tol      = 1e-5                                   # stop threshold for ||f(x)||
+max_iter = 100                                    # maximum number of iterations
+n_steps  = 2                                      # exact step count for "fixed_steps"
 
 # ============================================================
 # PART 2 — Method selection
@@ -74,7 +74,7 @@ def newton_with_norms(f_sym, X, x0, tol, max_iter, n_steps, method):
         k     += 1
         print(f"k = {k}   x = {x}   ||f(x)|| = {err_f:.6e}   ||x-x_prev|| = {err_x:.6e}")
 
-    print(f"\nNäherungslösung nach {k} Schritten: x = {x}")
+    print(f"\nApproximate solution after {k} steps: x = {x}")
     return x, k
 
 # ============================================================

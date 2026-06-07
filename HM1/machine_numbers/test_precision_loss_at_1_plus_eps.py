@@ -1,20 +1,20 @@
 # ============================================================
-# TOPIC: Maschinenzahlen — Auflösung von (1 + 10^-n) testen
+# TOPIC: Machine numbers — testing resolution of (1 + 10^-n)
 # DESCRIPTION:
-# Berechnet 1 + 10^-n für n = 1..N und beobachtet, ab welcher Stelle
-# das Ergebnis in Gleitkommazahlen wieder zu 1 wird. Zeigt, wo der
-# Übergang zur Maschinengenauigkeit liegt.
+# Computes 1 + 10^-n for n = 1..N and observes at which point
+# the result in floating-point numbers becomes 1 again. Shows
+# where the transition to machine precision lies.
 # USE WHEN:
-# Wenn die effektive Maschinengenauigkeit (resp. der Verlust kleiner
-# Beiträge) empirisch sichtbar gemacht werden soll.
+# When the effective machine precision (resp. the loss of small
+# contributions) should be made empirically visible.
 # EXAMPLE:
-# n = 1..60 -> (1 + 10^-n) und Vergleich mit 1.
+# n = 1..60 -> (1 + 10^-n) and comparison with 1.
 # ============================================================
 
 # ============================================================
 # PART 1 — Inputs
 # ============================================================
-anzahl_stellen = 18  # max. untersuchte Nachkommastelle n
+digit_count = 18  # max. investigated decimal place n
 
 # ============================================================
 # PART 2 — Method selection
@@ -24,10 +24,10 @@ anzahl_stellen = 18  # max. untersuchte Nachkommastelle n
 # ============================================================
 # PART 3 — Implementation
 # ============================================================
-def test_precision_loss_at_1_plus_eps(anzahl_stellen):
+def test_precision_loss_at_1_plus_eps(digit_count):
     print(f"{'n':>3} | {'1 + 10^-n':>26} | {'== 1?':>6}")
     print("-" * 45)
-    for n in range(1, anzahl_stellen + 1):
+    for n in range(1, digit_count + 1):
         eps = 1.0 / (10 ** n)
         val = 1.0 + eps
         print(f"{n:>3} | {val:>26.20f} | {val == 1.0!s:>6}")
@@ -35,4 +35,4 @@ def test_precision_loss_at_1_plus_eps(anzahl_stellen):
 # ============================================================
 # PART 4 — Call
 # ============================================================
-test_precision_loss_at_1_plus_eps(anzahl_stellen)
+test_precision_loss_at_1_plus_eps(digit_count)

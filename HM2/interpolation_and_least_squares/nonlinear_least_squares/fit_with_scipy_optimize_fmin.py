@@ -1,14 +1,14 @@
 # ============================================================
-# TOPIC: Nichtlinearer Fit mit scipy.optimize.fmin (direkte Minimierung)
+# TOPIC: Nonlinear fit with scipy.optimize.fmin (direct minimization)
 # DESCRIPTION:
-# Minimiert das Fehlerfunktional E(lambda) = sum (y_i - f(lambda, x_i))^2
-# direkt mit scipy.optimize.fmin (Nelder-Mead). Kein Gradient nötig.
+# Minimizes the error functional E(lambda) = sum (y_i - f(lambda, x_i))^2
+# directly with scipy.optimize.fmin (Nelder-Mead). No gradient required.
 # USE WHEN:
-# Wenn als Vergleich oder schnelle Alternative zum Gauss-Newton-Verfahren
-# ein fertiger Optimierer verwendet werden soll (oder als Sanity-Check).
+# When a ready-made optimizer is to be used as a comparison or quick alternative
+# to the Gauss-Newton method (or as a sanity check).
 # EXAMPLE:
-# Fit f(x) = λ0 + λ1·10^(λ2+λ3·x) / (1 + 10^(λ2+λ3·x)) mit scipy.optimize.fmin
-# und Vergleich zur Gauss-Newton-Lösung.
+# Fit f(x) = λ0 + λ1·10^(λ2+λ3·x) / (1 + 10^(λ2+λ3·x)) with scipy.optimize.fmin
+# and compare to the Gauss-Newton solution.
 # ============================================================
 
 import numpy as np
@@ -43,15 +43,15 @@ def fit_with_scipy_fmin(x_data, y_data, model, lambda_0):
         return np.sum((y_data - model(p, x_data))**2)
 
     p_opt = fmin(error_functional, lambda_0, disp=True)
-    print(f"\nLösung lambda = {p_opt}")
+    print(f"\nSolution lambda = {p_opt}")
     print(f"E(lambda) = {error_functional(p_opt):.6e}")
 
     xs = np.linspace(x_data.min(), x_data.max(), 300)
     plt.figure(figsize=(10, 6))
-    plt.plot(x_data, y_data, 'ko', markersize=8, label='Datenpunkte')
-    plt.plot(xs, model(p_opt, xs), 'b-', label='scipy.optimize.fmin-Fit')
+    plt.plot(x_data, y_data, 'ko', markersize=8, label='Data points')
+    plt.plot(xs, model(p_opt, xs), 'b-', label='scipy.optimize.fmin fit')
     plt.xlabel('x'); plt.ylabel('y'); plt.legend(); plt.grid(True)
-    plt.title('Fit mit scipy.optimize.fmin')
+    plt.title('Fit with scipy.optimize.fmin')
     plt.show()
     return p_opt
 

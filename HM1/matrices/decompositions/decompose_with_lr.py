@@ -1,12 +1,12 @@
 # ============================================================
-# TOPIC: Matrix-Zerlegung — LR-Zerlegung ohne Pivotisierung
+# TOPIC: Matrix decomposition — LR decomposition without pivoting
 # DESCRIPTION:
-# Berechnet die LR-Zerlegung A = L · R einer quadratischen Matrix ohne
-# Pivotwahl und löst gleichzeitig Ax = b mittels Vorwärts- und
-# Rückwärtseinsetzen.
+# Computes the LR decomposition A = L · R of a square matrix without
+# pivot selection and simultaneously solves Ax = b via forward and
+# backward substitution.
 # USE WHEN:
-# Wenn ein lineares Gleichungssystem mit einer Matrix gelöst werden
-# soll, deren Pivot-Elemente in der Gauss-Elimination nicht null sind.
+# When solving a linear system of equations with a matrix whose
+# pivot elements in Gaussian elimination are non-zero.
 # EXAMPLE:
 # A = [[2,2,-1],[1,-1,0],[2,0,1]], b = [-1/3, -11/3, 2/3].
 # ============================================================
@@ -29,7 +29,7 @@ b = np.array([[-1.0  / 3.0],
 # ============================================================
 # PART 2 — Method selection
 # ============================================================
-# Only one method here. Es wird immer A in L·R zerlegt UND Ax=b gelöst.
+# Only one method here. A is always decomposed into L·R AND Ax=b is solved.
 
 # ============================================================
 # PART 3 — Implementation
@@ -62,13 +62,13 @@ def _back_sub(U, y):
 def _lr_decompose(A, eps=1e-14):
     A = np.asarray(A, dtype=float)
     if A.ndim != 2 or A.shape[0] != A.shape[1]:
-        raise ValueError("A muss quadratisch (n,n) sein.")
+        raise ValueError("A must be square (n,n).")
     n = A.shape[0]
     R = A.copy()
     L = np.eye(n, dtype=float)
     for i in range(n):
         if abs(R[i, i]) < eps:
-            raise ZeroDivisionError("LR ohne Pivoting: Pivot ist 0/zu klein.")
+            raise ZeroDivisionError("LR without pivoting: pivot is 0 / too small.")
         for j in range(i + 1, n):
             factor = R[j, i] / R[i, i]
             L[j, i] = factor

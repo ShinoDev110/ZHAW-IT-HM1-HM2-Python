@@ -1,13 +1,13 @@
 # ============================================================
-# TOPIC: DGL — Mittelpunkt-Verfahren für y'(x) = f(x, y)
+# TOPIC: ODE — midpoint method for y'(x) = f(x, y)
 # DESCRIPTION:
-# Halber Euler-Schritt bis (x + h/2, y + h/2 * f(x, y)), dort Steigung
-# auswerten, voller Schritt mit dieser Steigung. Konvergenzordnung p = 2.
+# Half Euler step to (x + h/2, y + h/2 * f(x, y)), evaluate slope
+# there, full step with that slope. Convergence order p = 2.
 # USE WHEN:
-# Wenn eine DGL 1. Ordnung mit einem Verfahren 2. Ordnung gelöst werden
-# soll, ohne den Aufwand von Runge-Kutta zu betreiben.
+# When a first-order ODE needs to be solved with a second-order method,
+# without the effort of Runge-Kutta.
 # EXAMPLE:
-# Löse y' = x^2 / y mit y(0) = 2 auf [0, 1.4] mit h = 0.7.
+# Solve y' = x^2 / y with y(0) = 2 on [0, 1.4] with h = 0.7.
 # ============================================================
 
 import numpy as np
@@ -49,16 +49,16 @@ def solve_ode_midpoint(f, a, b, y0, n, y_exact=None):
         print(f"{i+1:<3} {x[i+1]:<10.4f} {y[i+1]:<14.6f}")
 
     plt.figure(figsize=(9, 6))
-    plt.plot(x, y, 'b-+', label='Mittelpunkt')
+    plt.plot(x, y, 'b-+', label='Midpoint')
     if y_exact is not None:
         xs = np.linspace(a, b, 300)
-        plt.plot(xs, y_exact(xs), 'r-', label='Exakt')
+        plt.plot(xs, y_exact(xs), 'r-', label='Exact')
         err = np.abs(y_exact(x) - y)
-        print("\nAbsoluter Fehler:")
+        print("\nAbsolute error:")
         for i in range(n + 1):
             print(f"  i = {i}, x = {x[i]:.4f}, err = {err[i]:.6e}")
     plt.xlabel('x'); plt.ylabel('y'); plt.legend(); plt.grid(True)
-    plt.title("Mittelpunkt-Verfahren")
+    plt.title("Midpoint Method")
     plt.show()
     return x, y
 

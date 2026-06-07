@@ -1,15 +1,15 @@
 # ============================================================
-# TOPIC: Vergleich — ungedämpftes vs. gedämpftes Gauss-Newton-Verfahren
+# TOPIC: Comparison — undamped vs. damped Gauss-Newton method
 # DESCRIPTION:
-# Wendet beide Gauss-Newton-Varianten auf dasselbe nichtlineare
-# Ausgleichsproblem an und vergleicht Iterationszahl und Konvergenz.
-# Endet auch wenn das ungedämpfte Verfahren divergiert (max_iter).
+# Applies both Gauss-Newton variants to the same nonlinear
+# least-squares problem and compares iteration count and convergence.
+# Terminates even if the undamped method diverges (max_iter).
 # USE WHEN:
-# Wenn eine Aufgabe nach dem Vergleich beider Gauss-Newton-Varianten fragt
-# (Konvergenzbereich, Iterationszahl).
+# When a task asks for a comparison of both Gauss-Newton variants
+# (convergence region, iteration count).
 # EXAMPLE:
-# Exponentialer Fit f(x) = a·exp(b·x) mit zwei verschiedenen Startvektoren
-# (1, -1.5) und (2, 2) — letzterer divergiert beim ungedämpften Verfahren.
+# Exponential fit f(x) = a·exp(b·x) with two different initial vectors
+# (1, -1.5) and (2, 2) — the latter diverges with the undamped method.
 # ============================================================
 
 import numpy as np
@@ -58,7 +58,10 @@ def compare_gauss_newton_methods(x_data, y_data, params, model, start_vectors, t
         p = p0.copy().astype(float); k = 0
         while np.linalg.norm(g_eval(p), 2) > tol and k < max_iter:
             Q, R = np.linalg.qr(Dg_eval(p))
-            p = p + np.linalg.solve(R, -Q.T @ g_eval(p))
+            try:
+                p = p + np.linalg.solve(R, -Q.T @ g_eval(p))
+            except np.linalg.LinAlgError:
+                break  # singular matrix — method diverged
             k += 1
         return p, k, np.linalg.norm(g_eval(p), 2)
 
@@ -77,10 +80,10 @@ def compare_gauss_newton_methods(x_data, y_data, params, model, start_vectors, t
             k += 1
         return p, k, np.linalg.norm(g_eval(p), 2)
 
-    print(f"{'Startvektor':<22} {'Verfahren':<22} {'Iter':<6} {'lambda':<35} {'||g||':<12}")
+    print(f"{'Initial vector':<22} {'Method':<22} {'Iter':<6} {'lambda':<35} {'||g||':<12}")
     print("-" * 100)
     for p0 in start_vectors:
-        for name, runner in [("ungedämpft", run_undamped), ("gedämpft", run_damped)]:
+        for name, runner in [("undamped", run_undamped), ("damped", run_damped)]:
             p_sol, k, err = runner(p0)
             flag = "" if err <= tol else "  (DIV)"
             print(f"{str(p0):<22} {name:<22} {k:<6} {str(p_sol):<35} {err:.6e}{flag}")

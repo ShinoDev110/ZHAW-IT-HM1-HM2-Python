@@ -1,68 +1,68 @@
 # ============================================================
-# TOPIC: Maschinenzahlen — Maschinengenauigkeit zweier Rechner vergleichen
+# TOPIC: Machine numbers — comparing machine precision of two computers
 # DESCRIPTION:
-# Berechnet für mehrere Gleitkommaformate die Maschinengenauigkeit
-# eps = (B/2) · B^(-n) und bestimmt, welcher Rechner genauer rechnet
-# (kleineres eps). Erlaubt unterschiedliche Basen (binär, dezimal, hex, ...).
+# Computes the machine precision eps = (B/2) · B^(-n) for several
+# floating-point formats and determines which computer computes more
+# accurately (smaller eps). Allows different bases (binary, decimal, hex, ...).
 # USE WHEN:
-# Wenn zwei Rechner mit verschiedenen Basen/Mantissenlängen verglichen
-# werden sollen ("Welche Maschine rechnet genauer?").
+# When two computers with different bases/mantissa lengths should be
+# compared ("Which machine computes more accurately?").
 # EXAMPLE:
-# 46-stellige Binärarithmetik vs. 14-stellige Dezimalarithmetik
-# -> eps = 2^-46 ~= 1.42e-14 < 5·10^-14, also rechnet die Binärmaschine genauer.
+# 46-digit binary arithmetic vs. 14-digit decimal arithmetic
+# -> eps = 2^-46 ~= 1.42e-14 < 5·10^-14, so the binary machine is more accurate.
 # ============================================================
 
 # ============================================================
 # PART 1 — Inputs
 # ============================================================
-# Jede Maschine: Name, Basis B, Anzahl Mantissenstellen n.
-maschinen = [
-    {"name": "Binär (46-stellig)",   "base": 2,  "mantisse": 46},
-    {"name": "Dezimal (14-stellig)", "base": 10, "mantisse": 14},
+# Each machine: name, base B, number of mantissa digits n.
+machines = [
+    {"name": "Binary (46-digit)",   "base": 2,  "mantissa": 46},
+    {"name": "Decimal (14-digit)", "base": 10, "mantissa": 14},
 ]
 
-# Weiteres Beispiel (Aufgabe 2020_2.1c): 5-stellig binär vs. 2-stellig hex
-# maschinen = [
-#     {"name": "Binär (5-stellig)", "base": 2,  "mantisse": 5},
-#     {"name": "Hex (2-stellig)",   "base": 16, "mantisse": 2},
+# Further example (exercise 2020_2.1c): 5-digit binary vs. 2-digit hex
+# machines = [
+#     {"name": "Binary (5-digit)", "base": 2,  "mantissa": 5},
+#     {"name": "Hex (2-digit)",    "base": 16, "mantissa": 2},
 # ]
 
 # ============================================================
 # PART 2 — Method selection
 # ============================================================
-# Only one method here: eps = (B/2) · B^(-n) für jede Maschine, dann Vergleich.
+# Only one method here: eps = (B/2) · B^(-n) for each machine, then comparison.
 
 # ============================================================
 # PART 3 — Implementation
 # ============================================================
-def _eps(base, mantisse):
-    return (base / 2) * base ** (-mantisse)
+def _eps(base, mantissa):
+    return (base / 2) * base ** (-mantissa)
 
-def compare_machine_precision(maschinen):
+def compare_machine_precision(machines):
     print("============================================================")
-    print("Vergleich der Maschinengenauigkeit  eps = (B/2)·B^(-n)")
+    print("Comparison of machine precision  eps = (B/2)·B^(-n)")
     print("============================================================")
     results = []
-    for m in maschinen:
-        eps = _eps(m["base"], m["mantisse"])
-        results.append((m["name"], m["base"], m["mantisse"], eps))
-        print(f"  {m['name']:<24}: B={m['base']:<3} n={m['mantisse']:<3} "
+    for m in machines:
+        eps = _eps(m["base"], m["mantissa"])
+        results.append((m["name"], m["base"], m["mantissa"], eps))
+        print(f"  {m['name']:<24}: B={m['base']:<3} n={m['mantissa']:<3} "
               f"-> eps = {eps:.6g}")
 
     eps_values = [r[3] for r in results]
     eps_min = min(eps_values)
-    genaueste = [r[0] for r in results if r[3] == eps_min]
+    most_accurate = [r[0] for r in results if r[3] == eps_min]
 
-    print("\nKleinstes eps => genaueste Maschine.")
-    if len(genaueste) == len(results):
-        print("=> Alle Maschinen rechnen gleich genau (eps identisch).")
-    elif len(genaueste) > 1:
-        print(f"=> Gleich genau (kleinstes eps): {', '.join(genaueste)}")
+    print("\nSmallest eps => most accurate machine.")
+    if len(most_accurate) == len(results):
+        print("=> All machines compute equally accurately (eps identical).")
+    elif len(most_accurate) > 1:
+        print(f"=> Equally accurate (smallest eps): {', '.join(most_accurate)}")
     else:
-        print(f"=> Genaueste Maschine: {genaueste[0]} (eps = {eps_min:.6g})")
+        print(f"=> Most accurate machine: {most_accurate[0]} (eps = {eps_min:.6g})")
     return results
 
 # ============================================================
 # PART 4 — Call
 # ============================================================
-compare_machine_precision(maschinen)
+compare_machine_precision(machines)

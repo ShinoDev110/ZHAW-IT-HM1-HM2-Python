@@ -1,14 +1,14 @@
 # ============================================================
-# TOPIC: Nullstellenverfahren — Sekantenverfahren (1D)
+# TOPIC: Root-finding methods — secant method (1D)
 # DESCRIPTION:
-# Sekantenverfahren x_{k+1} = x_k - f(x_k)(x_k - x_{k-1}) / (f(x_k) - f(x_{k-1}))
-# für eine symbolisch gegebene Funktion. Approximiert f' durch die
-# Sekante; braucht zwei Startwerte. Abbruch per Toleranz oder Iterationszahl.
+# Secant method x_{k+1} = x_k - f(x_k)(x_k - x_{k-1}) / (f(x_k) - f(x_{k-1}))
+# for a symbolically given function. Approximates f' by the
+# secant; requires two initial values. Stopping by tolerance or iteration count.
 # USE WHEN:
-# Wenn eine Nullstelle gesucht ist, aber die Ableitung nicht analytisch
-# vorliegt oder zu teuer auszuwerten ist.
+# When a root is sought but the derivative is not analytically
+# available or too expensive to evaluate.
 # EXAMPLE:
-# f(x) = (x^2 + 1)^2 - 10 - 5/((x-1)^2 + 1), Startwerte x0=1.6, x1=1.7.
+# f(x) = (x^2 + 1)^2 - 10 - 5/((x-1)^2 + 1), initial values x0=1.6, x1=1.7.
 # ============================================================
 
 import sympy as sp
@@ -18,22 +18,22 @@ from sympy import sympify
 # PART 1 — Inputs
 # ============================================================
 x = sp.Symbol("x")
-funktion_1 = (x**2 + 1)**2 - 10
-funktion_2 = 5 / ((x - 1)**2 + 1)
-funktion   = funktion_1 - funktion_2   # f(x), deren Nullstelle gesucht ist
+function_1 = (x**2 + 1)**2 - 10
+function_2 = 5 / ((x - 1)**2 + 1)
+function   = function_1 - function_2   # f(x) whose root is sought
 
-x_0         = {"x": 1.6}   # erster Startwert
-x_1         = {"x": 1.7}   # zweiter Startwert
-toleranz    = 1e-6         # Toleranz für Abbruchkriterium
-iterationen = 2            # max. Iterationen (für Methode "iters")
-debug       = True         # Zwischenwerte anzeigen
+x_0         = {"x": 1.6}   # first initial value
+x_1         = {"x": 1.7}   # second initial value
+tolerance   = 1e-6         # tolerance for stopping criterion
+iterations  = 2            # max. iterations (for method "iters")
+debug       = True         # show intermediate values
 
 # ============================================================
 # PART 2 — Method selection
 # ============================================================
 # method:
-#   "tol"   -> Abbruch bei |x_{k+1} - x_k| < toleranz
-#   "iters" -> immer iterationen Schritte ausführen
+#   "tol"   -> stop when |x_{k+1} - x_k| < tolerance
+#   "iters" -> always execute iterations steps
 method = "tol"
 
 # ============================================================
@@ -43,7 +43,7 @@ def _secant_tol(fx, x0, x1, tol, debug=False, max_iter=1000):
     fx = sympify(fx)
     symbols = sorted(fx.free_symbols, key=lambda s: s.name)
     if not symbols:
-        raise ValueError("Keine Unbekannte in Funktion gefunden.")
+        raise ValueError("No unknown found in function.")
     s = symbols[0]
     x_nm1 = float(x0[str(s)])
     x_n   = float(x1[str(s)])
@@ -52,7 +52,7 @@ def _secant_tol(fx, x0, x1, tol, debug=False, max_iter=1000):
         f_n   = float(fx.subs({s: x_n}).evalf())
         denom = f_n - f_nm1
         if denom == 0:
-            raise ZeroDivisionError("Sekantenverfahren: f(x_n) - f(x_{n-1}) = 0.")
+            raise ZeroDivisionError("Secant method: f(x_n) - f(x_{n-1}) = 0.")
         x_np1 = x_n - f_n * (x_n - x_nm1) / denom
         if debug:
             print(f"---- Iteration {k + 1}")
@@ -64,13 +64,13 @@ def _secant_tol(fx, x0, x1, tol, debug=False, max_iter=1000):
         if abs(x_np1 - x_n) <= tol:
             return x_np1
         x_nm1, x_n = x_n, x_np1
-    raise RuntimeError("Maximale Iterationen erreicht.")
+    raise RuntimeError("Maximum iterations reached.")
 
 def _secant_iters(fx, x0, x1, iters, debug=False):
     fx = sympify(fx)
     symbols = sorted(fx.free_symbols, key=lambda s: s.name)
     if not symbols:
-        raise ValueError("Keine Unbekannte in Funktion gefunden.")
+        raise ValueError("No unknown found in function.")
     s = symbols[0]
     x_nm1 = float(x0[str(s)])
     x_n   = float(x1[str(s)])
@@ -79,7 +79,7 @@ def _secant_iters(fx, x0, x1, iters, debug=False):
         f_n   = float(fx.subs({s: x_n}).evalf())
         denom = f_n - f_nm1
         if denom == 0:
-            raise ZeroDivisionError("Sekantenverfahren: f(x_n) - f(x_{n-1}) = 0.")
+            raise ZeroDivisionError("Secant method: f(x_n) - f(x_{n-1}) = 0.")
         x_np1 = x_n - f_n * (x_n - x_nm1) / denom
         if debug:
             print(f"---- Iteration {k + 1}")
@@ -91,14 +91,14 @@ def _secant_iters(fx, x0, x1, iters, debug=False):
         x_nm1, x_n = x_n, x_np1
     return x_n
 
-def find_root_with_secant(method, funktion, x_0, x_1, toleranz, iterationen, debug=False):
+def find_root_with_secant(method, function, x_0, x_1, tolerance, iterations, debug=False):
     if method == "tol":
-        return _secant_tol(funktion, x_0, x_1, toleranz, debug)
+        return _secant_tol(function, x_0, x_1, tolerance, debug)
     if method == "iters":
-        return _secant_iters(funktion, x_0, x_1, iterationen, debug)
-    raise ValueError(f"Unbekannte Methode: {method!r}")
+        return _secant_iters(function, x_0, x_1, iterations, debug)
+    raise ValueError(f"Unknown method: {method!r}")
 
 # ============================================================
 # PART 4 — Call
 # ============================================================
-find_root_with_secant(method, funktion, x_0, x_1, toleranz, iterationen, debug)
+find_root_with_secant(method, function, x_0, x_1, tolerance, iterations, debug)

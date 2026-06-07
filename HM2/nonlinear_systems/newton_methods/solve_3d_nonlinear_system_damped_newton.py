@@ -1,14 +1,14 @@
 # ============================================================
-# TOPIC: Nichtlineare Gleichungssysteme — Gedämpftes Newton-Verfahren (3D-System)
+# TOPIC: Nonlinear systems of equations — Damped Newton method (3D system)
 # DESCRIPTION:
-# Löst ein nichtlineares 3×3-Gleichungssystem mit dem gedämpften Newton-Verfahren.
-# Gibt pro Iterationsschritt k ||f(x^(k))||₂ und ||x^(k) - x^(k-1)||₂ aus.
+# Solves a nonlinear 3x3 system of equations with the damped Newton method.
+# Outputs ||f(x^(k))||₂ and ||x^(k) - x^(k-1)||₂ per iteration step k.
 # USE WHEN:
-# Wenn das gedämpfte Newton-Verfahren auf ein 3D-System angewendet werden soll
-# (z.B. wenn Standard-Newton divergiert oder schlecht konditioniert ist).
+# When the damped Newton method is to be applied to a 3D system
+# (e.g. when standard Newton diverges or is poorly conditioned).
 # EXAMPLE:
-# Lösung von f(x1,x2,x3) = (x1+x2²-x3²-13, ln(x2/4)+e^(0.5x3-1)-1,
-#                             (x2-3)²-x3³+7) ausgehend von x^(0)=(1.5,3,2.5)^T.
+# Solution of f(x1,x2,x3) = (x1+x2²-x3²-13, ln(x2/4)+e^(0.5x3-1)-1,
+#                             (x2-3)²-x3³+7) starting from x^(0)=(1.5,3,2.5)^T.
 # ============================================================
 
 import numpy as np
@@ -17,8 +17,8 @@ import sympy as sp
 # ============================================================
 # PART 1 — Inputs
 # ============================================================
-x1, x2, x3 = sp.symbols('x1 x2 x3')   # symbolische Variablen
-X = sp.Matrix([x1, x2, x3])            # Vektor der Unbekannten
+x1, x2, x3 = sp.symbols('x1 x2 x3')   # symbolic variables
+X = sp.Matrix([x1, x2, x3])            # vector of unknowns
 
 f_sym = sp.Matrix([
     x1 + x2**2 - x3**2 - 13,                          # f1
@@ -26,15 +26,15 @@ f_sym = sp.Matrix([
     (x2 - 3)**2 - x3**3 + 7                            # f3
 ])
 
-x0       = np.array([1.5, 3.0, 2.5], dtype=float)    # Startvektor
-tol      = 1e-5                                        # Abbruch wenn ||f(x^(k))||₂ < tol
-max_iter = 50                                          # maximale Iterationszahl
-k_max    = 4                                           # maximale Dämpfungsstufe (Halbierungen)
+x0       = np.array([1.5, 3.0, 2.5], dtype=float)    # initial vector
+tol      = 1e-5                                        # stop when ||f(x^(k))||₂ < tol
+max_iter = 50                                          # maximum number of iterations
+k_max    = 4                                           # maximum damping level (halvings)
 
 # ============================================================
 # PART 2 — Method selection
 # ============================================================
-# Only one method: gedämpftes Newton-Verfahren.
+# Only one method: damped Newton method.
 
 # ============================================================
 # PART 3 — Implementation
@@ -56,8 +56,8 @@ def solve_3d_nonlinear_system_damped_newton(f_sym, X, x0, tol, max_iter, k_max):
     x     = x0.copy()
     x_old = x.copy()
 
-    print(f"Startvektor x^(0) = {x}")
-    print(f"Toleranz = {tol},  kmax = {k_max}\n")
+    print(f"Initial vector x^(0) = {x}")
+    print(f"Tolerance = {tol},  kmax = {k_max}\n")
     header = f"{'k':<4} {'||f(x^(k))||_2':<18} {'||x^(k)-x^(k-1)||_2':<22} {'x^(k)'}"
     print(header)
     print("-" * 75)
@@ -72,10 +72,10 @@ def solve_3d_nonlinear_system_damped_newton(f_sym, X, x0, tol, max_iter, k_max):
         try:
             delta = np.linalg.solve(Dfx, -fx)
         except np.linalg.LinAlgError:
-            print("Jacobi-Matrix ist singulär – Abbruch.")
+            print("Jacobian matrix is singular — stopping.")
             break
 
-        # Dämpfung: finde kleinstes k mit ||f(x + delta/2^k)|| < ||f(x)||
+        # Damping: find smallest k with ||f(x + delta/2^k)|| < ||f(x)||
         err_curr = np.linalg.norm(fx, 2)
         k_found  = None
         for k in range(k_max + 1):
@@ -84,7 +84,7 @@ def solve_3d_nonlinear_system_damped_newton(f_sym, X, x0, tol, max_iter, k_max):
                 k_found = k
                 break
         if k_found is None:
-            k_found = 0   # kein besserer Schritt gefunden → voller Schritt
+            k_found = 0   # no better step found -> full step
 
         x_old = x.copy()
         x     = x + delta / (2**k_found)
@@ -94,12 +94,12 @@ def solve_3d_nonlinear_system_damped_newton(f_sym, X, x0, tol, max_iter, k_max):
         print(f"{iteration:<4} {f_norm:<18.6e} {dx_norm:<22.6e} {np.round(x, 8)}")
 
         if f_norm < tol:
-            print(f"\nKonvergiert nach {iteration} Iterationen.")
-            print(f"Lösung: x* = {x}")
-            print(f"Residuum: ||f(x*)|| = {f_norm:.6e}")
+            print(f"\nConverged after {iteration} iterations.")
+            print(f"Solution: x* = {x}")
+            print(f"Residual: ||f(x*)|| = {f_norm:.6e}")
             return x
 
-    print(f"\nKeine Konvergenz nach {max_iter} Iterationen.")
+    print(f"\nNo convergence after {max_iter} iterations.")
     return x
 
 # ============================================================

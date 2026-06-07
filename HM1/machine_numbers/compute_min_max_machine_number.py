@@ -1,62 +1,62 @@
 # ============================================================
-# TOPIC: Maschinenzahlen — kleinste / grösste positive Maschinenzahl
+# TOPIC: Machine numbers — smallest / largest positive machine number
 # DESCRIPTION:
-# Berechnet x_min und x_max einer Maschinenzahlenmenge M(B, n, e_min, e_max).
-# Druckt zusätzlich die Zwischenrechnung mit Mantissen-/Exponentenstellen.
+# Computes x_min and x_max of a machine number set M(B, n, e_min, e_max).
+# Also prints intermediate results with mantissa/exponent digits.
 # USE WHEN:
-# Wenn für ein gegebenes Gleitkommaformat die kleinste und grösste
-# darstellbare positive Zahl bestimmt werden soll.
+# When the smallest and largest representable positive number of a
+# given floating-point format should be determined.
 # EXAMPLE:
-# Basis = 2, n = 20 Mantissenstellen, e_max-Stellen = 4 -> x_min und x_max.
+# Base = 2, n = 20 mantissa digits, e_max digits = 4 -> x_min and x_max.
 # ============================================================
 
 # ============================================================
 # PART 1 — Inputs
 # ============================================================
-basis            = 2    # Basis B des Zahlensystems
-mantisse_stellen = 20   # Anzahl Mantissenstellen n
-exponent_stellen = 4    # Anzahl Stellen für den Exponenten
-basis_exponent   = 2    # Basis für den Exponenten (üblicherweise = Basis)
-debug            = True # detaillierte Zwischenausgaben
+base             = 2    # base B of the number system
+mantissa_digits  = 20   # number of mantissa digits n
+exponent_digits  = 4    # number of digits for the exponent
+exponent_base    = 2    # base for the exponent (usually = base)
+debug            = True # detailed intermediate output
 
 # ============================================================
 # PART 2 — Method selection
 # ============================================================
-# Only one method here. Beide Werte (x_min, x_max) werden immer berechnet.
+# Only one method here. Both values (x_min, x_max) are always computed.
 
 # ============================================================
 # PART 3 — Implementation
 # ============================================================
-def _get_min(base_exponent, exp_stellen, debug=False):
-    max_zahl_im_system = base_exponent - 1
-    smallest_binary_number = "-" + f"{max_zahl_im_system}" * exp_stellen
+def _get_min(exp_base, exp_digits, debug=False):
+    max_digit_in_system = exp_base - 1
+    smallest_binary_number = "-" + f"{max_digit_in_system}" * exp_digits
     if debug:
-        print(f"Kleinste Zahl im {base_exponent}-System mit {exp_stellen} Stellen: 0.1 * {base_exponent}^{smallest_binary_number}")
-    return int(smallest_binary_number, base_exponent)
+        print(f"Smallest number in the {exp_base}-system with {exp_digits} digits: 0.1 * {exp_base}^{smallest_binary_number}")
+    return int(smallest_binary_number, exp_base)
 
-def _get_max(base_exponent, exp_stellen, debug=False):
-    max_zahl_im_system = base_exponent - 1
-    largest_binary_number = f"{max_zahl_im_system}" * exp_stellen
+def _get_max(exp_base, exp_digits, debug=False):
+    max_digit_in_system = exp_base - 1
+    largest_binary_number = f"{max_digit_in_system}" * exp_digits
     if debug:
-        print(f"Max Zahl im {base_exponent}-System mit {exp_stellen} Stellen: {base_exponent}^{largest_binary_number}")
-    return int(largest_binary_number, base_exponent)
+        print(f"Largest number in the {exp_base}-system with {exp_digits} digits: {exp_base}^{largest_binary_number}")
+    return int(largest_binary_number, exp_base)
 
-def compute_min_max_machine_number(base, base_exponent, m_stellen, exp_stellen, debug=False):
-    l_min = _get_min(base_exponent, exp_stellen, debug)
+def compute_min_max_machine_number(base, exp_base, m_digits, exp_digits, debug=False):
+    l_min = _get_min(exp_base, exp_digits, debug)
     if debug:
         print(f"B^(e_min - 1): {base}^({l_min} - 1) = {base}^({l_min - 1})")
-        print(f"Kleinste positive Maschinenzahl: {base ** (l_min - 1)}\n")
+        print(f"Smallest positive machine number: {base ** (l_min - 1)}\n")
     x_min = base ** l_min - 1
 
-    l_max = _get_max(base_exponent, exp_stellen, debug)
+    l_max = _get_max(exp_base, exp_digits, debug)
     if debug:
-        print(f"B^e_max - B^(e_max - n): {base}^{l_max} - {base}^({l_max} - {m_stellen}) = {base}^{l_max} - {base}^{l_max - m_stellen}")
-        print(f"Max Positive Maschinenzahl: {(base ** l_max) - (base ** (l_max - m_stellen))}")
-    x_max = (base ** l_max) - (base ** (l_max - m_stellen))
+        print(f"B^e_max - B^(e_max - n): {base}^{l_max} - {base}^({l_max} - {m_digits}) = {base}^{l_max} - {base}^{l_max - m_digits}")
+        print(f"Largest positive machine number: {(base ** l_max) - (base ** (l_max - m_digits))}")
+    x_max = (base ** l_max) - (base ** (l_max - m_digits))
 
     return x_min, x_max
 
 # ============================================================
 # PART 4 — Call
 # ============================================================
-compute_min_max_machine_number(basis, basis_exponent, mantisse_stellen, exponent_stellen, debug)
+compute_min_max_machine_number(base, exponent_base, mantissa_digits, exponent_digits, debug)

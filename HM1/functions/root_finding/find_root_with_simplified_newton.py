@@ -1,12 +1,12 @@
 # ============================================================
-# TOPIC: Nullstellenverfahren — vereinfachtes Newton-Verfahren
+# TOPIC: Root-finding methods — simplified Newton method
 # DESCRIPTION:
-# Vereinfachtes Newton: x_{k+1} = x_k - f(x_k) / f'(x_0). Die Ableitung
-# wird nur einmal am Startwert x0 ausgewertet und dann als konstant
-# angenommen. Spart Rechenaufwand, konvergiert aber nur linear.
+# Simplified Newton: x_{k+1} = x_k - f(x_k) / f'(x_0). The derivative
+# is evaluated only once at the initial value x0 and then treated as constant.
+# Saves computational effort but converges only linearly.
 # USE WHEN:
-# Wenn f'(x_0) bekannt ist und Berechnungen von f'(x_k) teuer sind, der
-# Startwert nahe genug an der Nullstelle liegt.
+# When f'(x_0) is known and evaluating f'(x_k) is expensive, and the
+# initial value is close enough to the root.
 # EXAMPLE:
 # f(x) = e^(x^2) + x^-3 - 10, f'(x) = 2x e^(x^2) - 3 x^-4, x0 = 1.5.
 # ============================================================
@@ -23,8 +23,8 @@ def df(x):
     return 2.0 * x * math.exp(x * x) - 3.0 * x ** -4
 
 x0            = 1.5
-toleranz      = 1e-8
-maximale_iter = 50
+tolerance     = 1e-8
+max_iterations = 50
 
 # ============================================================
 # PART 2 — Method selection
@@ -37,27 +37,27 @@ maximale_iter = 50
 def find_root_with_simplified_newton(f, df, x0, tol=1e-8, max_iter=50):
     df0 = float(df(x0))
     if df0 == 0.0:
-        raise ValueError("f'(x0) = 0, vereinfachtes Newton nicht anwendbar.")
+        raise ValueError("f'(x0) = 0, simplified Newton not applicable.")
 
-    x_alt = float(x0)
-    folge = [x_alt]
-    iterationen = 0
+    x_old = float(x0)
+    sequence = [x_old]
+    iterations = 0
 
-    while iterationen < max_iter:
-        fx = float(f(x_alt))
-        x_neu = x_alt - fx / df0
-        folge.append(x_neu)
-        iterationen += 1
-        print(f"k={iterationen} | x_k = {x_neu} | f(x_k) = {f(x_neu)}")
-        if abs(x_neu - x_alt) < tol:
+    while iterations < max_iter:
+        fx = float(f(x_old))
+        x_new = x_old - fx / df0
+        sequence.append(x_new)
+        iterations += 1
+        print(f"k={iterations} | x_k = {x_new} | f(x_k) = {f(x_new)}")
+        if abs(x_new - x_old) < tol:
             break
-        x_alt = x_neu
+        x_old = x_new
 
-    print(f"\nNäherungslösung: x ~= {x_neu}")
-    print(f"Iterationen:     {iterationen}")
-    return x_neu, iterationen, folge
+    print(f"\nApproximate solution: x ~= {x_new}")
+    print(f"Iterations:           {iterations}")
+    return x_new, iterations, sequence
 
 # ============================================================
 # PART 4 — Call
 # ============================================================
-find_root_with_simplified_newton(f, df, x0, toleranz, maximale_iter)
+find_root_with_simplified_newton(f, df, x0, tolerance, max_iterations)

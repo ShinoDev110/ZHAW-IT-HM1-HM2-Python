@@ -1,14 +1,14 @@
 # ============================================================
-# TOPIC: DGL — modifiziertes Euler-Verfahren (Heun) für y'(x) = f(x, y)
+# TOPIC: ODE — modified Euler method (Heun) for y'(x) = f(x, y)
 # DESCRIPTION:
-# Berechnet k1 = f(x_i, y_i), prädiziert mit klassischem Euler-Schritt,
-# wertet die Steigung k2 am Endpunkt aus und nimmt den Durchschnitt
-# (k1 + k2) / 2 als effektive Steigung. Konvergenzordnung p = 2.
+# Computes k1 = f(x_i, y_i), predicts with classical Euler step,
+# evaluates slope k2 at the endpoint and takes the average
+# (k1 + k2) / 2 as the effective slope. Convergence order p = 2.
 # USE WHEN:
-# Wenn eine DGL 1. Ordnung mit einem Heun-artigen Verfahren 2. Ordnung
-# gelöst werden soll.
+# When a first-order ODE needs to be solved with a Heun-type second-order
+# method.
 # EXAMPLE:
-# Löse y' = t^2 + 0.1 * y mit y(-1.5) = 0 auf [-1.5, 1.5] mit n = 5.
+# Solve y' = t^2 + 0.1 * y with y(-1.5) = 0 on [-1.5, 1.5] with n = 5.
 # ============================================================
 
 import numpy as np
@@ -54,13 +54,13 @@ def solve_ode_modified_euler(f, a, b, y0, n, y_exact=None):
     plt.plot(x, y, 'g-+', label='Mod. Euler')
     if y_exact is not None:
         xs = np.linspace(a, b, 300)
-        plt.plot(xs, y_exact(xs), 'r-', label='Exakt')
+        plt.plot(xs, y_exact(xs), 'r-', label='Exact')
         err = np.abs(y_exact(x) - y)
-        print("\nAbsoluter Fehler:")
+        print("\nAbsolute error:")
         for i in range(n + 1):
             print(f"  i = {i}, x = {x[i]:.4f}, err = {err[i]:.6e}")
     plt.xlabel('x'); plt.ylabel('y'); plt.legend(); plt.grid(True)
-    plt.title("Modifiziertes Euler-Verfahren (Heun)")
+    plt.title("Modified Euler Method (Heun)")
     plt.show()
     return x, y
 

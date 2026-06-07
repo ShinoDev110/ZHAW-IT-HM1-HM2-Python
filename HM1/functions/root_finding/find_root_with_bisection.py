@@ -1,14 +1,14 @@
 # ============================================================
-# TOPIC: Nullstellenverfahren — Bisektion (Intervallhalbierung)
+# TOPIC: Root-finding methods — bisection (interval halving)
 # DESCRIPTION:
-# Klassische Intervallhalbierung für f(x) = 0. Voraussetzung: f stetig
-# auf [a, b] und f(a)·f(b) < 0 (Vorzeichenwechsel). Liefert Mittelpunkt
-# des letzten Intervalls als Näherung und Iterationszahl.
+# Classic interval halving for f(x) = 0. Prerequisite: f continuous
+# on [a, b] and f(a)·f(b) < 0 (sign change). Returns the midpoint
+# of the last interval as approximation and the iteration count.
 # USE WHEN:
-# Wenn ein robuster (aber linear konvergenter) Nullstellenlöser ohne
-# Ableitungsinformation benötigt wird.
+# When a robust (but linearly convergent) root solver without
+# derivative information is needed.
 # EXAMPLE:
-# f(x) = e^(x^2) + x^-3 - 10 auf [0.5, 2.0], tol = 1e-8.
+# f(x) = e^(x^2) + x^-3 - 10 on [0.5, 2.0], tol = 1e-8.
 # ============================================================
 
 import math
@@ -19,10 +19,10 @@ import math
 def f(x):
     return math.exp(x * x) + x ** -3 - 10.0
 
-intervall_links  = 0.5
-intervall_rechts = 2.0
-toleranz         = 1e-8
-maximale_iter    = 100
+interval_left  = 0.5
+interval_right = 2.0
+tolerance      = 1e-8
+max_iterations = 100
 
 # ============================================================
 # PART 2 — Method selection
@@ -36,28 +36,28 @@ def find_root_with_bisection(f, a, b, tol=1e-8, max_iter=100):
     a, b = float(a), float(b)
     fa, fb = f(a), f(b)
     if fa * fb > 0:
-        raise ValueError("Bisektion: kein Vorzeichenwechsel im Startintervall.")
+        raise ValueError("Bisection: no sign change in the starting interval.")
 
-    iterationen = 0
-    while (b - a) / 2.0 > tol and iterationen < max_iter:
-        mitte = 0.5 * (a + b)
-        fm = f(mitte)
+    iterations = 0
+    while (b - a) / 2.0 > tol and iterations < max_iter:
+        midpoint = 0.5 * (a + b)
+        fm = f(midpoint)
         if fm == 0.0:
-            print(f"Exakter Treffer bei x = {mitte}, iterations = {iterationen + 1}")
-            return mitte, iterationen + 1
+            print(f"Exact hit at x = {midpoint}, iterations = {iterations + 1}")
+            return midpoint, iterations + 1
         if fa * fm < 0:
-            b, fb = mitte, fm
+            b, fb = midpoint, fm
         else:
-            a, fa = mitte, fm
-        iterationen += 1
+            a, fa = midpoint, fm
+        iterations += 1
 
-    x_naeherung = 0.5 * (a + b)
-    print(f"Nullstellen-Näherung: x ~= {x_naeherung}")
-    print(f"Iterationen: {iterationen}")
-    print(f"f(x) ~= {f(x_naeherung)}")
-    return x_naeherung, iterationen
+    x_approximation = 0.5 * (a + b)
+    print(f"Root approximation: x ~= {x_approximation}")
+    print(f"Iterations: {iterations}")
+    print(f"f(x) ~= {f(x_approximation)}")
+    return x_approximation, iterations
 
 # ============================================================
 # PART 4 — Call
 # ============================================================
-find_root_with_bisection(f, intervall_links, intervall_rechts, toleranz, maximale_iter)
+find_root_with_bisection(f, interval_left, interval_right, tolerance, max_iterations)

@@ -1,14 +1,14 @@
 # ============================================================
-# TOPIC: Numerische Integration — Gauss-Formeln (n = 1, 2, 3)
+# TOPIC: Numerical Integration — Gauss formulas (n = 1, 2, 3)
 # DESCRIPTION:
-# Approximiert int_a^b f(x) dx mit den Gauss-Quadraturformeln für 1, 2
-# oder 3 Stützstellen. Stützstellen und Gewichte sind so optimiert, dass
-# die Fehlerordnung maximal wird.
+# Approximates int_a^b f(x) dx with the Gauss quadrature formulas for 1, 2,
+# or 3 nodes. Nodes and weights are optimized so that the error order is
+# maximal.
 # USE WHEN:
-# Wenn ein Integral mit möglichst wenigen Funktionsauswertungen sehr
-# genau berechnet werden soll.
+# An integral is to be computed very accurately with as few function
+# evaluations as possible.
 # EXAMPLE:
-# Berechne int_0^0.5 exp(-x^2) dx mit der Gauss-Formel G3.
+# Compute int_0^0.5 exp(-x^2) dx with the Gauss formula G3.
 # ============================================================
 
 import numpy as np
@@ -26,10 +26,10 @@ b = 0.5
 # PART 2 — Method selection
 # ============================================================
 # Options:
-#   "G1"  -> 1 Stützstelle
-#   "G2"  -> 2 Stützstellen
-#   "G3"  -> 3 Stützstellen
-#   "all" -> alle drei
+#   "G1"  -> 1 node
+#   "G2"  -> 2 nodes
+#   "G3"  -> 3 nodes
+#   "all" -> all three
 method = "all"
 
 # ============================================================

@@ -1,14 +1,13 @@
 # ============================================================
-# TOPIC: Numerische Integration — Vergleich Rechteck / Trapez / Simpson / Gauss / Romberg
+# TOPIC: Numerical Integration — comparison of rectangle / trapezoidal / Simpson / Gauss / Romberg
 # DESCRIPTION:
-# Berechnet das gleiche bestimmte Integral mit allen behandelten Verfahren
-# und zeigt Wert sowie absoluten Fehler gegenüber einem Referenzwert
-# (scipy.integrate.quad als hochgenaue Referenz).
+# Computes the same definite integral with all covered methods and shows the
+# value and absolute error against a reference value
+# (scipy.integrate.quad as a high-accuracy reference).
 # USE WHEN:
-# Wenn eine Aufgabe nach dem Vergleich der Genauigkeit verschiedener
-# Quadraturverfahren fragt.
+# A task asks for a comparison of the accuracy of various quadrature methods.
 # EXAMPLE:
-# Vergleich aller Verfahren für int_0^0.5 exp(-x^2) dx mit n = 3 (Romberg: m = 3).
+# Compare all methods for int_0^0.5 exp(-x^2) dx with n = 3 (Romberg: m = 3).
 # ============================================================
 
 import numpy as np
@@ -22,8 +21,8 @@ def f(x):
 
 a = 0.0
 b = 0.5
-n = 3        # Subintervalle für Newton-Cotes
-m = 3        # Stufen für Romberg
+n = 3        # subintervals for Newton-Cotes
+m = 3        # levels for Romberg
 
 # ============================================================
 # PART 2 — Method selection
@@ -37,11 +36,11 @@ def compare_quadrature_methods(f, a, b, n, m):
     exact, _ = quad(f, a, b)
     h = (b - a) / n
 
-    # Rechteck
+    # Rectangle
     mids = np.array([a + (i + 0.5) * h for i in range(n)])
     Rf = h * np.sum(f(mids))
 
-    # Trapez
+    # Trapezoidal
     x = np.array([a + i * h for i in range(n + 1)])
     y = f(x)
     Tf = h * ((y[0] + y[-1]) / 2 + np.sum(y[1:-1]))
@@ -71,17 +70,17 @@ def compare_quadrature_methods(f, a, b, n, m):
     Romberg = T[0, m]
 
     results = [
-        (f"Rechteck (n={n})", Rf),
-        (f"Trapez (n={n})",   Tf),
-        (f"Simpson (n={n})",  Sf),
-        ("Gauss G1",          G1f),
-        ("Gauss G2",          G2f),
-        ("Gauss G3",          G3f),
-        (f"Romberg (m={m})",  Romberg),
+        (f"Rectangle (n={n})",   Rf),
+        (f"Trapezoidal (n={n})", Tf),
+        (f"Simpson (n={n})",     Sf),
+        ("Gauss G1",             G1f),
+        ("Gauss G2",             G2f),
+        ("Gauss G3",             G3f),
+        (f"Romberg (m={m})",     Romberg),
     ]
 
-    print(f"Referenz (scipy.quad): {exact:.12f}\n")
-    print(f"{'Methode':<22} {'Wert':<22} {'|Fehler|':<14}")
+    print(f"Reference (scipy.quad): {exact:.12f}\n")
+    print(f"{'Method':<22} {'Value':<22} {'|Error|':<14}")
     print("-" * 60)
     for name, val in results:
         print(f"{name:<22} {val:<22.12f} {abs(val - exact):.6e}")

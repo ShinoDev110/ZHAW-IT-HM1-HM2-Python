@@ -1,12 +1,12 @@
 # ============================================================
-# TOPIC: Nullstellenverfahren — Fehlerschranke per Vorzeichenwechsel
+# TOPIC: Root-finding methods — error bound via sign change
 # DESCRIPTION:
-# Prüft, ob im Intervall [x* - r, x* + r] um eine Näherung x* ein
-# Vorzeichenwechsel von f vorliegt. Wenn ja, gilt (unter Stetigkeit)
-# |x_wahr - x*| ≤ r.
+# Checks whether in the interval [x* - r, x* + r] around an approximation x*
+# a sign change of f exists. If so, (under continuity)
+# |x_true - x*| <= r holds.
 # USE WHEN:
-# Wenn nach Newton/Sekanten/etc. eine harte Fehlerschranke ohne
-# Ableitungsinformation benötigt wird.
+# When after Newton/secant/etc. a hard error bound without
+# derivative information is needed.
 # EXAMPLE:
 # f(x) = e^(x^2) + x^-3 - 10, x* ~= 1.65, r = 0.01.
 # ============================================================
@@ -31,17 +31,17 @@ radius   = 0.01
 # PART 3 — Implementation
 # ============================================================
 def verify_root_with_sign_change(f, x_approx, radius):
-    links  = x_approx - radius
-    rechts = x_approx + radius
-    f_l    = f(links)
-    f_r    = f(rechts)
-    ok     = f_l * f_r <= 0.0
-    print(f"f({links}) = {f_l}")
-    print(f"f({rechts}) = {f_r}")
+    left  = x_approx - radius
+    right = x_approx + radius
+    f_l   = f(left)
+    f_r   = f(right)
+    ok    = f_l * f_r <= 0.0
+    print(f"f({left}) = {f_l}")
+    print(f"f({right}) = {f_r}")
     if ok:
-        print(f"-> Vorzeichenwechsel: |x_wahr - {x_approx}| <= {radius}")
+        print(f"-> Sign change: |x_true - {x_approx}| <= {radius}")
     else:
-        print(f"-> KEIN Vorzeichenwechsel im Intervall [{links}, {rechts}]")
+        print(f"-> NO sign change in interval [{left}, {right}]")
     return ok
 
 # ============================================================

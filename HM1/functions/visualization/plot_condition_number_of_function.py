@@ -1,16 +1,16 @@
 # ============================================================
-# TOPIC: Visualisierung — Konditionszahl K_f(x) plotten + Schwellen-Bereich
+# TOPIC: Visualization — plot condition number K_f(x) + threshold region
 # DESCRIPTION:
-# Zeichnet K_f(x) = |x f'(x)/f(x)| (wahlweise halblogarithmisch) über ein
-# Intervall, markiert die Schwelle K = threshold und gibt die x-Bereiche aus,
-# in denen f gut konditioniert ist (K <= threshold). Zusätzlich wird das
-# Grenzverhalten von K an wählbaren Stellen (numerisch + sympy.limit) gezeigt.
+# Plots K_f(x) = |x f'(x)/f(x)| (optionally semilogarithmic) over an
+# interval, marks the threshold K = threshold and prints the x-regions
+# where f is well-conditioned (K <= threshold). Additionally shows the
+# limit behavior of K at selectable points (numerically + sympy.limit).
 # USE WHEN:
-# Wenn die gut/schlecht konditionierten Bereiche einer Funktion gesucht sind
-# (z.B. "für welche x ist K <= 1?") oder das Verhalten für x -> x0 / x -> R.
+# When the well/poorly conditioned regions of a function are sought
+# (e.g. "for which x is K <= 1?") or the behavior for x -> x0 / x -> R.
 # EXAMPLE:
-# f(x) = x·exp(x): K = |1+x|, gut konditioniert (K<=1) auf [-2, 0].
-# f(x) = x^2·sin(x) halblogarithmisch auf [-2pi, 3pi], Grenzwert bei x->0.
+# f(x) = x·exp(x): K = |1+x|, well-conditioned (K<=1) on [-2, 0].
+# f(x) = x^2·sin(x) semilogarithmic on [-2pi, 3pi], limit at x->0.
 # ============================================================
 
 import numpy as np
@@ -20,20 +20,20 @@ import sympy as sp
 # ============================================================
 # PART 1 — Inputs
 # ============================================================
-funktion     = "x*exp(x)"   # f(x) als String (sympy-Syntax)
-x_min        = -5.0         # linke Intervallgrenze
-x_max        = 5.0          # rechte Intervallgrenze
-n_pts        = 2000        # Anzahl Stützstellen
-threshold    = 1.0         # Schwelle für "gut konditioniert" (K <= threshold)
-limit_points = [0.0]       # Stellen, an denen das Grenzverhalten untersucht wird
+funktion     = "x*exp(x)"   # f(x) as string (sympy syntax)
+x_min        = -5.0         # left interval boundary
+x_max        = 5.0          # right interval boundary
+n_pts        = 2000        # number of support points
+threshold    = 1.0         # threshold for "well-conditioned" (K <= threshold)
+limit_points = [0.0]       # points at which limit behavior is investigated
 
 # ============================================================
 # PART 2 — Method selection
 # ============================================================
 # y_scale:
-#   "semilogy" -> log-Achse für K (entspricht "halblogarithmisch" der Aufgaben)
-#   "linear"   -> lineare K-Achse
-#   "loglog"   -> beide Achsen logarithmisch
+#   "semilogy" -> log axis for K (corresponds to "semilogarithmic" in exercises)
+#   "linear"   -> linear K axis
+#   "loglog"   -> both axes logarithmic
 y_scale = "semilogy"
 
 # ============================================================
@@ -48,7 +48,7 @@ def _build_K(funktion):
     return x, f, K_simpl, f_num
 
 def _threshold_regions(xs, Ks, threshold):
-    # zusammenhängende x-Bereiche, in denen K <= threshold (und endlich)
+    # contiguous x-regions where K <= threshold (and finite)
     mask = np.isfinite(Ks) & (Ks <= threshold)
     regions = []
     start = None
@@ -64,12 +64,12 @@ def _threshold_regions(xs, Ks, threshold):
 
 def _limit_analysis(x, K_simpl, points):
     for p in points:
-        print(f"-- Grenzverhalten bei x -> {p}")
+        print(f"-- Limit behavior at x -> {p}")
         try:
             lim = sp.limit(K_simpl, x, p)
             print(f"   sympy.limit(K, x, {p}) = {lim}")
         except Exception as exc:
-            print(f"   sympy.limit nicht bestimmbar ({exc})")
+            print(f"   sympy.limit not determinable ({exc})")
         for d in (1e-1, 1e-2, 1e-4, 1e-6, 1e-8):
             try:
                 val = float(K_simpl.subs(x, p + d).evalf())
@@ -82,7 +82,7 @@ def plot_condition_number_of_function(funktion, x_min, x_max, n_pts,
                                       threshold, limit_points, y_scale):
     x, f, K_simpl, f_num = _build_K(funktion)
     print("============================================================")
-    print("Konditionszahl-Analyse")
+    print("Condition number analysis")
     print("============================================================")
     print(f"f(x)   = {f}")
     print(f"K_f(x) = |x f'(x)/f(x)| = {K_simpl}\n")
@@ -93,12 +93,12 @@ def plot_condition_number_of_function(funktion, x_min, x_max, n_pts,
     Ks = np.where(np.isfinite(Ks), Ks, np.nan)
 
     regions = _threshold_regions(xs, Ks, threshold)
-    print(f"Gut konditioniert (K <= {threshold}) auf:")
+    print(f"Well-conditioned (K <= {threshold}) on:")
     if regions:
         for a, b in regions:
             print(f"   x in [{a:.4g}, {b:.4g}]")
     else:
-        print("   (kein Bereich im betrachteten Intervall)")
+        print("   (no region in the considered interval)")
     print()
 
     if limit_points:
@@ -119,7 +119,7 @@ def plot_condition_number_of_function(funktion, x_min, x_max, n_pts,
         plt.yscale("log"); plt.xscale("log")
     plt.xlabel("x")
     plt.ylabel("K_f(x)")
-    plt.title(f"Konditionszahl von f(x) = {funktion}")
+    plt.title(f"Condition number of f(x) = {funktion}")
     plt.grid(True, which="both")
     plt.legend()
     plt.tight_layout()

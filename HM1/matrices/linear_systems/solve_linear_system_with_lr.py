@@ -1,12 +1,12 @@
 # ============================================================
-# TOPIC: Lineare Systeme — Lösen über vorberechnete L,R
+# TOPIC: Linear Systems — solving via pre-computed L, R
 # DESCRIPTION:
-# Löst Ax = b über eine schon vorhandene LR-Zerlegung A = L·R, indem
-# Ly = b vorwärts und Rx = y rückwärts gelöst werden. Hilfreich, wenn
-# A einmal zerlegt und mit vielen verschiedenen b's gelöst werden soll.
+# Solves Ax = b using an already available LR decomposition A = L·R by
+# solving Ly = b forward and Rx = y backward. Useful when
+# A is decomposed once and needs to be solved for many different b's.
 # USE WHEN:
-# Wenn A fix ist und x für mehrere rechte Seiten b benötigt wird —
-# einmal LR zerlegen, dann pro b nur 2 Dreieckslösungen.
+# When A is fixed and x is needed for multiple right-hand sides b —
+# decompose LR once, then only 2 triangular solves per b.
 # EXAMPLE:
 # A = [[2,2,-1],[1,-1,0],[2,0,1]], b = [-1/3, -11/3, 2/3].
 # ============================================================
@@ -29,7 +29,7 @@ b = np.array([-1.0 / 3.0,
 # ============================================================
 # PART 2 — Method selection
 # ============================================================
-# Only one method here (LR ohne Pivot + Vor/Rückwärtseinsetzen).
+# Only one method here (LR without pivoting + forward/back substitution).
 
 # ============================================================
 # PART 3 — Implementation
@@ -41,7 +41,7 @@ def _lr_decompose(A):
     L = np.eye(n)
     for k in range(n - 1):
         if R[k, k] == 0.0:
-            raise ValueError("Nullpivot in LR ohne Pivotwahl.")
+            raise ValueError("Zero pivot in LR decomposition without pivoting.")
         for i in range(k + 1, n):
             mult = R[i, k] / R[k, k]
             L[i, k] = mult

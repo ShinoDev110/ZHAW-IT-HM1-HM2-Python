@@ -1,12 +1,12 @@
 # ============================================================
-# TOPIC: Diagonalisierung — T aus Eigenvektoren bauen und D = T^-1 A T
+# TOPIC: Diagonalization — build T from eigenvectors and D = T^-1 A T
 # DESCRIPTION:
-# Baut die Transformationsmatrix T aus den Spalten der Eigenvektoren,
-# prüft rank(T) == n und berechnet D = T^-1 A T. Wahlweise auch mit
-# einer manuell vorgegebenen T-Matrix vergleichen.
+# Builds the transformation matrix T from the columns of the eigenvectors,
+# checks rank(T) == n and computes D = T^-1 A T. Optionally also compare
+# with a manually provided T matrix.
 # USE WHEN:
-# Wenn geprüft werden soll, ob eine Matrix A diagonalisierbar ist und
-# welche Diagonalform sich ergibt.
+# When it should be checked whether a matrix A is diagonalizable and
+# what diagonal form results.
 # EXAMPLE:
 # A = [[2,0,1],[7,-5,9],[6,-6,9]].
 # ============================================================
@@ -25,7 +25,7 @@ A = np.array([[2.0,  0.0, 1.0],
 tol   = 1e-10
 debug = True
 
-# Optional: manuell vorgegebenes T (für Methode "manual"):
+# Optional: manually provided T (for method "manual"):
 T_given = np.array([[ 3.0, 1.0, 1.0],
                     [-1.0, 1.0, 2.0],
                     [-3.0, 0.0, 1.0]])
@@ -34,8 +34,8 @@ T_given = np.array([[ 3.0, 1.0, 1.0],
 # PART 2 — Method selection
 # ============================================================
 # method:
-#   "auto"   -> T aus Eigenvektoren von A bauen, D = T^-1 A T prüfen
-#   "manual" -> mit vorgegebenem T_given vergleichen
+#   "auto"   -> build T from eigenvectors of A, check D = T^-1 A T
+#   "manual" -> compare with provided T_given
 method = "auto"
 
 # ============================================================
@@ -79,35 +79,35 @@ def _diagonalize_with_T(A, T, tol=1e-10, debug=False):
 def build_diagonalization_matrix_t(method, A, T_given, tol=1e-10, debug=False):
     A = np.asarray(A, dtype=float)
     if A.ndim != 2 or A.shape[0] != A.shape[1]:
-        raise ValueError("A muss quadratisch sein.")
+        raise ValueError("A must be square.")
     n = A.shape[0]
 
     if method == "auto":
         _line("Automatic diagonalization check (build T from eigenvectors)")
         print("A =\n", A)
-        T, eigenwerte, rank_T = _make_T_from_eigenvectors(A, tol=tol)
-        _line("Eigenwerte / Eigenvektoren via numpy.linalg.eig")
-        print("Eigenwerte (ungeordnet) =")
-        for i, lam in enumerate(eigenwerte, start=1):
+        T, eigenvalues, rank_T = _make_T_from_eigenvectors(A, tol=tol)
+        _line("Eigenvalues / Eigenvectors via numpy.linalg.eig")
+        print("Eigenvalues (unordered) =")
+        for i, lam in enumerate(eigenvalues, start=1):
             print(f"  lambda{i} = {lam}")
-        print("\nT (Spalten = Eigenvektoren) =\n", T)
-        print(f"\nrank(T) = {rank_T} (braucht {n} für Diagonalisierbarkeit)")
+        print("\nT (columns = eigenvectors) =\n", T)
+        print(f"\nrank(T) = {rank_T} (needs {n} for diagonalizability)")
         if rank_T < n:
             _line("Result")
-            print("Nicht diagonalisierbar (zu wenige linear unabhängige Eigenvektoren).")
-            return None, eigenwerte, T
+            print("Not diagonalizable (too few linearly independent eigenvectors).")
+            return None, eigenvalues, T
         D, diag_ok = _diagonalize_with_T(A, T, tol=tol, debug=debug)
         _line("Result")
         if diag_ok:
-            print("Diagonalisierbar.")
+            print("Diagonalizable.")
             print("\nD = T^-1 A T =\n", D)
-            print("\nDiagonal von D (sollte Eigenwerte sein):")
+            print("\nDiagonal of D (should be eigenvalues):")
             for i, d in enumerate(np.diag(D), start=1):
                 print(f"  D[{i},{i}] = {d}")
         else:
-            print("T invertierbar, aber D numerisch nicht diagonal (Rundung/komplex).")
+            print("T invertible, but D numerically not diagonal (rounding/complex).")
             print("\nD =\n", D)
-        return D, eigenwerte, T
+        return D, eigenvalues, T
 
     if method == "manual":
         _line("Manual check with provided T")
@@ -115,7 +115,7 @@ def build_diagonalization_matrix_t(method, A, T_given, tol=1e-10, debug=False):
         print("\nDiagonal with this T" if ok else "\nNOT diagonal with this T")
         return D, None, T_given
 
-    raise ValueError(f"Unbekannte Methode: {method!r}")
+    raise ValueError(f"Unknown method: {method!r}")
 
 # ============================================================
 # PART 4 — Call

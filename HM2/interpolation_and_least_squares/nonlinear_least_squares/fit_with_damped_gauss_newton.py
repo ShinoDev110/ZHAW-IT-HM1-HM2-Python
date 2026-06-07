@@ -1,14 +1,14 @@
 # ============================================================
-# TOPIC: Gedämpftes Gauss-Newton-Verfahren für nichtlineare Ausgleichsprobleme
+# TOPIC: Damped Gauss-Newton method for nonlinear least-squares problems
 # DESCRIPTION:
-# Wie Gauss-Newton, aber pro Iteration wird das minimale p in {0,...,p_max}
-# gesucht, sodass ||g(lambda + delta/2^p)|| < ||g(lambda)||. Wenn keines
-# existiert, p = 0. Robuster bei schlechten Startvektoren.
+# Like Gauss-Newton, but each iteration searches for the minimum p in {0,...,p_max}
+# such that ||g(lambda + delta/2^p)|| < ||g(lambda)||. If none
+# exists, p = 0. More robust with poor initial vectors.
 # USE WHEN:
-# Wenn das ungedämpfte Gauss-Newton-Verfahren divergiert oder oszilliert,
-# oder wenn der Startvektor möglicherweise weit vom Optimum entfernt ist.
+# When the undamped Gauss-Newton method diverges or oscillates,
+# or when the initial vector may be far from the optimum.
 # EXAMPLE:
-# Fit f(x) = λ0 + λ1·10^(λ2+λ3·x) / (1 + 10^(λ2+λ3·x)) mit Startvektor
+# Fit f(x) = λ0 + λ1·10^(λ2+λ3·x) / (1 + 10^(λ2+λ3·x)) with initial vector
 # (100, 120, 3, -1).
 # ============================================================
 
@@ -82,15 +82,15 @@ def damped_gauss_newton_fit(x_data, y_data, params, model, lambda_0, tol, max_it
         k  += 1
         print(f"k = {k}   p_damp = {p_found}   lambda = {p}   ||g|| = {err:.6e}")
 
-    print(f"\nLösung: lambda = {p}")
+    print(f"\nSolution: lambda = {p}")
 
     f_num = sp.lambdify((syms, sp.Symbol('x_var')), model(params, sp.Symbol('x_var')), "numpy")
     xs = np.linspace(x_data.min(), x_data.max(), 300)
     plt.figure(figsize=(10, 6))
-    plt.plot(x_data, y_data, 'ko', markersize=8, label='Datenpunkte')
-    plt.plot(xs, f_num(p, xs), 'b-', label='Gedämpftes Gauss-Newton-Fit')
+    plt.plot(x_data, y_data, 'ko', markersize=8, label='Data points')
+    plt.plot(xs, f_num(p, xs), 'b-', label='Damped Gauss-Newton fit')
     plt.xlabel('x'); plt.ylabel('y'); plt.legend(); plt.grid(True)
-    plt.title('Gedämpftes Gauss-Newton-Verfahren')
+    plt.title('Damped Gauss-Newton Method')
     plt.show()
     return p, k
 

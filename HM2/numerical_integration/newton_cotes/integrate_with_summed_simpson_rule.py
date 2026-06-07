@@ -1,14 +1,13 @@
 # ============================================================
-# TOPIC: Numerische Integration — summierte Simpson-Regel
+# TOPIC: Numerical Integration — summed Simpson rule
 # DESCRIPTION:
-# Approximiert int_a^b f(x) dx mit Sf(h) = h/3 * (f(a)/2 +
+# Approximates int_a^b f(x) dx with Sf(h) = h/3 * (f(a)/2 +
 # sum_{i=1}^{n-1} f(x_i) + 2 * sum_{i=1}^{n} f((x_{i-1}+x_i)/2) + f(b)/2)
-# gemäss Skript-Formel (Newton-Cotes Ordnung 2).
+# per script formula (Newton-Cotes order 2).
 # USE WHEN:
-# Wenn ein bestimmtes Integral mit der summierten Simpsonregel
-# approximiert werden soll.
+# A definite integral is to be approximated with the summed Simpson rule.
 # EXAMPLE:
-# Berechne int_2^4 1/x dx mit n = 4.
+# Compute int_2^4 1/x dx with n = 4.
 # ============================================================
 
 import numpy as np

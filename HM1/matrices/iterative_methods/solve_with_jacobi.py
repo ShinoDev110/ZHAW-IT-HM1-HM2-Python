@@ -1,14 +1,14 @@
 # ============================================================
-# TOPIC: Iterative Löser — Jacobi-Verfahren für Ax = b
+# TOPIC: Iterative Solvers — Jacobi method for Ax = b
 # DESCRIPTION:
-# Iterativer Jacobi-Löser mit Splittung A = D + L + R und Update
-# x^(k+1) = -D^-1 (L+R) x^(k) + D^-1 b. Liefert auf Wunsch a-priori
-# / a-posteriori Abbruchschranken pro Iteration.
+# Iterative Jacobi solver with splitting A = D + L + R and update
+# x^(k+1) = -D^-1 (L+R) x^(k) + D^-1 b. Optionally provides a-priori
+# / a-posteriori stop bounds per iteration.
 # USE WHEN:
-# Wenn ein lineares Gleichungssystem Ax = b iterativ gelöst werden soll
-# und A strikt diagonal-dominant ist (|D| > |L+R| zeilenweise).
+# When a linear system of equations Ax = b is to be solved iteratively
+# and A is strictly diagonally dominant (|D| > |L+R| row-wise).
 # EXAMPLE:
-# 3x3-System mit A = [[4,-1,1],[-2,5,1],[1,-2,5]], b = [5,11,12].
+# 3x3 system with A = [[4,-1,1],[-2,5,1],[1,-2,5]], b = [5,11,12].
 # ============================================================
 
 import numpy as np
@@ -22,29 +22,29 @@ np.set_printoptions(precision=6, suppress=True)
 # ============================================================
 A = np.array([[ 4.0, -1.0, 1.0],
               [-2.0,  5.0, 1.0],
-              [ 1.0, -2.0, 5.0]])              # Koeffizientenmatrix
+              [ 1.0, -2.0, 5.0]])              # coefficient matrix
 
 b = np.array([[5.0],
               [11.0],
-              [12.0]])                          # rechte Seite
+              [12.0]])                          # right-hand side
 
 x0 = np.array([[0.0],
                [0.0],
-               [0.0]])                          # Startvektor
+               [0.0]])                          # initial vector
 
-tol      = 1e-4    # Toleranz für Abbruchkriterium
-max_iter = 50      # Maximale Iterationsanzahl
-norm     = np.inf  # Verwendete Norm (1, 2 oder np.inf)
-debug    = True    # Zwischenresultate ausgeben
+tol      = 1e-4    # tolerance for stop criterion
+max_iter = 50      # maximum number of iterations
+norm     = np.inf  # norm used (1, 2 or np.inf)
+debug    = True    # print intermediate results
 
 # ============================================================
 # PART 2 — Method selection
 # ============================================================
-# Stop-Mode wählen:
-#   "fixed"        -> immer max_iter Schritte
-#   "aposteriori"  -> Abbruch wenn a-posteriori Schranke <= tol
-#   "apriori"      -> Abbruch wenn k >= a-priori Iterationsbedarf n
-#   "both"         -> Abbruch wenn (a-posteriori <= tol) ODER (k >= n)
+# Choose stop mode:
+#   "fixed"        -> always max_iter steps
+#   "aposteriori"  -> stop when a-posteriori bound <= tol
+#   "apriori"      -> stop when k >= a-priori iteration requirement n
+#   "both"         -> stop when (a-posteriori <= tol) OR (k >= n)
 stop_mode = "both"
 
 # ============================================================
@@ -60,7 +60,7 @@ def _A_to_LDR(A, debug=False):
     L = np.tril(A, -1)
     R = np.triu(A, 1)
     if debug:
-        print("-- A in D, L, R zerlegen")
+        print("-- decompose A into D, L, R")
         print("D =\n", D)
         print("L =\n", L)
         print("R =\n", R, "\n")
@@ -71,7 +71,7 @@ def _jacobi_BC_from_LDR(L, D, R, b, debug=False):
     B = -D_inv @ (L + R)
     C = D_inv @ _as_col(b)
     if debug:
-        print("-- Jacobi: B und C")
+        print("-- Jacobi: B and C")
         print("B = -D^-1(L+R) =\n", B)
         print("C = D^-1 b     =\n", C, "\n")
     return B, C
@@ -79,7 +79,7 @@ def _jacobi_BC_from_LDR(L, D, R, b, debug=False):
 def _a_posteriori(B, x_n, x_n_minus_1, norm=np.inf, debug=False):
     B_norm = lin.norm(B, norm)
     if B_norm >= 1:
-        raise ValueError(f"||B|| = {B_norm} >= 1 -> Abschätzung nicht gültig (keine Kontraktion).")
+        raise ValueError(f"||B|| = {B_norm} >= 1 -> estimate not valid (no contraction).")
     diff_norm = lin.norm(_as_col(x_n) - _as_col(x_n_minus_1), norm)
     err = (B_norm / (1 - B_norm)) * diff_norm
     if debug:
@@ -92,7 +92,7 @@ def _a_posteriori(B, x_n, x_n_minus_1, norm=np.inf, debug=False):
 def _a_priori_iterations(B, x0, x1, tol, norm=np.inf, debug=False):
     B_norm = lin.norm(B, norm)
     if B_norm >= 1:
-        raise ValueError(f"||B|| = {B_norm} >= 1 -> Abschätzung nicht gültig (keine Kontraktion).")
+        raise ValueError(f"||B|| = {B_norm} >= 1 -> estimate not valid (no contraction).")
     step_norm = lin.norm(_as_col(x1) - _as_col(x0), norm)
     if step_norm == 0:
         return 0.0, 0
@@ -122,11 +122,11 @@ def _print_result(B, C, xs, info):
     print("\n=== Jacobi Matrices ===")
     print("B =\n", B)
     print("C =\n", C, "\n")
-    print("=== Abbruch Info ===")
+    print("=== Stop Info ===")
     for k, v in info.items():
         print(f"{k}: {v}")
     k_last = info["iterations_done"]
-    print(f"\nLetzte Näherung x^{k_last} =\n{xs[k_last]}")
+    print(f"\nLast approximation x^{k_last} =\n{xs[k_last]}")
 
 def solve_linear_system_with_jacobi(A, b, x0, tol, max_iter, norm=np.inf,
                                     stop_mode="aposteriori", debug=False):
@@ -143,7 +143,7 @@ def solve_linear_system_with_jacobi(A, b, x0, tol, max_iter, norm=np.inf,
 
     B_norm = lin.norm(B, norm)
     if stop_mode in ("aposteriori", "apriori", "both") and B_norm >= 1:
-        raise ValueError(f"||B|| = {B_norm} >= 1 -> Abbruchkriterien nicht gültig (keine Kontraktion).")
+        raise ValueError(f"||B|| = {B_norm} >= 1 -> stop criteria not valid (no contraction).")
 
     n_apriori_real = None
     n_apriori_int  = None
@@ -157,7 +157,7 @@ def solve_linear_system_with_jacobi(A, b, x0, tol, max_iter, norm=np.inf,
         if debug:
             print(f"Target iterations from a-priori: n = {n_apriori_real} -> ceil = {n_apriori_int}\n")
         if n_apriori_int <= 1:
-            stop_reason = "a-priori erreicht (n<=1)"
+            stop_reason = "a-priori reached (n<=1)"
             _print_result(B, C, xs, {
                 "stop_mode": stop_mode, "stop_reason": stop_reason,
                 "iterations_done": 1, "B_norm": B_norm,
@@ -169,7 +169,7 @@ def solve_linear_system_with_jacobi(A, b, x0, tol, max_iter, norm=np.inf,
         if stop_mode == "both":
             last_post = _a_posteriori(B, xs[1], xs[0], norm=norm, debug=False)
             if last_post <= tol:
-                stop_reason = "a-posteriori erreicht (nach k=1)"
+                stop_reason = "a-posteriori reached (after k=1)"
                 _print_result(B, C, xs, {
                     "stop_mode": stop_mode, "stop_reason": stop_reason,
                     "iterations_done": 1, "B_norm": B_norm,
@@ -195,18 +195,18 @@ def solve_linear_system_with_jacobi(A, b, x0, tol, max_iter, norm=np.inf,
             if debug:
                 print(f"A-posteriori bound (k={k}): {last_post}")
             if last_post <= tol:
-                stop_reason = f"a-posteriori erreicht (k={k})"
+                stop_reason = f"a-posteriori reached (k={k})"
                 break
 
         if stop_mode in ("apriori", "both") and n_apriori_int is not None:
             if k >= n_apriori_int:
-                stop_reason = f"a-priori erreicht (k={k} >= {n_apriori_int})"
+                stop_reason = f"a-priori reached (k={k} >= {n_apriori_int})"
                 break
 
         x = x_new
 
     if stop_reason is None:
-        stop_reason = f"max_iter erreicht (k={len(xs)-1})"
+        stop_reason = f"max_iter reached (k={len(xs)-1})"
 
     _print_result(B, C, xs, {
         "stop_mode": stop_mode, "stop_reason": stop_reason,

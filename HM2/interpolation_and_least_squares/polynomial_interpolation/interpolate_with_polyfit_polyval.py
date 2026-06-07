@@ -1,15 +1,15 @@
 # ============================================================
-# TOPIC: Polynom-Interpolation mit numpy.polyfit / numpy.polyval
+# TOPIC: Polynomial interpolation with numpy.polyfit / numpy.polyval
 # DESCRIPTION:
-# Berechnet die Koeffizienten eines Interpolationspolynoms (Grad = n_pts - 1)
-# mit numpy.polyfit und wertet es aus. Optional kann x vor dem Fit
-# zentriert werden (x - x.mean()), um die Kondition zu verbessern.
+# Computes the coefficients of an interpolation polynomial (degree = n_pts - 1)
+# with numpy.polyfit and evaluates it. Optionally x can be centered before the
+# fit (x - x.mean()) to improve conditioning.
 # USE WHEN:
-# Wenn ein Polynom-Fit mit numpy gemacht werden soll und Konditionsprobleme
-# bei rohen Eingabewerten (z.B. Jahreszahlen) untersucht werden sollen.
+# When a polynomial fit with numpy should be done and conditioning problems
+# with raw input values (e.g. year numbers) should be investigated.
 # EXAMPLE:
-# Anteil US-Haushalte mit Computer 1981-2010 durch Polynom Grad 9 fitten und
-# auf x in [1975, 2020] plotten.
+# Fit the share of US households with a computer 1981-2010 by a degree-9
+# polynomial and plot on x in [1975, 2020].
 # ============================================================
 
 import numpy as np
@@ -53,19 +53,19 @@ def interpolate_polyfit_polyval(x_data, y_data, x_plot_range, y_plot_range, plot
         return coeffs, y_at_pts, y_plot
 
     plt.figure(figsize=(10, 6))
-    plt.plot(x_data, y_data, 'ko', markersize=8, label='Datenpunkte')
+    plt.plot(x_data, y_data, 'ko', markersize=8, label='Data points')
 
     runs = ["raw", "mean_centered"] if method == "both" else [method]
     for m in runs:
         coeffs, y_at_pts, y_plot = fit(m == "mean_centered")
         err = np.max(np.abs(y_at_pts - y_data))
         print(f"--- {m} ---")
-        print(f"Max. Fehler an Datenpunkten: {err:.4e}")
-        plt.plot(x_plot, y_plot, label=f'Polynom Grad {n} ({m})')
+        print(f"Max. error at data points: {err:.4e}")
+        plt.plot(x_plot, y_plot, label=f'Polynomial degree {n} ({m})')
 
     plt.xlim(x_plot_range); plt.ylim(y_plot_range)
     plt.xlabel('x'); plt.ylabel('y'); plt.legend(); plt.grid(True)
-    plt.title('Polynom-Interpolation mit polyfit/polyval')
+    plt.title('Polynomial interpolation with polyfit/polyval')
     plt.show()
 
 # ============================================================

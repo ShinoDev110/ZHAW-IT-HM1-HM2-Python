@@ -1,15 +1,15 @@
 # ============================================================
-# TOPIC: Maschinenzahlen — Approximation von e via (1 + 1/10^n)^(10^n)
+# TOPIC: Machine numbers — approximation of e via (1 + 1/10^n)^(10^n)
 # DESCRIPTION:
-# Berechnet die klassische Approximation e ~= (1 + 1/10^n)^(10^n) für
-# wachsendes n und vergleicht mit math.e (absolute und relative
-# Abweichung). Demonstriert, dass die Approximation ab einem gewissen
-# n wieder schlechter wird (Rundungsfehler!).
+# Computes the classical approximation e ~= (1 + 1/10^n)^(10^n) for
+# increasing n and compares with math.e (absolute and relative
+# deviation). Demonstrates that the approximation degrades again beyond
+# a certain n due to rounding errors.
 # USE WHEN:
-# Wenn der Effekt grosser Exponenten und kleiner Inkremente auf
-# Gleitkommazahlen sichtbar gemacht werden soll.
+# When the effect of large exponents and small increments on
+# floating-point numbers should be made visible.
 # EXAMPLE:
-# n = 1, 2, ..., 16 -> Annäherung an e und ab wann sie wieder driftet.
+# n = 1, 2, ..., 16 -> approach to e and from which n it drifts again.
 # ============================================================
 
 import math
@@ -17,19 +17,19 @@ import math
 # ============================================================
 # PART 1 — Inputs
 # ============================================================
-n_max = 16   # Exponentenbereich n = 1..n_max
+n_max = 16   # exponent range n = 1..n_max
 
 # ============================================================
 # PART 2 — Method selection
 # ============================================================
-# Only one method here. Es wird immer ein Sweep von n=1 bis n_max ausgeführt.
+# Only one method here. A sweep from n=1 to n_max is always executed.
 
 # ============================================================
 # PART 3 — Implementation
 # ============================================================
 def _approximate_e(n):
-    nenner = 10 ** n
-    return (1.0 + 1.0 / nenner) ** nenner
+    denominator = 10 ** n
+    return (1.0 + 1.0 / denominator) ** denominator
 
 def _abs_dev(x, ref):
     return abs(x - ref)
@@ -38,7 +38,7 @@ def _rel_dev(x, ref):
     return abs(x - ref) / abs(ref)
 
 def approximate_e_with_powers_of_ten(n_max):
-    print(f"Referenzwert math.e = {math.e}")
+    print(f"Reference value math.e = {math.e}")
     print(f"{'n':>3} | {'(1+1/10^n)^(10^n)':>26} | {'abs dev':>14} | {'rel dev':>14}")
     print("-" * 70)
     for n in range(1, n_max + 1):

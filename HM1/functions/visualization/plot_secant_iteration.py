@@ -1,15 +1,14 @@
 # ============================================================
-# TOPIC: Visualisierung — Sekantenverfahren auf f(x) + Nullstellen-Karte
+# TOPIC: Visualization — secant method on f(x) + root map
 # DESCRIPTION:
-# Zeichnet f(x), findet Nullstellen per Bisektion bei
-# Vorzeichenwechseln und führt zusätzlich das Sekantenverfahren ab
-# (x0, x1) aus. Klassifiziert jede Nullstelle als einfach oder
-# mehrfach/abgeflacht über |f'(x*)|.
+# Plots f(x), finds roots via bisection at sign changes and
+# additionally runs the secant method starting from (x0, x1).
+# Classifies each root as simple or multiple/flat via |f'(x*)|.
 # USE WHEN:
-# Wenn der Konvergenzpfad des Sekantenverfahrens und alle Nullstellen
-# einer Funktion zusammen grafisch dargestellt werden sollen.
+# When the convergence path of the secant method and all roots
+# of a function should be displayed together graphically.
 # EXAMPLE:
-# f(x) = (exp(x)+exp(-x))/2 - 1.5 - x, Startwerte x0=1.4, x1=2.6.
+# f(x) = (exp(x)+exp(-x))/2 - 1.5 - x, starting values x0=1.4, x1=2.6.
 # ============================================================
 
 import numpy as np
@@ -25,7 +24,7 @@ expr_str = "(exp(x)+exp(-x))/2 - 1.5 - x"
 x_spec = {"kind": "linspace", "start": -1.0, "stop": 2.5, "n": 2000}
 
 plot_cfg = {
-    "title": "Sekantenverfahren + Nullstellen von f(x)",
+    "title": "Secant method + roots of f(x)",
     "xlabel": "x", "ylabel": "f(x)", "label": "f(x)",
     "xlim": (-1.0, 2.5), "grid_both": True, "legend": True,
 }
@@ -43,8 +42,8 @@ classify_cfg = {"eps": 1e-6, "annotate": True}
 # ============================================================
 # PART 2 — Method selection
 # ============================================================
-# Only one method here. Sekantenverfahren startet immer mit (x0, x1)
-# aus secant_cfg.
+# Only one method here. The secant method always starts with (x0, x1)
+# from secant_cfg.
 
 # ============================================================
 # PART 3 — Implementation
@@ -106,7 +105,7 @@ def _bisection_root(fun, a, b, tol=1e-10, max_iter=200):
             left = mid; fa = fm
     return float((left + right) / 2.0)
 
-def _find_nullstellen(fun, xs, tol_root=1e-10, max_iter=200, dedup_eps=1e-6):
+def _find_roots(fun, xs, tol_root=1e-10, max_iter=200, dedup_eps=1e-6):
     ys = np.asarray(fun(xs), dtype=float)
     roots = []
     hit_idx = np.where(np.isfinite(ys) & (np.abs(ys) <= tol_root))[0]
@@ -128,7 +127,7 @@ def _find_nullstellen(fun, xs, tol_root=1e-10, max_iter=200, dedup_eps=1e-6):
             unique.append(r)
     return unique
 
-def _sekantenverfahren(fun, x0, x1, tol=1e-10, max_iter=50):
+def _secant_method(fun, x0, x1, tol=1e-10, max_iter=50):
     x_prev, x_curr = float(x0), float(x1)
     f_prev, f_curr = float(fun(x_prev)), float(fun(x_curr))
     history = [(0, x_prev, f_prev), (1, x_curr, f_curr)]
@@ -146,8 +145,8 @@ def _sekantenverfahren(fun, x0, x1, tol=1e-10, max_iter=50):
     return float(x_curr), history
 
 def _classify_root(fprime_val, eps=1e-6):
-    if not np.isfinite(fprime_val): return "unbestimmt"
-    return "mehrfach/abgeflacht" if abs(fprime_val) <= eps else "einfach"
+    if not np.isfinite(fprime_val): return "undetermined"
+    return "multiple/flat" if abs(fprime_val) <= eps else "simple"
 
 def plot_secant_iteration(expr_str, x_spec, plot_cfg, root_cfg, secant_cfg, classify_cfg):
     x, expr = _parse_expr(expr_str)
@@ -158,47 +157,47 @@ def plot_secant_iteration(expr_str, x_spec, plot_cfg, root_cfg, secant_cfg, clas
     ys = f(xs)
     ys = np.where(np.isfinite(ys), ys, np.nan)
 
-    roots = _find_nullstellen(f, xs,
+    roots = _find_roots(f, xs,
                               tol_root=root_cfg.get("tol_root", 1e-10),
                               max_iter=root_cfg.get("max_iter", 200),
                               dedup_eps=root_cfg.get("dedup_eps", 1e-6))
-    print("\nNullstellen von f(x) im Intervall:")
+    print("\nRoots of f(x) in the interval:")
     if not roots:
-        print("  (keine gefunden)")
+        print("  (none found)")
     else:
         for i, r in enumerate(roots, start=1):
             fp = float(fprime(r))
             kind = _classify_root(fp, classify_cfg.get("eps", 1e-6))
             print(f"  x_{i} = {r:.12g} | f'(x_i) = {fp:.12g} -> {kind}")
 
-    root_sec, hist = _sekantenverfahren(
+    root_sec, hist = _secant_method(
         f, secant_cfg["x0"], secant_cfg["x1"],
         tol=secant_cfg.get("tol", 1e-10),
         max_iter=secant_cfg.get("max_iter", 50),
     )
 
-    print("\nSekantenverfahren:")
+    print("\nSecant method:")
     if secant_cfg.get("print_iterations", True):
         for k, xv, fv in hist:
             print(f"  k={k:>2} | x={xv:.12g} | f(x)={fv:.12g}")
-    print(f"\n  Ergebnis: x* ~= {root_sec:.12g} | f(x*) ~= {float(f(root_sec)):.12g}")
+    print(f"\n  Result: x* ~= {root_sec:.12g} | f(x*) ~= {float(f(root_sec)):.12g}")
 
     plt.figure()
     plt.plot(xs, ys, label=plot_cfg.get("label", "f(x)"))
     plt.axhline(0, linewidth=1)
     if root_cfg.get("mark_roots", True) and roots:
-        plt.scatter(roots, [0.0] * len(roots), label="Nullstellen (Bisection)")
+        plt.scatter(roots, [0.0] * len(roots), label="Roots (bisection)")
         if classify_cfg.get("annotate", True):
             for r in roots:
                 fp = float(fprime(r))
                 kind = _classify_root(fp, classify_cfg.get("eps", 1e-6))
                 plt.annotate(kind, (r, 0.0), textcoords="offset points", xytext=(6, 6))
     if secant_cfg.get("mark_secant_result", True):
-        plt.scatter([root_sec], [0.0], label="Sekantenverfahren Ergebnis")
+        plt.scatter([root_sec], [0.0], label="Secant method result")
     if secant_cfg.get("plot_iteration_points", True):
         xs_it = [h[1] for h in hist]
         ys_it = [h[2] for h in hist]
-        plt.scatter(xs_it, ys_it, label="Iterationen (x_k, f(x_k))", s=20)
+        plt.scatter(xs_it, ys_it, label="Iterations (x_k, f(x_k))", s=20)
     _apply_axes_settings(plot_cfg)
     plt.show()
     return roots, root_sec, hist

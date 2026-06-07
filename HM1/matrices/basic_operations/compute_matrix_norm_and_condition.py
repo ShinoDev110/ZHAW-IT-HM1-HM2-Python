@@ -1,13 +1,12 @@
 # ============================================================
-# TOPIC: Matrizen — Matrixnormen und Konditionszahlen
+# TOPIC: Matrices — matrix norms and condition numbers
 # DESCRIPTION:
-# Druckt ||A||_1, ||A||_2, ||A||_inf und (falls A quadratisch) die
-# Konditionszahlen cond_1(A), cond_2(A), cond_inf(A).
+# Prints ||A||_1, ||A||_2, ||A||_inf and (if A is square) the
+# condition numbers cond_1(A), cond_2(A), cond_inf(A).
 # USE WHEN:
-# Wenn die Stabilität eines linearen Gleichungssystems Ax = b
-# eingeschätzt werden soll.
+# When assessing the stability of a linear system of equations Ax = b.
 # EXAMPLE:
-# 3x3-Matrix [[240,120,80],[60,180,170],[60,90,500]].
+# 3x3 matrix [[240,120,80],[60,180,170],[60,90,500]].
 # ============================================================
 
 import numpy as np
@@ -21,13 +20,13 @@ np.set_printoptions(precision=6, suppress=True)
 A = np.array([[240.0, 120.0,  80.0],
               [ 60.0, 180.0, 170.0],
               [ 60.0,  90.0, 500.0]])
-debug = False  # zusätzlich A^-1 ausgeben (nur für quadratische A)
+debug = False  # additionally print A^-1 (only for square A)
 
 # ============================================================
 # PART 2 — Method selection
 # ============================================================
-# Only one method here. Es werden immer alle drei Normen und (falls
-# quadratisch) alle drei Konditionszahlen berechnet.
+# Only one method here. All three norms are always computed, and (if
+# square) all three condition numbers are computed as well.
 
 # ============================================================
 # PART 3 — Implementation
@@ -48,10 +47,10 @@ def compute_matrix_norm_and_condition(A, debug=False):
             print(f"cond_{name:>9}(A) = {lin.cond(A, p=p)}")
         if debug:
             print("------------------------------------------------------------")
-            print("A^-1 (Referenz):")
+            print("A^-1 (reference):")
             print(lin.inv(A))
     else:
-        print("cond_p(A): nur für quadratische Matrizen definiert (übersprungen).")
+        print("cond_p(A): only defined for square matrices (skipped).")
 
 # ============================================================
 # PART 4 — Call

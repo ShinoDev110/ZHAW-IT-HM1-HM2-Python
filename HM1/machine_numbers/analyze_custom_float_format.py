@@ -1,42 +1,42 @@
 # ============================================================
-# TOPIC: Maschinenzahlen — vollständige Analyse eines Bit-Formats mit Bias
+# TOPIC: Machine numbers — complete analysis of a bit format with bias
 # DESCRIPTION:
-# Analysiert ein frei definiertes Gleitkommaformat (Vorzeichen | Exponent
-# mit Bias | Mantisse) und liefert in einem Report: Maschinengenauigkeit,
-# grössten/kleinsten Exponenten (unter Berücksichtigung des Bias), kleinste/
-# grösste positive Maschinenzahl (Wert + Bitmuster) und die Anzahl
-# verschiedener Maschinenzahlen (inkl. 0). Annahme: normalisierte Mantisse
-# 0.m1..mn mit m1 != 0 (ohne Hidden Bit) bzw. 1.m1..mn (mit Hidden Bit).
+# Analyses a freely defined floating-point format (sign | exponent
+# with bias | mantissa) and delivers in a report: machine precision,
+# largest/smallest exponent (taking bias into account), smallest/
+# largest positive machine number (value + bit pattern) and the count of
+# distinct machine numbers (incl. 0). Assumption: normalised mantissa
+# 0.m1..mn with m1 != 0 (without hidden bit) or 1.m1..mn (with hidden bit).
 # USE WHEN:
-# Wenn ein eigener Standard (z.B. "IDDD-643") komplett charakterisiert
-# werden soll, statt die Teilwerte einzeln zu berechnen.
+# When a custom standard (e.g. "IDDD-643") should be fully characterised
+# rather than computing the individual values separately.
 # EXAMPLE:
-# IDDD-643: 1 Vorzeichenbit, 5 Exponentenbits (Bias 15), 10 Mantissenbits,
-# kein Hidden Bit -> eps = 2^-10, e in [-15, 16], x_min = 2^-16,
-# x_max = 65472, 32769 verschiedene Maschinenzahlen.
+# IDDD-643: 1 sign bit, 5 exponent bits (bias 15), 10 mantissa bits,
+# no hidden bit -> eps = 2^-10, e in [-15, 16], x_min = 2^-16,
+# x_max = 65472, 32769 distinct machine numbers.
 # ============================================================
 
 # ============================================================
 # PART 1 — Inputs
 # ============================================================
-basis          = 2     # Basis B (2 = Dual)
-vorzeichen_bit = True  # eigenes Vorzeichenbit vorhanden?
-exponent_bits  = 5     # Anzahl Exponentenstellen
-bias           = 15    # Bias des Exponenten (gespeicherter Exp - bias = echter Exp)
-mantisse_bits  = 10    # Anzahl Mantissenstellen n
-hidden_bit     = False # True = 1.m1..mn (IEEE-artig), False = 0.m1..mn mit m1!=0
+base          = 2     # base B (2 = binary)
+sign_bit      = True  # own sign bit present?
+exponent_bits = 5     # number of exponent digits
+bias          = 15    # bias of the exponent (stored exp - bias = actual exp)
+mantissa_bits = 10    # number of mantissa digits n
+hidden_bit    = False # True = 1.m1..mn (IEEE-like), False = 0.m1..mn with m1!=0
 
 # ============================================================
 # PART 2 — Method selection
 # ============================================================
-# Only one method here. Alle Kennzahlen werden immer berechnet.
-# (Annahme: keine reservierten Exponenten für Inf/NaN — voller Bereich.)
+# Only one method here. All characteristic values are always computed.
+# (Assumption: no reserved exponents for Inf/NaN — full range.)
 
 # ============================================================
 # PART 3 — Implementation
 # ============================================================
 def _digits(value, base, width):
-    # value als Stellenfolge zur Basis base mit fester Breite (höchstwertig zuerst)
+    # value as digit sequence in the given base with fixed width (most significant first)
     ds = []
     x = value
     for _ in range(width):
@@ -47,58 +47,58 @@ def _digits(value, base, width):
 
 def analyze_custom_float_format(base, sign_bit, exp_bits, bias, m_bits, hidden_bit):
     print("============================================================")
-    print("Analyse eines eigenen Gleitkommaformats")
+    print("Analysis of a custom floating-point format")
     print("============================================================")
     total_bits = (1 if sign_bit else 0) + exp_bits + m_bits
-    print(f"Format: {'1 Vorzeichen | ' if sign_bit else ''}{exp_bits} Exponent (Bias {bias}) "
-          f"| {m_bits} Mantisse  ({total_bits} Bits, Basis {base})")
-    print(f"Mantisse: {'1.m1..mn (Hidden Bit)' if hidden_bit else '0.m1..mn mit m1 != 0'}\n")
+    print(f"Format: {'1 sign | ' if sign_bit else ''}{exp_bits} exponent (bias {bias}) "
+          f"| {m_bits} mantissa  ({total_bits} bits, base {base})")
+    print(f"Mantissa: {'1.m1..mn (hidden bit)' if hidden_bit else '0.m1..mn with m1 != 0'}\n")
 
-    # --- Exponentenbereich (gespeicherter Exponent 0 .. base^exp_bits - 1) ---
+    # --- Exponent range (stored exponent 0 .. base^exp_bits - 1) ---
     e_min = 0 - bias
     e_max = (base ** exp_bits - 1) - bias
     n_exp = e_max - e_min + 1
-    print(f"kleinster Exponent e_min = 0 - {bias}                 = {e_min}")
-    print(f"grösster  Exponent e_max = ({base}^{exp_bits} - 1) - {bias} = {e_max}")
-    print(f"Anzahl Exponenten        = {n_exp}\n")
+    print(f"Smallest exponent e_min = 0 - {bias}                 = {e_min}")
+    print(f"Largest  exponent e_max = ({base}^{exp_bits} - 1) - {bias} = {e_max}")
+    print(f"Number of exponents     = {n_exp}\n")
 
-    # --- Maschinengenauigkeit ---
+    # --- Machine precision ---
     if hidden_bit:
         eps = base ** (-m_bits)
-        print(f"Maschinengenauigkeit eps = B^(-n) = {base}^(-{m_bits}) = {eps:.6g}\n")
+        print(f"Machine precision eps = B^(-n) = {base}^(-{m_bits}) = {eps:.6g}\n")
     else:
         eps = (base / 2) * base ** (-m_bits)
-        print(f"Maschinengenauigkeit eps = (B/2)·B^(-n) = {eps:.6g}\n")
+        print(f"Machine precision eps = (B/2)·B^(-n) = {eps:.6g}\n")
 
-    # --- kleinste / grösste positive Maschinenzahl ---
+    # --- Smallest / largest positive machine number ---
     if hidden_bit:
-        x_min = base ** e_min                                   # Mantisse 1.0
-        x_max = (base - base ** (1 - m_bits)) * base ** e_max   # Mantisse (base - ulp)
+        x_min = base ** e_min                                   # mantissa 1.0
+        x_max = (base - base ** (1 - m_bits)) * base ** e_max   # mantissa (base - ulp)
         mant_min_digits = "0" * m_bits
         mant_max_digits = str(base - 1) * m_bits
     else:
-        x_min = base ** (e_min - 1)                             # Mantisse 0.10..0
-        x_max = (1 - base ** (-m_bits)) * base ** e_max         # Mantisse 0.11..1
+        x_min = base ** (e_min - 1)                             # mantissa 0.10..0
+        x_max = (1 - base ** (-m_bits)) * base ** e_max         # mantissa 0.11..1
         mant_min_digits = "1" + "0" * (m_bits - 1)
         mant_max_digits = "1" * m_bits
 
     sign_str = "0|" if sign_bit else ""
     exp_min_field = _digits(0, base, exp_bits)
     exp_max_field = _digits(base ** exp_bits - 1, base, exp_bits)
-    print("kleinste positive Maschinenzahl:")
-    print(f"   Bitmuster |{sign_str}{exp_min_field}|{mant_min_digits}|  = {x_min:.6g}")
-    print("grösste positive Maschinenzahl:")
-    print(f"   Bitmuster |{sign_str}{exp_max_field}|{mant_max_digits}|  = {x_max:.6g}\n")
+    print("Smallest positive machine number:")
+    print(f"   Bit pattern |{sign_str}{exp_min_field}|{mant_min_digits}|  = {x_min:.6g}")
+    print("Largest positive machine number:")
+    print(f"   Bit pattern |{sign_str}{exp_max_field}|{mant_max_digits}|  = {x_max:.6g}\n")
 
-    # --- Anzahl verschiedener Maschinenzahlen (inkl. 0) ---
+    # --- Count of distinct machine numbers (incl. 0) ---
     if hidden_bit:
-        mant_count = base ** m_bits                 # alle m1..mn frei (führende 1 implizit)
+        mant_count = base ** m_bits                 # all m1..mn free (leading 1 implicit)
     else:
         mant_count = (base - 1) * base ** (m_bits - 1)   # m1 != 0
     sign_factor = 2 if sign_bit else 1
     total = sign_factor * mant_count * n_exp + 1
-    print(f"Anzahl Mantissen (normalisiert) = {mant_count}")
-    print(f"Anzahl verschiedener Maschinenzahlen (inkl. 0):")
+    print(f"Number of mantissas (normalised) = {mant_count}")
+    print(f"Count of distinct machine numbers (incl. 0):")
     print(f"   {sign_factor} · {mant_count} · {n_exp} + 1 = {total}")
     return {"eps": eps, "e_min": e_min, "e_max": e_max,
             "x_min": x_min, "x_max": x_max, "count": total}
@@ -106,5 +106,5 @@ def analyze_custom_float_format(base, sign_bit, exp_bits, bias, m_bits, hidden_b
 # ============================================================
 # PART 4 — Call
 # ============================================================
-analyze_custom_float_format(basis, vorzeichen_bit, exponent_bits, bias,
-                            mantisse_bits, hidden_bit)
+analyze_custom_float_format(base, sign_bit, exponent_bits, bias,
+                            mantissa_bits, hidden_bit)

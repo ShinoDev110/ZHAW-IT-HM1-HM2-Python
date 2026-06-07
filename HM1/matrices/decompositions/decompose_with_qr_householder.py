@@ -1,12 +1,12 @@
 # ============================================================
-# TOPIC: Matrix-Zerlegung — QR via Householder-Reflexionen
+# TOPIC: Matrix decomposition — QR via Householder reflections
 # DESCRIPTION:
-# Eigene Implementierung der QR-Zerlegung A = Q·R einer quadratischen
-# Matrix mit Householder-Reflexionen (statt np.linalg.qr).
-# Druckt optional einen Report mit Q, R und Konsistenzchecks.
+# Custom implementation of the QR decomposition A = Q·R of a square
+# matrix using Householder reflections (instead of np.linalg.qr).
+# Optionally prints a report with Q, R and consistency checks.
 # USE WHEN:
-# Wenn die Householder-Methode explizit Schritt für Schritt
-# nachgerechnet werden soll (Prüfungsaufgabe / Lehrzweck).
+# When the Householder method needs to be traced step by step
+# explicitly (exam problem / teaching purpose).
 # EXAMPLE:
 # A = [[2,0,1],[7,-5,9],[6,-6,9]].
 # ============================================================
@@ -29,22 +29,22 @@ debug = False
 # PART 2 — Method selection
 # ============================================================
 # output:
-#   "report"    -> Q, R + Konsistenzchecks ausführlich drucken
-#   "minimal"   -> nur Q und R drucken
-#   "vs_numpy"  -> Householder-Q,R gegen numpy.linalg.qr vergleichen
+#   "report"    -> print Q, R + consistency checks verbosely
+#   "minimal"   -> print only Q and R
+#   "vs_numpy"  -> compare Householder Q,R against numpy.linalg.qr
 output = "report"
 
 # ============================================================
 # PART 3 — Implementation
 # ============================================================
-def _ist_quadratisch(A):
+def _is_square(A):
     return A.ndim == 2 and A.shape[0] == A.shape[1]
 
-def _ist_orthogonal(Q, tol=1e-10):
+def _is_orthogonal(Q, tol=1e-10):
     n = Q.shape[0]
     return np.linalg.norm(Q.T @ Q - np.eye(n), ord=np.inf) < tol
 
-def _matrix_abweichung(A, B, ord_norm=np.inf):
+def _matrix_deviation(A, B, ord_norm=np.inf):
     return float(np.linalg.norm(A - B, ord=ord_norm))
 
 def _sign(x):
@@ -52,8 +52,8 @@ def _sign(x):
 
 def _qr_householder(A, debug=False):
     A = np.array(A, dtype=float, copy=True)
-    if not _ist_quadratisch(A):
-        raise ValueError("A muss quadratisch sein (n x n).")
+    if not _is_square(A):
+        raise ValueError("A must be square (n x n).")
     n = A.shape[0]
     Q = np.eye(n)
     R = A.copy()
@@ -75,33 +75,33 @@ def _qr_householder(A, debug=False):
         R = Hk @ R
         Q = Q @ Hk
         if debug:
-            print(f"--------------------- Schritt k={k+1}")
+            print(f"--------------------- step k={k+1}")
             print("x = R[k:, k] =\n", x)
-            print("v (normiert) =\n", v)
+            print("v (normalised) =\n", v)
             print("H_k =\n", Hk)
             print("R = H_k * R =\n", R)
             print("Q = Q * H_k =\n", Q, "\n")
     return Q, R
 
-def _drucke_qr_report(A, Q, R):
+def _print_qr_report(A, Q, R):
     print("============================================================")
-    print("QR-Zerlegung (Householder)")
+    print("QR decomposition (Householder)")
     print("============================================================")
     print("A =\n", A, "\n")
     print("Q =\n", Q, "\n")
     print("R =\n", R, "\n")
     print("Checks")
     print("------")
-    print("Q orthogonal?  ", _ist_orthogonal(Q))
+    print("Q orthogonal?  ", _is_orthogonal(Q))
     print("R upper-tri?   ", np.allclose(R, np.triu(R), atol=1e-10))
-    print("||A - Q R||_inf  =", _matrix_abweichung(A, Q @ R, np.inf))
-    print("||A - Q R||_2  =", _matrix_abweichung(A, Q @ R, 2))
+    print("||A - Q R||_inf  =", _matrix_deviation(A, Q @ R, np.inf))
+    print("||A - Q R||_2  =", _matrix_deviation(A, Q @ R, 2))
     print("============================================================\n")
 
 def decompose_with_qr_householder(A, output, debug=False):
     if output == "report":
         Q, R = _qr_householder(A, debug=debug)
-        _drucke_qr_report(A, Q, R)
+        _print_qr_report(A, Q, R)
     elif output == "minimal":
         Q, R = _qr_householder(A, debug=debug)
         print("Q=\n", Q)
@@ -109,13 +109,13 @@ def decompose_with_qr_householder(A, output, debug=False):
     elif output == "vs_numpy":
         Qh, Rh = _qr_householder(A, debug=False)
         Qn, Rn = np.linalg.qr(A)
-        print("Householder ||A-QR||_inf:", _matrix_abweichung(A, Qh @ Rh, np.inf))
-        print("NumPy       ||A-QR||_inf:", _matrix_abweichung(A, Qn @ Rn, np.inf))
+        print("Householder ||A-QR||_inf:", _matrix_deviation(A, Qh @ Rh, np.inf))
+        print("NumPy       ||A-QR||_inf:", _matrix_deviation(A, Qn @ Rn, np.inf))
         print("\nHouseholder R=\n", Rh)
         print("\nNumPy       R=\n", Rn)
         Q, R = Qh, Rh
     else:
-        raise ValueError(f"Unbekannte output-Wahl: {output!r}")
+        raise ValueError(f"Unknown output choice: {output!r}")
     return Q, R
 
 # ============================================================

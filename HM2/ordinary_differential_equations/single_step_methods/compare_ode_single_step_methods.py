@@ -1,15 +1,15 @@
 # ============================================================
-# TOPIC: DGL — Vergleich Euler / Mittelpunkt / mod. Euler / RK4
+# TOPIC: ODE — Comparison Euler / Midpoint / Mod. Euler / RK4
 # DESCRIPTION:
-# Wendet alle vier klassischen Einschrittverfahren auf dieselbe DGL an
-# und plottet (1) die Lösungen zusammen sowie (2) den globalen Fehler
-# |y(x_i) - y_i| in einer logarithmischen Grafik.
+# Applies all four classical single-step methods to the same ODE
+# and plots (1) the solutions together and (2) the global error
+# |y(x_i) - y_i| in a logarithmic graph.
 # USE WHEN:
-# Wenn eine Aufgabe nach dem direkten Vergleich der Konvergenzordnungen
-# fragt oder veranschaulichen will, wie schnell der Fehler mit der
-# Methode abnimmt.
+# When a problem asks for a direct comparison of the convergence orders
+# or wants to illustrate how quickly the error decreases with the
+# method.
 # EXAMPLE:
-# Vergleiche alle vier Verfahren für y' = x^2 / y mit y(0) = 2 auf [0, 10],
+# Compare all four methods for y' = x^2 / y with y(0) = 2 on [0, 10],
 # h = 0.1.
 # ============================================================
 
@@ -75,25 +75,25 @@ def compare_ode_single_step_methods(f, a, b, y0, h, y_exact):
         return y
 
     runs = [
-        ("Euler",       run_euler(),     'm'),
-        ("Mittelpunkt", run_midpoint(),  'b'),
-        ("Mod. Euler",  run_mod_euler(), 'g'),
-        ("RK4",         run_rk4(),       'k'),
+        ("Euler",     run_euler(),     'm'),
+        ("Midpoint",  run_midpoint(),  'b'),
+        ("Mod. Euler", run_mod_euler(), 'g'),
+        ("RK4",       run_rk4(),       'k'),
     ]
 
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 6))
     xs = np.linspace(a, b, 500)
-    ax1.plot(xs, y_exact(xs), 'r-', label='Exakt')
+    ax1.plot(xs, y_exact(xs), 'r-', label='Exact')
     for name, y, col in runs:
         ax1.plot(x, y, col + '-', label=name)
     ax1.set_xlabel('x'); ax1.set_ylabel('y'); ax1.legend(); ax1.grid(True)
-    ax1.set_title("Lösungen")
+    ax1.set_title("Solutions")
 
     for name, y, col in runs:
         err = np.abs(y_exact(x) - y)
         ax2.semilogy(x, err, col + '-', label=name)
-    ax2.set_xlabel('x'); ax2.set_ylabel('|Fehler| (log)'); ax2.legend(); ax2.grid(True, which='both')
-    ax2.set_title("Globaler Fehler")
+    ax2.set_xlabel('x'); ax2.set_ylabel('|Error| (log)'); ax2.legend(); ax2.grid(True, which='both')
+    ax2.set_title("Global Error")
     plt.tight_layout(); plt.show()
 
 # ============================================================

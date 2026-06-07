@@ -1,15 +1,15 @@
 # ============================================================
-# TOPIC: Iterative Löser — Gauss-Seidel-Verfahren für Ax = b
+# TOPIC: Iterative Solvers — Gauss-Seidel method for Ax = b
 # DESCRIPTION:
-# Iterativer Gauss-Seidel-Löser: (D+L) x^(k+1) = -R x^(k) + b mit
-# B = -(D+L)^-1 R und C = (D+L)^-1 b. Liefert auf Wunsch a-priori /
-# a-posteriori Abbruchschranken pro Iteration.
+# Iterative Gauss-Seidel solver: (D+L) x^(k+1) = -R x^(k) + b with
+# B = -(D+L)^-1 R and C = (D+L)^-1 b. Optionally provides a-priori /
+# a-posteriori stop bounds per iteration.
 # USE WHEN:
-# Wenn Ax = b iterativ gelöst werden soll und A strikt
-# diagonal-dominant ist (Gauss-Seidel konvergiert i.d.R. schneller als
+# When Ax = b is to be solved iteratively and A is strictly
+# diagonally dominant (Gauss-Seidel generally converges faster than
 # Jacobi).
 # EXAMPLE:
-# 3x3-System mit A = [[4,-1,1],[-2,5,1],[1,-2,5]], b = [5,11,12].
+# 3x3 system with A = [[4,-1,1],[-2,5,1],[1,-2,5]], b = [5,11,12].
 # ============================================================
 
 import numpy as np
@@ -33,19 +33,19 @@ x0 = np.array([[0.0],
                [0.0],
                [0.0]])
 
-norm     = np.inf  # 1, 2 oder np.inf
-tol      = 1e-2    # Toleranz für Abbruchkriterium
-max_iter = 10_000  # max. Iterationen
-debug    = True    # Zwischenresultate ausgeben
+norm     = np.inf  # 1, 2 or np.inf
+tol      = 1e-2    # tolerance for stop criterion
+max_iter = 10_000  # max. iterations
+debug    = True    # print intermediate results
 
 # ============================================================
 # PART 2 — Method selection
 # ============================================================
-# Stop-Mode wählen:
-#   "fixed"        -> immer max_iter Schritte
-#   "aposteriori"  -> Abbruch wenn a-posteriori Schranke <= tol
-#   "apriori"      -> Abbruch wenn k >= a-priori Iterationsbedarf n
-#   "both"         -> Abbruch wenn (a-posteriori <= tol) ODER (k >= n)
+# Choose stop mode:
+#   "fixed"        -> always max_iter steps
+#   "aposteriori"  -> stop when a-posteriori bound <= tol
+#   "apriori"      -> stop when k >= a-priori iteration requirement n
+#   "both"         -> stop when (a-posteriori <= tol) OR (k >= n)
 stop_mode = "both"
 
 # ============================================================
@@ -61,7 +61,7 @@ def _A_to_LDR(A, debug=False):
     L = np.tril(A, -1)
     R = np.triu(A, 1)
     if debug:
-        print("-- A in D, L, R zerlegen")
+        print("-- decompose A into D, L, R")
         print("D =\n", D)
         print("L =\n", L)
         print("R =\n", R, "\n")
@@ -72,7 +72,7 @@ def _gs_BC_from_LDR(L, D, R, b, debug=False):
     B = -M_inv @ R
     C = M_inv @ _as_col(b)
     if debug:
-        print("-- Gauss-Seidel: B und C")
+        print("-- Gauss-Seidel: B and C")
         print("B = -(D+L)^-1 R =\n", B)
         print("C = (D+L)^-1 b  =\n", C, "\n")
     return B, C
@@ -87,7 +87,7 @@ def _gs_step(B, C, x_prev, debug=False):
 def _a_posteriori(B, x_n, x_n_minus_1, norm=np.inf, debug=False):
     B_norm = lin.norm(B, ord=norm)
     if B_norm >= 1:
-        raise ValueError(f"||B|| = {B_norm} >= 1 -> Abschätzung nicht gültig (keine Kontraktion).")
+        raise ValueError(f"||B|| = {B_norm} >= 1 -> estimate not valid (no contraction).")
     diff_norm = lin.norm(_as_col(x_n) - _as_col(x_n_minus_1), ord=norm)
     err = (B_norm / (1 - B_norm)) * diff_norm
     if debug:
@@ -100,7 +100,7 @@ def _a_posteriori(B, x_n, x_n_minus_1, norm=np.inf, debug=False):
 def _a_priori_iterations(B, x0, x1, tol, norm=np.inf, debug=False):
     B_norm = lin.norm(B, ord=norm)
     if B_norm >= 1:
-        raise ValueError(f"||B|| = {B_norm} >= 1 -> Abschätzung nicht gültig (keine Kontraktion).")
+        raise ValueError(f"||B|| = {B_norm} >= 1 -> estimate not valid (no contraction).")
     step_norm = lin.norm(_as_col(x1) - _as_col(x0), ord=norm)
     if step_norm == 0:
         return 0.0, 0
@@ -123,12 +123,12 @@ def _print_result(B, C, xs, info, A, b):
     print("\n=== Gauss-Seidel Matrices ===")
     print("B =\n", B)
     print("C =\n", C, "\n")
-    print("=== Abbruch Info ===")
+    print("=== Stop Info ===")
     for k, v in info.items():
         print(f"{k}: {v}")
     k_last = info["iterations_done"]
     x_star = xs[k_last]
-    print(f"\nLetzte Näherung x^{k_last} =\n{x_star}")
+    print(f"\nLast approximation x^{k_last} =\n{x_star}")
     print("check A@x == b:", np.allclose(A @ x_star, b))
 
 def solve_with_gauss_seidel(A, b, x0, tol, max_iter, norm=np.inf,
@@ -146,7 +146,7 @@ def solve_with_gauss_seidel(A, b, x0, tol, max_iter, norm=np.inf,
 
     B_norm = lin.norm(B, ord=norm)
     if stop_mode in ("aposteriori", "apriori", "both") and B_norm >= 1:
-        raise ValueError(f"||B|| = {B_norm} >= 1 -> A-priori/A-posteriori Abbruch nicht gültig (keine Kontraktion).")
+        raise ValueError(f"||B|| = {B_norm} >= 1 -> a-priori/a-posteriori stop not valid (no contraction).")
 
     n_apriori_real = None
     n_apriori_int  = None
@@ -160,7 +160,7 @@ def solve_with_gauss_seidel(A, b, x0, tol, max_iter, norm=np.inf,
         if debug:
             print(f"Target iterations from a-priori: n = {n_apriori_real} -> ceil = {n_apriori_int}\n")
         if n_apriori_int <= 1:
-            stop_reason = "a-priori erreicht (n<=1)"
+            stop_reason = "a-priori reached (n<=1)"
             info = {
                 "stop_mode": stop_mode, "stop_reason": stop_reason,
                 "iterations_done": 1, "B_norm": B_norm,
@@ -173,7 +173,7 @@ def solve_with_gauss_seidel(A, b, x0, tol, max_iter, norm=np.inf,
         if stop_mode == "both":
             last_post = _a_posteriori(B, xs[1], xs[0], norm=norm, debug=False)
             if last_post <= tol:
-                stop_reason = "a-posteriori erreicht (nach k=1)"
+                stop_reason = "a-posteriori reached (after k=1)"
                 info = {
                     "stop_mode": stop_mode, "stop_reason": stop_reason,
                     "iterations_done": 1, "B_norm": B_norm,
@@ -200,18 +200,18 @@ def solve_with_gauss_seidel(A, b, x0, tol, max_iter, norm=np.inf,
             if debug:
                 print(f"A-posteriori bound (k={k}): {last_post}")
             if last_post <= tol:
-                stop_reason = f"a-posteriori erreicht (k={k})"
+                stop_reason = f"a-posteriori reached (k={k})"
                 break
 
         if stop_mode in ("apriori", "both") and n_apriori_int is not None:
             if k >= n_apriori_int:
-                stop_reason = f"a-priori erreicht (k={k} >= {n_apriori_int})"
+                stop_reason = f"a-priori reached (k={k} >= {n_apriori_int})"
                 break
 
         x = x_new
 
     if stop_reason is None:
-        stop_reason = f"max_iter erreicht (k={len(xs)-1})"
+        stop_reason = f"max_iter reached (k={len(xs)-1})"
 
     info = {
         "stop_mode": stop_mode, "stop_reason": stop_reason,

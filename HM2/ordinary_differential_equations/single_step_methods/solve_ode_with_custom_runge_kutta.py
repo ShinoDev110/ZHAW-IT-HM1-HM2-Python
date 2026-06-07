@@ -1,15 +1,15 @@
 # ============================================================
-# TOPIC: DGL — eigenes s-stufiges Runge-Kutta-Verfahren via Butcher-Schema
+# TOPIC: ODE — custom s-stage Runge-Kutta method via Butcher tableau
 # DESCRIPTION:
-# Implementiert das allgemeine explizite s-stufige Runge-Kutta-Verfahren
-# basierend auf Koeffizienten c, A, b aus einem Butcher-Schema. Erlaubt
-# Vergleich mit klassischem RK4 oder eigene Erfindungen.
+# Implements the general explicit s-stage Runge-Kutta method
+# based on coefficients c, A, b from a Butcher tableau. Allows
+# comparison with classical RK4 or custom designs.
 # USE WHEN:
-# Wenn ein selbst entworfenes oder spezielles RK-Verfahren (z.B. Heun,
-# Ralston, Kutta 3/8) angewendet werden soll.
+# When a self-designed or special RK method (e.g. Heun,
+# Ralston, Kutta 3/8) should be applied.
 # EXAMPLE:
-# Erfinde ein neues 4-stufiges RK-Verfahren mit eigenen c, A, b und löse
-# y' = 1 - y/t mit y(1) = 5 auf [1, 6].
+# Design a new 4-stage RK method with custom c, A, b and solve
+# y' = 1 - y/t with y(1) = 5 on [1, 6].
 # ============================================================
 
 import numpy as np
@@ -25,7 +25,7 @@ a, b   = 1.0, 6.0
 y0     = 5.0
 n_step = 500
 
-# Butcher-Schema (eigenes Beispiel — Summe(b) muss = 1 sein!)
+# Butcher tableau (custom example — sum(b) must equal 1!)
 c = np.array([0.0, 0.25, 0.5, 0.75])
 A = np.array([
     [0.0,  0.0,  0.0, 0.0],
@@ -47,7 +47,7 @@ def y_exact(t):
 # PART 3 — Implementation
 # ============================================================
 def solve_ode_custom_runge_kutta(f, a, b_end, y0, n_step, c, A, b_vec, y_exact=None):
-    assert abs(np.sum(b_vec) - 1.0) < 1e-12, "Summe der b-Koeffizienten muss 1 sein"
+    assert abs(np.sum(b_vec) - 1.0) < 1e-12, "Sum of b coefficients must equal 1"
     s = len(b_vec)
     h = (b_end - a) / n_step
     x = np.array([a + i * h for i in range(n_step + 1)])
@@ -61,18 +61,18 @@ def solve_ode_custom_runge_kutta(f, a, b_end, y0, n_step, c, A, b_vec, y_exact=N
             k[j]  = f(x[i] + c[j] * h, y_arg)
         y[i + 1] = y[i] + h * np.sum(b_vec * k)
 
-    print(f"Endwert: y({x[-1]}) = {y[-1]:.10f}")
+    print(f"Final value: y({x[-1]}) = {y[-1]:.10f}")
     if y_exact is not None:
-        print(f"Exakt:   y({x[-1]}) = {y_exact(x[-1]):.10f}")
-        print(f"|Fehler| am Endpunkt = {abs(y_exact(x[-1]) - y[-1]):.6e}")
+        print(f"Exact:       y({x[-1]}) = {y_exact(x[-1]):.10f}")
+        print(f"|Error| at endpoint = {abs(y_exact(x[-1]) - y[-1]):.6e}")
 
     plt.figure(figsize=(10, 6))
     plt.plot(x, y, 'b-', label='Custom RK')
     if y_exact is not None:
         xs = np.linspace(a, b_end, 500)
-        plt.plot(xs, y_exact(xs), 'r--', label='Exakt')
+        plt.plot(xs, y_exact(xs), 'r--', label='Exact')
     plt.xlabel('x'); plt.ylabel('y'); plt.legend(); plt.grid(True)
-    plt.title("Eigenes Runge-Kutta-Verfahren")
+    plt.title("Custom Runge-Kutta Method")
     plt.show()
     return x, y
 

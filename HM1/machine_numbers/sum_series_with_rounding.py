@@ -1,54 +1,54 @@
 # ============================================================
-# TOPIC: Maschinenzahlen — Summation in beide Richtungen mit Rundung
+# TOPIC: Machine numbers — summation in both directions with rounding
 # DESCRIPTION:
-# Summiert die Reihe Σ 1/i^2 einmal aufwärts (i = 1..n) und einmal
-# abwärts (i = n..1) und rundet jede Zwischensumme auf eine feste
-# Anzahl Nachkommastellen. Zeigt, wie Summationsreihenfolge das
-# Ergebnis bei Gleitkommazahlen beeinflusst.
+# Sums the series Σ 1/i^2 once upward (i = 1..n) and once
+# downward (i = n..1), rounding each partial sum to a fixed
+# number of decimal places. Shows how summation order affects
+# the result with floating-point numbers.
 # USE WHEN:
-# Wenn der Einfluss von Rundungsfehlern und Summationsreihenfolge
-# demonstriert werden soll (klassisches Skript-Beispiel).
+# When the influence of rounding errors and summation order
+# should be demonstrated (classic script example).
 # EXAMPLE:
-# n = 300 Glieder, gerundet auf 5 Nachkommastellen.
+# n = 300 terms, rounded to 5 decimal places.
 # ============================================================
 
 # ============================================================
 # PART 1 — Inputs
 # ============================================================
-anzahl_terme     = 300  # n = Obergrenze
-rundungsstellen  = 5    # Nachkommastellen je Zwischensumme
+term_count       = 300  # n = upper limit
+rounding_digits  = 5    # decimal places per partial sum
 
 # ============================================================
 # PART 2 — Method selection
 # ============================================================
-# Only one method here. Beide Richtungen (aufwärts UND abwärts) werden
-# immer berechnet und verglichen.
+# Only one method here. Both directions (upward AND downward) are
+# always computed and compared.
 
 # ============================================================
 # PART 3 — Implementation
 # ============================================================
-def sum_series_with_rounding(anzahl_terme, rundungsstellen):
-    def folgenglied(idx):
+def sum_series_with_rounding(term_count, rounding_digits):
+    def series_term(idx):
         return 1.0 / (idx ** 2)
 
-    summe = 0.0
-    for i in range(1, anzahl_terme + 1):
-        summe += round(folgenglied(i), rundungsstellen)
-        summe = round(summe, rundungsstellen)
-    summe_aufwaerts = summe
+    total = 0.0
+    for i in range(1, term_count + 1):
+        total += round(series_term(i), rounding_digits)
+        total = round(total, rounding_digits)
+    sum_upward = total
 
-    summe = 0.0
-    for i in range(anzahl_terme, 0, -1):
-        summe += round(folgenglied(i), rundungsstellen)
-        summe = round(summe, rundungsstellen)
-    summe_abwaerts = summe
+    total = 0.0
+    for i in range(term_count, 0, -1):
+        total += round(series_term(i), rounding_digits)
+        total = round(total, rounding_digits)
+    sum_downward = total
 
-    print(f"Summe aufwärts (i=1..{anzahl_terme}):  {summe_aufwaerts}")
-    print(f"Summe abwärts  (i={anzahl_terme}..1):  {summe_abwaerts}")
-    print(f"Differenz:                              {summe_aufwaerts - summe_abwaerts}")
-    return summe_aufwaerts, summe_abwaerts
+    print(f"Sum upward   (i=1..{term_count}):  {sum_upward}")
+    print(f"Sum downward (i={term_count}..1):  {sum_downward}")
+    print(f"Difference:                         {sum_upward - sum_downward}")
+    return sum_upward, sum_downward
 
 # ============================================================
 # PART 4 — Call
 # ============================================================
-sum_series_with_rounding(anzahl_terme, rundungsstellen)
+sum_series_with_rounding(term_count, rounding_digits)

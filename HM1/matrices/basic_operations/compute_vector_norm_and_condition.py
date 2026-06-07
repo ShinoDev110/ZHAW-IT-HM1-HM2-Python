@@ -1,11 +1,11 @@
 # ============================================================
-# TOPIC: Vektoren — Vektornormen ||v||_1, ||v||_2, ||v||_inf
+# TOPIC: Vectors — vector norms ||v||_1, ||v||_2, ||v||_inf
 # DESCRIPTION:
-# Druckt für einen gegebenen Vektor die drei üblichen Normen
-# (1-Norm, 2-Norm, Maximumsnorm).
+# Prints the three standard norms for a given vector
+# (1-norm, 2-norm, maximum norm).
 # USE WHEN:
-# Wenn ein Vektor (z.B. rechte Seite b oder Lösung x) in
-# unterschiedlichen Normen verglichen werden soll.
+# When comparing a vector (e.g. right-hand side b or solution x)
+# across different norms.
 # EXAMPLE:
 # v = [3080, 4070, 5030].
 # ============================================================
@@ -25,7 +25,7 @@ v = np.array([3080.0,
 # ============================================================
 # PART 2 — Method selection
 # ============================================================
-# Only one method here. Es werden immer ||v||_1, ||v||_2 und ||v||_inf ausgegeben.
+# Only one method here. ||v||_1, ||v||_2 and ||v||_inf are always printed.
 
 # ============================================================
 # PART 3 — Implementation

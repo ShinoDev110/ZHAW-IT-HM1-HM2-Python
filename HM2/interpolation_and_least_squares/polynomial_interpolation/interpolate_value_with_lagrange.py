@@ -1,15 +1,15 @@
 # ============================================================
-# TOPIC: Lagrange-Interpolation — interpoliert y-Werte an gegebenen x-Stellen
+# TOPIC: Lagrange interpolation — interpolates y values at given x points
 # DESCRIPTION:
-# Eigene Implementierung der Lagrange-Interpolationsformel P_n(x) =
-# sum(l_i(x) * y_i). Akzeptiert x_int als Skalar ODER Vektor und plottet
-# das Resultat.
+# Own implementation of the Lagrange interpolation formula P_n(x) =
+# sum(l_i(x) * y_i). Accepts x_int as scalar OR vector and plots
+# the result.
 # USE WHEN:
-# Wenn die Lagrange-Interpolation manuell programmiert werden soll
-# (ohne numpy.polyfit) — typischer Klausur-/Übungsstil.
+# When the Lagrange interpolation should be implemented manually
+# (without numpy.polyfit) — typical exam/exercise style.
 # EXAMPLE:
-# Atmosphärendruck bei einer fehlenden Höhe (3750 m) aus einer Messreihe
-# schätzen.
+# Estimate atmospheric pressure at a missing altitude (3750 m) from a
+# measurement series.
 # ============================================================
 
 import numpy as np
@@ -18,9 +18,9 @@ import matplotlib.pyplot as plt
 # ============================================================
 # PART 1 — Inputs
 # ============================================================
-x_data = np.array([0, 2500, 5000, 10000], dtype=float)   # Stützstellen
-y_data = np.array([1013, 747, 540, 226], dtype=float)    # Stützwerte
-x_int  = 3750                                            # Skalar ODER Array
+x_data = np.array([0, 2500, 5000, 10000], dtype=float)   # support points
+y_data = np.array([1013, 747, 540, 226], dtype=float)    # support values
+x_int  = 3750                                            # scalar OR array
 
 # ============================================================
 # PART 2 — Method selection
@@ -52,11 +52,11 @@ def lagrange_int(x, y, x_int):
     xs = np.linspace(x.min(), x.max(), 500)
     ys = np.array([eval_at(xv) for xv in xs])
     plt.figure(figsize=(8, 5))
-    plt.plot(xs, ys, 'b-', label='Lagrange-Polynom')
-    plt.plot(x, y, 'ro', label='Stützpunkte')
-    plt.plot(x_int_arr, y_int, 'k*', markersize=12, label='interpoliert')
+    plt.plot(xs, ys, 'b-', label='Lagrange polynomial')
+    plt.plot(x, y, 'ro', label='Support points')
+    plt.plot(x_int_arr, y_int, 'k*', markersize=12, label='interpolated')
     plt.xlabel('x'); plt.ylabel('y'); plt.legend(); plt.grid(True)
-    plt.title('Lagrange-Interpolation')
+    plt.title('Lagrange Interpolation')
     plt.show()
 
     print(f"x_int = {x_int_arr}")

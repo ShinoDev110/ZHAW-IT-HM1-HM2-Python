@@ -1,13 +1,13 @@
 # ============================================================
-# TOPIC: Numerische Integration — summierte Rechteck-/Mittelpunktsregel
+# TOPIC: Numerical Integration — summed rectangle/midpoint rule
 # DESCRIPTION:
-# Approximiert int_a^b f(x) dx mit Rf(h) = h * sum_{i=0}^{n-1} f(x_i + h/2),
-# d.h. n äquidistante Subintervalle und Auswertung in der Mitte.
+# Approximates int_a^b f(x) dx with Rf(h) = h * sum_{i=0}^{n-1} f(x_i + h/2),
+# i.e. n equidistant subintervals with evaluation at the midpoint.
 # USE WHEN:
-# Wenn ein bestimmtes Integral mit der summierten Mittelpunktsregel
-# (Newton-Cotes Ordnung 0) approximiert werden soll.
+# A definite integral is to be approximated with the summed midpoint rule
+# (Newton-Cotes order 0).
 # EXAMPLE:
-# Berechne int_2^4 1/x dx näherungsweise mit n = 4.
+# Compute int_2^4 1/x dx approximately with n = 4.
 # ============================================================
 
 import numpy as np
@@ -18,9 +18,9 @@ import numpy as np
 def f(x):
     return 1 / x
 
-a = 2.0          # untere Grenze
-b = 4.0          # obere Grenze
-n = 4            # Anzahl Subintervalle
+a = 2.0          # lower bound
+b = 4.0          # upper bound
+n = 4            # number of subintervals
 
 # ============================================================
 # PART 2 — Method selection

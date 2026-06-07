@@ -1,11 +1,11 @@
 # ============================================================
-# TOPIC: Eigenwerte — Spektrum einer Matrix
+# TOPIC: Eigenvalues — Spectrum of a matrix
 # DESCRIPTION:
-# Druckt das vollständige Spektrum (alle Eigenwerte) einer Matrix und
-# gibt seine Mächtigkeit zurück.
+# Prints the complete spectrum (all eigenvalues) of a matrix and
+# returns its cardinality.
 # USE WHEN:
-# Wenn das Spektrum {lambda_1, ..., lambda_n} einer Matrix als Menge gebraucht
-# wird (z.B. um Spektralsätze direkt nachzulesen).
+# When the spectrum {lambda_1, ..., lambda_n} of a matrix is needed
+# as a set (e.g. to directly verify spectral theorems).
 # EXAMPLE:
 # A = [[1,0,0],[2,3,0],[0,1,2]].
 # ============================================================
@@ -29,11 +29,11 @@ debug = True
 # PART 3 — Implementation
 # ============================================================
 def compute_spectrum(A, debug=False):
-    eigenwerte = np.linalg.eigvals(A)
+    eigenvalues = np.linalg.eigvals(A)
     if debug:
-        print(f"Spektrum: {eigenwerte}\n")
-    print(f"Mächtigkeit des Spektrums: {eigenwerte.size}")
-    return eigenwerte
+        print(f"Spectrum: {eigenvalues}\n")
+    print(f"Cardinality of the spectrum: {eigenvalues.size}")
+    return eigenvalues
 
 # ============================================================
 # PART 4 — Call

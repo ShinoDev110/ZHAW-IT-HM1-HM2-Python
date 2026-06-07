@@ -1,15 +1,14 @@
 # ============================================================
-# TOPIC: Vergleich Lagrange-Interpolation vs. polyfit/polyval
+# TOPIC: Comparison Lagrange interpolation vs. polyfit/polyval
 # DESCRIPTION:
-# Plottet die Lagrange-Interpolation (eigene Implementation) und den
-# polyfit-Fit (mit Mittelwertzentrierung) in derselben Grafik. Beide
-# Verfahren sollten identische Polynome liefern; numerische Unterschiede
-# zeigen Konditionsprobleme.
+# Plots the Lagrange interpolation (own implementation) and the
+# polyfit fit (with mean-centering) in the same figure. Both
+# methods should produce identical polynomials; numerical differences
+# indicate conditioning problems.
 # USE WHEN:
-# Wenn eine Aufgabe nach dem Vergleich der beiden Interpolationsmethoden
-# fragt.
+# When a problem asks for a comparison of the two interpolation methods.
 # EXAMPLE:
-# Vergleich beider Verfahren für die Computer-Haushalte-Zeitreihe auf
+# Comparison of both methods for the computer-households time series on
 # x in [1981, 2010].
 # ============================================================
 
@@ -54,15 +53,15 @@ def compare_lagrange_polyfit(x_data, y_data, x_plot_range, y_plot_range, plot_st
     y_polyfit = np.polyval(coeffs, x_plot - xm)
 
     diff_max = np.max(np.abs(y_lagrange - y_polyfit))
-    print(f"Max. Differenz Lagrange vs. polyfit auf Plotgitter: {diff_max:.4e}")
+    print(f"Max. difference Lagrange vs. polyfit on plot grid: {diff_max:.4e}")
 
     plt.figure(figsize=(10, 6))
-    plt.plot(x_data, y_data, 'ko', markersize=8, label='Datenpunkte')
-    plt.plot(x_plot, y_lagrange, 'b-',  label='Lagrange (eigene)')
-    plt.plot(x_plot, y_polyfit,  'r--', label='numpy.polyfit (zentriert)')
+    plt.plot(x_data, y_data, 'ko', markersize=8, label='Data points')
+    plt.plot(x_plot, y_lagrange, 'b-',  label='Lagrange (own implementation)')
+    plt.plot(x_plot, y_polyfit,  'r--', label='numpy.polyfit (mean-centered)')
     plt.xlim(x_plot_range); plt.ylim(y_plot_range)
     plt.xlabel('x'); plt.ylabel('y'); plt.legend(); plt.grid(True)
-    plt.title('Vergleich: Lagrange vs. polyfit')
+    plt.title('Comparison: Lagrange vs. polyfit')
     plt.show()
 
 # ============================================================

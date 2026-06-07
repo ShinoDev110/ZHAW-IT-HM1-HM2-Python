@@ -1,13 +1,13 @@
 # ============================================================
-# TOPIC: Visualisierung — Newton-Verfahren auf f(x) + Nullstellen-Karte
+# TOPIC: Visualization — Newton's method on f(x) + root map
 # DESCRIPTION:
-# Zeichnet f(x), markiert alle Nullstellen (via Bisektion bei
-# Vorzeichenwechseln) und führt zusätzlich das Newton-Verfahren ab x0
-# wahlweise im normalen oder vereinfachten Modus aus. Plottet das
-# Iterationsergebnis und optional die Iterationspunkte.
+# Plots f(x), marks all roots (via bisection at sign changes)
+# and additionally runs Newton's method starting from x0
+# in either standard or simplified mode. Plots the
+# iteration result and optionally the iteration points.
 # USE WHEN:
-# Wenn der Konvergenzpfad eines Newton-Verfahrens grafisch sichtbar
-# gemacht werden soll, zusammen mit der globalen Nullstellenstruktur.
+# When the convergence path of Newton's method should be made
+# visible graphically, together with the global root structure.
 # EXAMPLE:
 # f(x) = (exp(x)+exp(-x))/2 - 1.5 - x, x0 = 2.0.
 # ============================================================
@@ -25,7 +25,7 @@ expr_str = "(exp(x)+exp(-x))/2 - 1.5 -x "
 x_spec = {"kind": "linspace", "start": -3.0, "stop": 3.0, "n": 2000}
 
 plot_cfg = {
-    "title": "Newton-Verfahren + Nullstellen von f(x)",
+    "title": "Newton's method + roots of f(x)",
     "xlabel": "x", "ylabel": "f(x)", "label": "f(x)",
     "xlim": (-3.0, 3.0), "grid_both": True, "legend": True,
 }
@@ -42,8 +42,8 @@ newton_cfg = {
 # PART 2 — Method selection
 # ============================================================
 # mode:
-#   0 -> normales Newton-Verfahren (Ableitung in jedem Schritt)
-#   1 -> vereinfachtes Newton-Verfahren (Ableitung fix in x0)
+#   0 -> standard Newton's method (derivative at each step)
+#   1 -> simplified Newton's method (derivative fixed at x0)
 mode = 0
 
 # ============================================================
@@ -87,7 +87,7 @@ def _apply_axes_settings(plot_cfg):
     if plot_cfg.get("legend", True): plt.legend()
     plt.tight_layout()
 
-def _find_nullstellen(fun, xs, tol_root=1e-10, dedup_eps=1e-6):
+def _find_roots(fun, xs, tol_root=1e-10, dedup_eps=1e-6):
     ys = np.asarray(fun(xs), dtype=float)
     roots = []
     hit_idx = np.where(np.isfinite(ys) & (np.abs(ys) <= tol_root))[0]
@@ -158,12 +158,12 @@ def plot_newton_iteration(expr_str, x_spec, plot_cfg, root_cfg, newton_cfg, mode
     ys = f(xs)
     ys = np.where(np.isfinite(ys), ys, np.nan)
 
-    roots = _find_nullstellen(f, xs,
+    roots = _find_roots(f, xs,
                               tol_root=root_cfg.get("tol_root", 1e-10),
                               dedup_eps=root_cfg.get("dedup_eps", 1e-6))
-    print("\nNullstellen von f(x) im Intervall:")
+    print("\nRoots of f(x) in the interval:")
     if not roots:
-        print("  (keine gefunden)")
+        print("  (none found)")
     else:
         for i, r in enumerate(roots, start=1):
             print(f"  x_{i} = {r:.12g}")
@@ -174,30 +174,30 @@ def plot_newton_iteration(expr_str, x_spec, plot_cfg, root_cfg, newton_cfg, mode
 
     if mode == 0:
         root_n, hist = _newton_normal(f, df, x0, tol=tol, max_iter=max_iter)
-        mode_name = "Newton (normal)"
+        mode_name = "Newton (standard)"
     elif mode == 1:
         root_n, hist = _newton_simplified(f, float(df(x0)), x0, tol=tol, max_iter=max_iter)
-        mode_name = "Newton (vereinfacht)"
+        mode_name = "Newton (simplified)"
     else:
-        raise ValueError("mode must be 0 (normal) or 1 (vereinfacht)")
+        raise ValueError("mode must be 0 (standard) or 1 (simplified)")
 
     print(f"\n{mode_name}:")
     if newton_cfg.get("print_iterations", True):
         for k, xv, fv in hist:
             print(f"  k={k:>2} | x={xv:.12g} | f(x)={fv:.12g}")
-    print(f"\n  Ergebnis: x* ~= {root_n:.12g} | f(x*) ~= {float(f(root_n)):.12g}")
+    print(f"\n  Result: x* ~= {root_n:.12g} | f(x*) ~= {float(f(root_n)):.12g}")
 
     plt.figure()
     plt.plot(xs, ys, label=plot_cfg.get("label", "f(x)"))
     plt.axhline(0, linewidth=1)
     if root_cfg.get("mark_roots", True) and roots:
-        plt.scatter(roots, [0.0] * len(roots), label="Nullstellen")
+        plt.scatter(roots, [0.0] * len(roots), label="Roots")
     if newton_cfg.get("mark_newton_result", True):
         plt.scatter([root_n], [0.0], label=mode_name)
     if newton_cfg.get("plot_iteration_points", False):
         xs_it = [h[1] for h in hist]
         ys_it = [h[2] for h in hist]
-        plt.scatter(xs_it, ys_it, label="Iterationen (x_k, f(x_k))", s=20)
+        plt.scatter(xs_it, ys_it, label="Iterations (x_k, f(x_k))", s=20)
     _apply_axes_settings(plot_cfg)
     plt.show()
     return roots, root_n, hist

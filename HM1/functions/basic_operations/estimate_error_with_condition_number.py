@@ -1,18 +1,18 @@
 # ============================================================
-# TOPIC: Funktionen — Fehlerfortpflanzung über die Konditionszahl
+# TOPIC: Functions — error propagation via the condition number
 # DESCRIPTION:
-# Nutzt die Konditionszahl K_f(x) = |x f'(x)/f(x)| und die Beziehung
-# (rel. Fehler von f) ~= K_f(x) · (rel. Fehler von x) für drei Richtungen:
-#   forward  -> aus Eingabefehler den Ausgabefehler schätzen
-#   backward -> max. zulässigen Eingabefehler für einen Zielausgabefehler
-#   actual   -> tatsächlichen rel. Ein-/Ausgabefehler aus x0, x̃0 berechnen
-#               und mit K_f(x0) vergleichen (ist K eine gute Näherung?)
+# Uses the condition number K_f(x) = |x f'(x)/f(x)| and the relation
+# (rel. error of f) ~= K_f(x) · (rel. error of x) in three directions:
+#   forward  -> estimate output error from input error
+#   backward -> max. allowable input error for a target output error
+#   actual   -> compute actual rel. input/output error from x0, x̃0
+#               and compare with K_f(x0) (is K a good approximation?)
 # USE WHEN:
-# Wenn beurteilt werden soll, wie genau ein Eingabewert sein muss bzw. wie
-# stark sich ein Eingabefehler auf den Funktionswert auswirkt.
+# When assessing how accurate an input value must be or how strongly
+# an input error affects the function value.
 # EXAMPLE:
-# f(x) = x^2 sin(x), x0 = pi/3: max. absoluter Fehler von x0, damit der
-# relative Fehler von f(x0) höchstens 10% beträgt (mode = "backward").
+# f(x) = x^2 sin(x), x0 = pi/3: max. absolute error of x0 so that the
+# relative error of f(x0) is at most 10% (mode = "backward").
 # ============================================================
 
 import sympy as sp
@@ -20,27 +20,27 @@ import sympy as sp
 # ============================================================
 # PART 1 — Inputs
 # ============================================================
-funktion         = "x**2 * sin(x)"  # f(x) als String (sympy-Syntax)
-x0               = "pi/3"           # Auswertungsstelle (Zahl oder Ausdruck, z.B. "pi/3")
-x0_tilde         = "0.9991"         # fehlerbehafteter Wert x̃0 (nur mode = "actual")
-input_rel        = 0.05             # rel. Eingabefehler (nur mode = "forward")
-target_output_rel = 0.10            # gewünschter max. rel. Ausgabefehler (nur "backward")
+function         = "x**2 * sin(x)"  # f(x) as string (sympy syntax)
+x0               = "pi/3"           # evaluation point (number or expression, e.g. "pi/3")
+x0_tilde         = "0.9991"         # error-affected value x̃0 (mode = "actual" only)
+input_rel        = 0.05             # rel. input error (mode = "forward" only)
+target_output_rel = 0.10            # desired max. rel. output error ("backward" only)
 
 # ============================================================
 # PART 2 — Method selection
 # ============================================================
 # mode:
-#   "forward"  -> Ausgabefehler ~= K · input_rel
-#   "backward" -> max. Eingabefehler = target_output_rel / K (abs. = · |x0|)
-#   "actual"   -> tatsächliche rel. Fehler aus x0 und x0_tilde, Vergleich mit K
+#   "forward"  -> output error ~= K · input_rel
+#   "backward" -> max. input error = target_output_rel / K (abs. = · |x0|)
+#   "actual"   -> actual rel. errors from x0 and x0_tilde, comparison with K
 mode = "backward"
 
 # ============================================================
 # PART 3 — Implementation
 # ============================================================
-def _build_symbols(funktion):
+def _build_symbols(function):
     x = sp.Symbol("x")
-    f = sp.sympify(funktion, locals={"x": x})
+    f = sp.sympify(function, locals={"x": x})
     df = sp.diff(f, x)
     K = sp.Abs(x * df / f)
     return x, f, df, K
@@ -48,13 +48,13 @@ def _build_symbols(funktion):
 def _num(expr_or_value, x, x_val):
     return float(sp.sympify(expr_or_value).subs(x, x_val).evalf())
 
-def estimate_error_with_condition_number(mode, funktion, x0, x0_tilde,
+def estimate_error_with_condition_number(mode, function, x0, x0_tilde,
                                          input_rel, target_output_rel):
-    x, f, df, K = _build_symbols(funktion)
+    x, f, df, K = _build_symbols(function)
     x0_val = sp.sympify(x0).evalf()
 
     print("============================================================")
-    print("Fehlerfortpflanzung über die Konditionszahl")
+    print("Error propagation via the condition number")
     print("============================================================")
     print(f"f(x)   = {f}")
     print(f"f'(x)  = {sp.simplify(df)}")
@@ -67,20 +67,20 @@ def estimate_error_with_condition_number(mode, funktion, x0, x0_tilde,
 
     if mode == "forward":
         out_rel = K0 * input_rel
-        print(f"-- forward (rel. Eingabefehler = {input_rel:.6g})")
-        print(f"rel. Ausgabefehler ~= K · input_rel = {out_rel:.6g}  ({out_rel*100:.4g} %)")
-        print(f"abs. Ausgabefehler ~= {out_rel * abs(fx0):.6g}")
+        print(f"-- forward (rel. input error = {input_rel:.6g})")
+        print(f"rel. output error ~= K · input_rel = {out_rel:.6g}  ({out_rel*100:.4g} %)")
+        print(f"abs. output error ~= {out_rel * abs(fx0):.6g}")
         return out_rel
 
     if mode == "backward":
         if K0 == 0:
-            print("K_f(x0) = 0 -> beliebig grosser Eingabefehler zulässig.")
+            print("K_f(x0) = 0 -> arbitrarily large input error is permissible.")
             return float("inf")
         in_rel_max = target_output_rel / K0
         in_abs_max = in_rel_max * abs(float(x0_val))
-        print(f"-- backward (Ziel: rel. Ausgabefehler <= {target_output_rel:.6g})")
-        print(f"max. rel. Eingabefehler = target/K = {in_rel_max:.6g}  ({in_rel_max*100:.4g} %)")
-        print(f"max. abs. Eingabefehler = rel · |x0| = {in_abs_max:.6g}")
+        print(f"-- backward (target: rel. output error <= {target_output_rel:.6g})")
+        print(f"max. rel. input error = target/K = {in_rel_max:.6g}  ({in_rel_max*100:.4g} %)")
+        print(f"max. abs. input error = rel · |x0| = {in_abs_max:.6g}")
         return in_rel_max, in_abs_max
 
     if mode == "actual":
@@ -91,19 +91,19 @@ def estimate_error_with_condition_number(mode, funktion, x0, x0_tilde,
         quotient = out_rel / in_rel if in_rel != 0 else float("inf")
         print(f"-- actual (x̃0 = {x0_tilde} = {float(xt_val):.10g})")
         print(f"f(x̃0) = {fxt:.10g}")
-        print(f"tatsächlicher rel. Eingabefehler  = |x̃0-x0|/|x0|     = {in_rel:.6g}")
-        print(f"tatsächlicher rel. Ausgabefehler  = |f(x̃0)-f(x0)|/|f(x0)| = {out_rel:.6g}")
-        print(f"Quotient (Ausgabe/Eingabe)        = {quotient:.6g}")
-        print(f"Konditionszahl K_f(x0)            = {K0:.6g}")
-        nahe = abs(quotient - K0) <= 0.05 * max(abs(K0), 1e-30)
-        print(f"=> K_f(x0) ist {'eine realistische' if nahe else 'NUR eine grobe'} "
-              f"Näherung der Fehlerfortpflanzung.")
+        print(f"actual rel. input error  = |x̃0-x0|/|x0|     = {in_rel:.6g}")
+        print(f"actual rel. output error = |f(x̃0)-f(x0)|/|f(x0)| = {out_rel:.6g}")
+        print(f"quotient (output/input)  = {quotient:.6g}")
+        print(f"condition number K_f(x0) = {K0:.6g}")
+        close = abs(quotient - K0) <= 0.05 * max(abs(K0), 1e-30)
+        print(f"=> K_f(x0) is {'a realistic' if close else 'only a rough'} "
+              f"approximation of the error propagation.")
         return in_rel, out_rel, quotient, K0
 
-    raise ValueError(f"Unbekannter mode: {mode!r}")
+    raise ValueError(f"Unknown mode: {mode!r}")
 
 # ============================================================
 # PART 4 — Call
 # ============================================================
-estimate_error_with_condition_number(mode, funktion, x0, x0_tilde,
+estimate_error_with_condition_number(mode, function, x0, x0_tilde,
                                      input_rel, target_output_rel)

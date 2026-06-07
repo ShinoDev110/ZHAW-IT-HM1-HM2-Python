@@ -1,14 +1,14 @@
 # ============================================================
-# TOPIC: Gauss-Newton-Verfahren (ungedämpft) für nichtlineare Ausgleichsprobleme
+# TOPIC: Gauss-Newton method (undamped) for nonlinear least-squares problems
 # DESCRIPTION:
-# Iteriert lambda^(k+1) = lambda^(k) + delta^(k), wobei delta aus dem
-# linearen Ausgleichsproblem min ||g(lambda) + Dg(lambda)·delta||^2 stammt
-# (gelöst via QR-Zerlegung). g(lambda) = y - f(lambda).
+# Iterates lambda^(k+1) = lambda^(k) + delta^(k), where delta comes from the
+# linear least-squares problem min ||g(lambda) + Dg(lambda)·delta||^2
+# (solved via QR decomposition). g(lambda) = y - f(lambda).
 # USE WHEN:
-# Wenn die Parameter einer nichtlinearen Ansatzfunktion f(lambda, x) an
-# Daten angepasst werden sollen und ein guter Startvektor verfügbar ist.
+# When the parameters of a nonlinear model function f(lambda, x) are to be
+# fitted to data and a good initial vector is available.
 # EXAMPLE:
-# Fit f(x) = a·exp(b·x) an Datenpunkte mit Startvektor (a0, b0) = (1, -1.5).
+# Fit f(x) = a·exp(b·x) to data points with initial vector (a0, b0) = (1, -1.5).
 # ============================================================
 
 import numpy as np
@@ -70,19 +70,19 @@ def gauss_newton_fit(x_data, y_data, params, model, lambda_0, tol, max_iter):
         print(f"k = {k}   lambda = {p}   ||g|| = {err:.6e}")
 
     if err <= tol:
-        print(f"\nKonvergiert nach {k} Iterationen.")
+        print(f"\nConverged after {k} iterations.")
     else:
-        print(f"\nNicht konvergiert nach {max_iter} Iterationen.")
-    print(f"Lösung: lambda = {p}")
+        print(f"\nDid not converge after {max_iter} iterations.")
+    print(f"Solution: lambda = {p}")
 
     # Plot
     f_num = sp.lambdify((syms, sp.Symbol('x_var')), model(params, sp.Symbol('x_var')), "numpy")
     xs = np.linspace(x_data.min(), x_data.max(), 300)
     plt.figure(figsize=(9, 6))
-    plt.plot(x_data, y_data, 'ko', markersize=8, label='Datenpunkte')
-    plt.plot(xs, f_num(p, xs), 'b-', label='Gauss-Newton-Fit')
+    plt.plot(x_data, y_data, 'ko', markersize=8, label='Data points')
+    plt.plot(xs, f_num(p, xs), 'b-', label='Gauss-Newton fit')
     plt.xlabel('x'); plt.ylabel('y'); plt.legend(); plt.grid(True)
-    plt.title('Gauss-Newton-Fit (ungedämpft)')
+    plt.title('Gauss-Newton Fit (undamped)')
     plt.show()
     return p, k
 

@@ -1,14 +1,14 @@
 # ============================================================
-# TOPIC: Visualisierung — Fixpunktiteration (F(x)-x Plot + Stabilität)
+# TOPIC: Visualization — fixed-point iteration (F(x)-x plot + stability)
 # DESCRIPTION:
-# Zeichnet F(x) - x, sucht die Nullstellen (= Fixpunkte) per Bisektion
-# in Vorzeichenwechselintervallen und klassifiziert jeden Fixpunkt
-# über |F'(x*)| als anziehend / abstossend / neutral.
+# Plots F(x) - x, finds the roots (= fixed points) via bisection
+# in sign-change intervals and classifies each fixed point
+# via |F'(x*)| as attracting / repelling / neutral.
 # USE WHEN:
-# Wenn eine grafische Übersicht aller Fixpunkte einer Funktion F(x)
-# inklusive Stabilität benötigt wird.
+# When a graphical overview of all fixed points of a function F(x)
+# including stability is needed.
 # EXAMPLE:
-# F(x) = (exp(x) + exp(-x))/2 - 1.5 auf [-1, 2.5].
+# F(x) = (exp(x) + exp(-x))/2 - 1.5 on [-1, 2.5].
 # ============================================================
 
 import numpy as np
@@ -19,12 +19,12 @@ from sympy.parsing.sympy_parser import parse_expr, standard_transformations, con
 # ============================================================
 # PART 1 — Inputs
 # ============================================================
-expr_str = "(exp(x) + exp(-x))/2 - 1.5"   # F(x); Fixpunkte = Nullstellen von F(x) - x
+expr_str = "(exp(x) + exp(-x))/2 - 1.5"   # F(x); fixed points = roots of F(x) - x
 
 x_spec = {"kind": "linspace", "start": -1.0, "stop": 2.5, "n": 2000}
 
 plot_cfg = {
-    "title": "Nullstellen von F(x) - x",
+    "title": "Roots of F(x) - x",
     "xlabel": "x", "ylabel": "F(x) - x", "label": "F(x) - x",
     "xlim": (-1.0, 2.5), "grid_both": True, "legend": True,
 }
@@ -41,8 +41,8 @@ stability_cfg = {
 # ============================================================
 # PART 2 — Method selection
 # ============================================================
-# Only one method here. Fixpunkte werden immer per Bisektion in
-# Vorzeichenwechseln gefunden; Klassifikation erfolgt via F'(x*).
+# Only one method here. Fixed points are always found via bisection at
+# sign changes; classification is done via F'(x*).
 
 # ============================================================
 # PART 3 — Implementation
@@ -100,7 +100,7 @@ def _bisection_root(fun, a, b, tol=1e-10, max_iter=200):
             left = mid; fa = fm
     return float((left + right) / 2.0)
 
-def _find_nullstellen(fun, xs, tol_root=1e-10, max_iter=200, dedup_eps=1e-6):
+def _find_roots(fun, xs, tol_root=1e-10, max_iter=200, dedup_eps=1e-6):
     ys = fun(xs)
     roots = []
     hit_idx = np.where(np.isfinite(ys) & (np.abs(ys) <= tol_root))[0]
@@ -122,13 +122,13 @@ def _find_nullstellen(fun, xs, tol_root=1e-10, max_iter=200, dedup_eps=1e-6):
             unique.append(r)
     return unique
 
-def _classify_fixpunkt(fprime_val, neutral_eps=1e-3):
+def _classify_fixed_point(fprime_val, neutral_eps=1e-3):
     if not np.isfinite(fprime_val):
-        return "unbestimmt"
+        return "undetermined"
     a = abs(fprime_val)
     if abs(a - 1.0) <= neutral_eps:
         return "neutral"
-    return "anziehend" if a < 1.0 else "abstossend"
+    return "attracting" if a < 1.0 else "repelling"
 
 def plot_fixed_point_iteration(expr_str, x_spec, plot_cfg, root_cfg, stability_cfg):
     x, expr = _parse_expr(expr_str)
@@ -138,23 +138,23 @@ def plot_fixed_point_iteration(expr_str, x_spec, plot_cfg, root_cfg, stability_c
     xs = _x_values(x_spec)
     ys = f(xs) - xs
 
-    roots = _find_nullstellen(
+    roots = _find_roots(
         fun=lambda t: f(t) - t, xs=xs,
         tol_root=root_cfg.get("tol_root", 1e-10),
         max_iter=root_cfg.get("max_iter", 200),
         dedup_eps=root_cfg.get("dedup_eps", 1e-6),
     )
 
-    print("\nNullstellen von F(x) - x (Fixpunkte) + Stabilität:")
+    print("\nRoots of F(x) - x (fixed points) + stability:")
     if not roots:
-        print("  (keine gefunden)")
+        print("  (none found)")
     else:
         for i, r in enumerate(roots, start=1):
             try:
                 fp = float(fprime(r))
             except Exception:
                 fp = float("nan")
-            status = _classify_fixpunkt(fp, stability_cfg.get("neutral_eps", 1e-3))
+            status = _classify_fixed_point(fp, stability_cfg.get("neutral_eps", 1e-3))
             print(f"  x_{i} = {r:.12g} | F'(x_i) = {fp:.12g} | |F'(x_i)| = {abs(fp):.12g} -> {status}")
 
     plt.figure()
@@ -162,14 +162,14 @@ def plot_fixed_point_iteration(expr_str, x_spec, plot_cfg, root_cfg, stability_c
     plt.axhline(0, linewidth=1)
 
     if root_cfg.get("mark_roots", True) and roots:
-        plt.scatter(roots, [0.0] * len(roots), label="Nullstellen")
+        plt.scatter(roots, [0.0] * len(roots), label="Roots")
         if stability_cfg.get("annotate", True):
             for r in roots:
                 try:
                     fp = float(fprime(r))
                 except Exception:
                     fp = float("nan")
-                status = _classify_fixpunkt(fp, stability_cfg.get("neutral_eps", 1e-3))
+                status = _classify_fixed_point(fp, stability_cfg.get("neutral_eps", 1e-3))
                 plt.annotate(status, (r, 0.0), textcoords="offset points", xytext=(6, 6))
 
     _apply_axes_settings(plot_cfg)

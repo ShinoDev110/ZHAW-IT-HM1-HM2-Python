@@ -1,12 +1,12 @@
 # ============================================================
-# TOPIC: Funktionen — symbolisches Vereinfachen
+# TOPIC: Functions — symbolic simplification
 # DESCRIPTION:
-# Vereinfacht einen symbolisch gegebenen Ausdruck mit sympy.simplify.
+# Simplifies a symbolically given expression using sympy.simplify.
 # USE WHEN:
-# Wenn ein per Hand umgeformter Ausdruck in eine kompakte Form gebracht
-# werden soll (z.B. nach Newton-Iterationsformel).
+# When a manually rearranged expression should be brought into a
+# compact form (e.g. after deriving the Newton iteration formula).
 # EXAMPLE:
-# f(x) = x - ((x^2 - c) / (2x))  ->  vereinfachte Form.
+# f(x) = x - ((x^2 - c) / (2x))  ->  simplified form.
 # ============================================================
 
 from sympy import simplify, sympify
@@ -14,7 +14,7 @@ from sympy import simplify, sympify
 # ============================================================
 # PART 1 — Inputs
 # ============================================================
-fx = "x - ((x**2 - c) / (2*x))"   # zu vereinfachender Ausdruck
+fx = "x - ((x**2 - c) / (2*x))"   # expression to simplify
 
 # ============================================================
 # PART 2 — Method selection
@@ -26,10 +26,10 @@ fx = "x - ((x**2 - c) / (2*x))"   # zu vereinfachender Ausdruck
 # ============================================================
 def simplify_function(fx):
     expr = sympify(fx)
-    vereinfacht = simplify(expr)
+    simplified = simplify(expr)
     print(f"Original:           {expr}")
-    print(f"Vereinfachte Form:  {vereinfacht}")
-    return vereinfacht
+    print(f"Simplified form:    {simplified}")
+    return simplified
 
 # ============================================================
 # PART 4 — Call

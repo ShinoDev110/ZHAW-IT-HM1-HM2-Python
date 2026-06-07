@@ -1,15 +1,15 @@
 # ============================================================
-# TOPIC: Natürliche kubische Spline-Interpolation (eigene Implementation)
+# TOPIC: Natural cubic spline interpolation (own implementation)
 # DESCRIPTION:
-# Berechnet die Koeffizienten a_i, b_i, c_i, d_i der natürlichen kubischen
-# Splinefunktion gemäss Skript-Algorithmus (Kap. 6.2.3) und wertet S(x)
-# an beliebigen Stellen xx aus. Plottet die Stützpunkte und den Spline.
+# Computes the coefficients a_i, b_i, c_i, d_i of the natural cubic
+# spline function per the lecture-script algorithm (Ch. 6.2.3) and evaluates
+# S(x) at arbitrary points xx. Plots the support points and the spline.
 # USE WHEN:
-# Wenn der Spline-Algorithmus explizit selbst implementiert werden soll
-# (typische Übungsaufgabe; nicht scipy verwenden).
+# When the spline algorithm should be explicitly implemented from scratch
+# (typical exercise task; do not use scipy).
 # EXAMPLE:
-# 4 Stützpunkte (4,6), (6,3), (8,9), (10,0) durch natürliche kubische
-# Splines interpolieren.
+# Interpolate 4 support points (4,6), (6,3), (8,9), (10,0) with natural
+# cubic splines.
 # ============================================================
 
 import numpy as np
@@ -70,10 +70,10 @@ def natural_cubic_spline(x, y, xx):
         yy[k] = a[i] + b[i] * dx + c[i] * dx**2 + d[i] * dx**3
 
     plt.figure(figsize=(9, 6))
-    plt.plot(xx, yy, 'b-', label='Natürliche kubische Spline')
-    plt.plot(x, y, 'ro', markersize=8, label='Stützpunkte')
+    plt.plot(xx, yy, 'b-', label='Natural cubic spline')
+    plt.plot(x, y, 'ro', markersize=8, label='Support points')
     plt.xlabel('x'); plt.ylabel('y'); plt.legend(); plt.grid(True)
-    plt.title('Natürliche kubische Spline-Interpolation')
+    plt.title('Natural cubic spline interpolation')
     plt.show()
     return yy
 

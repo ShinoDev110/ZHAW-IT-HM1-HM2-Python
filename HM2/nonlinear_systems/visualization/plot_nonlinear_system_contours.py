@@ -1,12 +1,13 @@
 # ============================================================
-# TOPIC: Nichtlineares System grafisch — Nullstellen von f: R^2 -> R^2 visualisieren
+# TOPIC: Nonlinear system visualization — zeros of f: R^2 -> R^2
 # DESCRIPTION:
-# Visualisiert die Nullstellen eines 2D-Systems f: R^2 -> R^2 als Contour-Linien
-# für f1=0 und f2=0 in einem gemeinsamen Plot.
+# Visualizes the zeros of a 2D system f: R^2 -> R^2 as contour lines
+# for f1=0 and f2=0 in a shared plot.
 # USE WHEN:
-# Wenn die Schnittpunkte zweier Konturlinien grafisch als Lösungen bestimmt werden sollen.
+# When the intersection points of two contour lines need to be determined
+# graphically as solutions.
 # EXAMPLE:
-# Erst grafisch Näherungen für das System 2x1+4x2=0 und 4x1+8x2^3=0 bestimmen.
+# First determine approximate solutions graphically for the system 2x1+4x2=0 and 4x1+8x2^3=0.
 # ============================================================
 
 import numpy as np
@@ -16,17 +17,17 @@ import sympy as sp
 # ============================================================
 # PART 1 — Inputs
 # ============================================================
-x1, x2 = sp.symbols('x1 x2')    # symbolische Variablen
-X = sp.Matrix([x1, x2])         # Vektor der Unbekannten
+x1, x2 = sp.symbols('x1 x2')    # symbolic variables
+X = sp.Matrix([x1, x2])         # vector of unknowns
 
 f_sym = sp.Matrix([
-    2*x1 + 4*x2,                  # erste Gleichung
-    4*x1 + 8*x2**3                # zweite Gleichung
+    2*x1 + 4*x2,                  # first equation
+    4*x1 + 8*x2**3                # second equation
 ])
 
-x_range  = (-3, 3)              # x-Achsenbereich
-y_range  = (-3, 3)              # y-Achsenbereich
-n_points = 200                  # Auflösung des Gitters
+x_range  = (-3, 3)              # x-axis range
+y_range  = (-3, 3)              # y-axis range
+n_points = 200                  # grid resolution
 
 # ============================================================
 # PART 2 — Method selection
@@ -57,7 +58,7 @@ def visualize_nonlinear_system_zeros(f_sym, X, x_range, y_range, n_points):
 
     ax.set_xlabel("x_1")
     ax.set_ylabel("x_2")
-    ax.set_title("Nullstellen des nichtlinearen Systems\n(Schnittpunkte = Lösungen)")
+    ax.set_title("Zeros of the nonlinear system\n(intersections = solutions)")
     ax.grid(True)
     ax.axhline(0, color='gray', linewidth=0.5)
     ax.axvline(0, color='gray', linewidth=0.5)

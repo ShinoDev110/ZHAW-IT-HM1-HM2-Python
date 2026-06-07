@@ -1,13 +1,13 @@
 # ============================================================
-# TOPIC: Newton-Verfahren für Systeme — Standard (quadratisch konvergent)
+# TOPIC: Newton method for systems — Standard (quadratically convergent)
 # DESCRIPTION:
-# Löst ein nichtlineares Gleichungssystem f(x)=0 mit dem Standard-Newton-Verfahren.
-# Verwenden, wenn eine quadratisch konvergente Nullstellensuche mit gutem
-# Startvektor benötigt wird.
+# Solves a nonlinear system of equations f(x)=0 with the standard Newton method.
+# Use when a quadratically convergent root search with a good
+# initial vector is needed.
 # USE WHEN:
-# Wenn das Newton-Verfahren für ein System mit einer Näherungslösung gesucht ist.
+# When the Newton method for a system with an approximate solution is sought.
 # EXAMPLE:
-# System mit f1=5x1^2-x2^2 und f2=x2-0.25(sin(x1)+cos(x2)).
+# System with f1=5x1^2-x2^2 and f2=x2-0.25(sin(x1)+cos(x2)).
 # ============================================================
 
 import numpy as np
@@ -16,17 +16,17 @@ import sympy as sp
 # ============================================================
 # PART 1 — Inputs
 # ============================================================
-x1, x2 = sp.symbols('x1 x2')    # symbolische Variablen
-X = sp.Matrix([x1, x2])         # Vektor der Unbekannten
+x1, x2 = sp.symbols('x1 x2')    # symbolic variables
+X = sp.Matrix([x1, x2])         # vector of unknowns
 
 f_sym = sp.Matrix([
-    5*x1**2 - x2**2,                                  # erste Gleichung
-    x2 - 0.25*(sp.sin(x1) + sp.cos(x2))               # zweite Gleichung
+    5*x1**2 - x2**2,                                  # first equation
+    x2 - 0.25*(sp.sin(x1) + sp.cos(x2))               # second equation
 ])
 
-x0       = np.array([0.25, 0.25], dtype=float)        # Startvektor
-tol      = 1e-5                                       # Abbruchschwelle für ||f(x)||
-max_iter = 100                                        # maximale Iterationszahl
+x0       = np.array([0.25, 0.25], dtype=float)        # initial vector
+tol      = 1e-5                                       # stop threshold for ||f(x)||
+max_iter = 100                                        # maximum number of iterations
 
 # ============================================================
 # PART 2 — Method selection
@@ -61,10 +61,10 @@ def newton_method_systems(f_sym, X, x0, tol, max_iter):
         print(f"n = {n}   x = {x}   ||f(x)|| = {err:.6e}")
 
     if err <= tol:
-        print(f"\nKonvergiert nach {n} Iterationen.")
+        print(f"\nConverged after {n} iterations.")
     else:
-        print(f"\nMax. Iterationen erreicht ({max_iter}). Letzter Fehler: {err}")
-    print(f"Näherungslösung: x = {x}")
+        print(f"\nMax. iterations reached ({max_iter}). Last error: {err}")
+    print(f"Approximate solution: x = {x}")
     return x, n
 
 # ============================================================

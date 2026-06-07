@@ -1,16 +1,16 @@
 # ============================================================
-# TOPIC: Numerische Differentiation — Differenzenquotient + h-Extrapolation
+# TOPIC: Numerical Differentiation — difference quotient + h-extrapolation
 # DESCRIPTION:
-# Approximiert f'(x0) mit dem Vorwärts-, Rückwärts- oder zentralen
-# Differenzenquotienten für eine Folge halbierter Schrittweiten h_j = h0/2^j
-# und verbessert das Resultat mit Richardson-/Romberg-Extrapolation
-# ("h-Algorithmus"): T_{j,k} = (r^k T_{j+1,k-1} - T_{j,k-1})/(r^k - 1) mit
-# r = 2 (Vorwärts/Rückwärts, Fehler O(h)) bzw. r = 4 (zentral, Fehler O(h^2)).
+# Approximates f'(x0) with the forward, backward, or central difference
+# quotient for a sequence of halved step sizes h_j = h0/2^j and improves
+# the result with Richardson/Romberg extrapolation
+# ("h-algorithm"): T_{j,k} = (r^k T_{j+1,k-1} - T_{j,k-1})/(r^k - 1) with
+# r = 2 (forward/backward, error O(h)) or r = 4 (central, error O(h^2)).
 # USE WHEN:
-# Wenn eine Ableitung numerisch genau aus Funktionswerten bestimmt werden soll
-# (typische Aufgabe: "Vorwärtsdifferenz und Extrapolation für h = 2, 1, 0.5").
+# A derivative is to be determined numerically and accurately from function
+# values (typical task: "forward difference and extrapolation for h = 2, 1, 0.5").
 # EXAMPLE:
-# v(t) = 2000·ln(10000/(10000-100t)) - 9.8t, a(30) = v'(30): h0 = 2, 2 Stufen
+# v(t) = 2000·ln(10000/(10000-100t)) - 9.8t, a(30) = v'(30): h0 = 2, 2 levels
 # -> T(0,2) ~= 18.7714.
 # ============================================================
 
@@ -22,22 +22,22 @@ import numpy as np
 def f(t):
     return 2000.0 * np.log(10000.0 / (10000.0 - 100.0 * t)) - 9.8 * t   # v(t)
 
-x0 = 30.0      # Stelle, an der f'(x0) gesucht ist
-h0 = 2.0       # grösste Schrittweite h_0
-m  = 2         # Anzahl Extrapolationsstufen -> h_j = h0/2^j, j = 0..m
+x0 = 30.0      # point at which f'(x0) is sought
+h0 = 2.0       # largest step size h_0
+m  = 2         # number of extrapolation levels -> h_j = h0/2^j, j = 0..m
 
 def df_exact(t):
-    return 2000.0 * 100.0 / (10000.0 - 100.0 * t) - 9.8   # v'(t), nur zum Vergleich
+    return 2000.0 * 100.0 / (10000.0 - 100.0 * t) - 9.8   # v'(t), for comparison only
 
-use_exact = True   # df_exact für Fehlerausgabe verwenden?
+use_exact = True   # use df_exact for error output?
 
 # ============================================================
 # PART 2 — Method selection
 # ============================================================
 # kind:
-#   "forward"  -> (f(x+h) - f(x)) / h          (Fehler O(h),  r = 2)
-#   "backward" -> (f(x) - f(x-h)) / h          (Fehler O(h),  r = 2)
-#   "central"  -> (f(x+h) - f(x-h)) / (2h)     (Fehler O(h^2), r = 4)
+#   "forward"  -> (f(x+h) - f(x)) / h          (error O(h),   r = 2)
+#   "backward" -> (f(x) - f(x-h)) / h          (error O(h),   r = 2)
+#   "central"  -> (f(x+h) - f(x-h)) / (2h)     (error O(h^2), r = 4)
 kind = "forward"
 
 # ============================================================
@@ -50,7 +50,7 @@ def _diff_quotient(f, x0, h, kind):
         return (f(x0) - f(x0 - h)) / h
     if kind == "central":
         return (f(x0 + h) - f(x0 - h)) / (2.0 * h)
-    raise ValueError(f"Unbekannte kind: {kind!r}")
+    raise ValueError(f"Unknown kind: {kind!r}")
 
 def differentiate_numerically_with_extrapolation(f, x0, h0, m, kind,
                                                  df_exact=None, use_exact=False):
@@ -66,20 +66,20 @@ def differentiate_numerically_with_extrapolation(f, x0, h0, m, kind,
             T[j, k] = (r**k * T[j + 1, k - 1] - T[j, k - 1]) / (r**k - 1)
 
     print("============================================================")
-    print(f"Numerische Differentiation — {kind} + Extrapolation (r = {r})")
+    print(f"Numerical differentiation — {kind} + extrapolation (r = {r})")
     print("============================================================")
-    print(f"f'({x0}) gesucht, h_j = {h0}/2^j\n")
-    print("Extrapolationsschema T_{j,k} (Zeile j = Schrittweite, Spalte k = Stufe):")
+    print(f"f'({x0}) sought, h_j = {h0}/2^j\n")
+    print("Extrapolation scheme T_{j,k} (row j = step size, column k = level):")
     for j in range(m + 1):
         row = [f"{T[j, k]:.4f}" for k in range(m + 1 - j)]
         print(f"  h={h0/2**j:<6g} " + "   ".join(row))
 
     best = T[0, m]
-    print(f"\nBester Wert T(0,{m}) = {best:.6f}")
+    print(f"\nBest value T(0,{m}) = {best:.6f}")
     if use_exact and df_exact is not None:
         exact = df_exact(x0)
-        print(f"Exakt    f'({x0}) = {exact:.6f}")
-        print(f"|Fehler| = {abs(best - exact):.3e}")
+        print(f"Exact    f'({x0}) = {exact:.6f}")
+        print(f"|Error| = {abs(best - exact):.3e}")
     return best
 
 # ============================================================

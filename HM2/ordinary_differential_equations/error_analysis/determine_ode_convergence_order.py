@@ -1,17 +1,17 @@
 # ============================================================
-# TOPIC: DGL — Konvergenzordnung eines Einschrittverfahrens bestimmen
+# TOPIC: ODE — Determine the convergence order of a single-step method
 # DESCRIPTION:
-# Löst ein AWP mit einem Einschrittverfahren (Euler / Mittelpunkt / mod.
-# Euler / RK4 oder eigenem Butcher-Schema) für mehrere Schrittweiten h,
-# berechnet jeweils den globalen Fehler |y_num(b) - y_exakt(b)| am Endpunkt
-# und bestimmt aus einem doppeltlogarithmischen Plot die Konvergenzordnung p
-# (Steigung der Geraden, gerundet auf eine ganze Zahl).
+# Solves an IVP with a single-step method (Euler / midpoint / modified
+# Euler / RK4 or a custom Butcher tableau) for several step sizes h,
+# computes the global error |y_num(b) - y_exact(b)| at the endpoint in each
+# case, and determines the convergence order p from a log-log plot
+# (slope of the fitted line, rounded to the nearest integer).
 # USE WHEN:
-# Wenn eine Aufgabe verlangt "berechnen Sie den Fehler für h in {...} und
-# schliessen Sie auf die Konvergenzordnung" (loglog-Plot).
+# When a problem asks "compute the error for h in {...} and deduce the
+# convergence order" (loglog plot).
 # EXAMPLE:
-# y' = 2(1-x)y, y(0)=1, exakt e^(2x-x^2), eigenes 4-stufiges RK-Schema,
-# h in {0.1, 0.01, 0.001} -> Ordnung p = 3.
+# y' = 2(1-x)y, y(0)=1, exact e^(2x-x^2), custom 4-stage RK scheme,
+# h in {0.1, 0.01, 0.001} -> order p = 3.
 # ============================================================
 
 import numpy as np
@@ -21,17 +21,17 @@ import matplotlib.pyplot as plt
 # PART 1 — Inputs
 # ============================================================
 def f(x, y):
-    return 2 * (1 - x) * y          # rechte Seite y' = f(x, y)
+    return 2 * (1 - x) * y          # right-hand side y' = f(x, y)
 
-a, b_end = 0.0, 3.0                 # Integrationsintervall [a, b]
-y0       = 1.0                      # Anfangswert y(a)
+a, b_end = 0.0, 3.0                 # integration interval [a, b]
+y0       = 1.0                      # initial value y(a)
 
 def y_exact(x):
-    return np.exp(2 * x - x**2)      # exakte Lösung (für den Fehler)
+    return np.exp(2 * x - x**2)      # exact solution (for the error)
 
-h_list = [0.1, 0.01, 0.001]         # zu testende Schrittweiten
+h_list = [0.1, 0.01, 0.001]         # step sizes to test
 
-# Eigenes Butcher-Schema (nur für method = "custom"); Summe(b) muss 1 sein
+# Custom Butcher tableau (only for method = "custom"); sum(b) must equal 1
 c_custom = np.array([0.0, 1/3, 1/3, 2/3])
 A_custom = np.array([
     [0.0, 0.0, 0.0, 0.0],
@@ -45,8 +45,8 @@ b_custom = np.array([1/4, 0.0, 0.0, 3/4])
 # PART 2 — Method selection
 # ============================================================
 # method:
-#   "euler" | "midpoint" | "mod_euler" | "rk4"  -> klassische Verfahren
-#   "custom"                                     -> Butcher-Schema oben
+#   "euler" | "midpoint" | "mod_euler" | "rk4"  -> classical methods
+#   "custom"                                     -> Butcher tableau above
 method = "custom"
 
 # ============================================================
@@ -69,7 +69,7 @@ def _butcher(method):
         return c, A, b
     if method == "custom":
         return c_custom, A_custom, b_custom
-    raise ValueError(f"Unbekannte Methode: {method!r}")
+    raise ValueError(f"Unknown method: {method!r}")
 
 def _integrate_endpoint(f, a, b_end, y0, n, c, A, bvec):
     s = len(bvec)
@@ -87,14 +87,14 @@ def _integrate_endpoint(f, a, b_end, y0, n, c, A, bvec):
 
 def determine_ode_convergence_order(method, f, a, b_end, y0, y_exact, h_list):
     c, A, bvec = _butcher(method)
-    assert abs(np.sum(bvec) - 1.0) < 1e-12, "Summe der b-Koeffizienten muss 1 sein"
+    assert abs(np.sum(bvec) - 1.0) < 1e-12, "Sum of b coefficients must equal 1"
     exact_end = y_exact(b_end)
 
     print("============================================================")
-    print(f"Konvergenzordnung — Methode '{method}'")
+    print(f"Convergence order — method '{method}'")
     print("============================================================")
-    print(f"y_exakt({b_end}) = {exact_end:.12g}\n")
-    print(f"{'h':>10} | {'n':>7} | {'y_num(b)':>16} | {'globaler Fehler':>16} | {'p (lokal)':>9}")
+    print(f"y_exact({b_end}) = {exact_end:.12g}\n")
+    print(f"{'h':>10} | {'n':>7} | {'y_num(b)':>16} | {'global error':>16} | {'p (local)':>9}")
     print("-" * 74)
 
     hs, errs = [], []
@@ -112,15 +112,15 @@ def determine_ode_convergence_order(method, f, a, b_end, y0, y_exact, h_list):
     hs = np.array(hs); errs = np.array(errs)
     valid = errs > 0
     slope = np.polyfit(np.log(hs[valid]), np.log(errs[valid]), 1)[0]
-    print(f"\nSteigung im loglog-Fit = {slope:.4f}  ->  Konvergenzordnung p ~= {round(slope)}")
+    print(f"\nSlope in loglog fit = {slope:.4f}  ->  convergence order p ~= {round(slope)}")
 
     plt.figure(figsize=(8, 6))
-    plt.loglog(hs, errs, 'bo-', label=f"globaler Fehler ({method})")
+    plt.loglog(hs, errs, 'bo-', label=f"global error ({method})")
     plt.loglog(hs, errs[0] * (hs / hs[0])**round(slope), 'r--',
-               label=f"Referenz Ordnung {round(slope)}")
+               label=f"reference order {round(slope)}")
     plt.gca().invert_xaxis()
-    plt.xlabel("Schrittweite h"); plt.ylabel("globaler Fehler bei x = b")
-    plt.title(f"Konvergenzordnung (Steigung ~= {slope:.2f})")
+    plt.xlabel("Step size h"); plt.ylabel("global error at x = b")
+    plt.title(f"Convergence order (slope ~= {slope:.2f})")
     plt.grid(True, which="both"); plt.legend()
     plt.tight_layout(); plt.show()
     return hs, errs, slope

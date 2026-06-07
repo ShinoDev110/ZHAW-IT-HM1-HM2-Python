@@ -1,12 +1,12 @@
 # ============================================================
-# TOPIC: Newton-Verfahren — alle Lösungen aus einer Liste von Startvektoren finden
+# TOPIC: Newton method — find all solutions from a list of initial vectors
 # DESCRIPTION:
-# Wendet das Standard-Newton-Verfahren auf eine Liste von Startvektoren an und
-# gibt alle gefundenen Lösungen tabellarisch aus.
+# Applies the standard Newton method to a list of initial vectors and
+# prints all found solutions in a table.
 # USE WHEN:
-# Wenn ein System mehrere Nullstellen besitzt und alle gefunden werden sollen.
+# When a system has multiple roots and all of them need to be found.
 # EXAMPLE:
-# Mit Startvektoren aus einer grafischen Voranalyse die vier Lösungen bestimmen.
+# Use initial vectors from a graphical pre-analysis to determine the four solutions.
 # ============================================================
 
 import numpy as np
@@ -15,24 +15,24 @@ import sympy as sp
 # ============================================================
 # PART 1 — Inputs
 # ============================================================
-x, y = sp.symbols('x y')          # symbolische Variablen
-X = sp.Matrix([x, y])             # Vektor der Unbekannten
+x, y = sp.symbols('x y')          # symbolic variables
+X = sp.Matrix([x, y])             # vector of unknowns
 
 f_sym = sp.Matrix([
-    x**2 / 186**2 - y**2 / (300**2 - 186**2) - 1,              # erste implizite Gleichung
-    (y - 500)**2 / 279**2 - (x - 300)**2 / (500**2 - 279**2) - 1  # zweite implizite Gleichung
+    x**2 / 186**2 - y**2 / (300**2 - 186**2) - 1,              # first implicit equation
+    (y - 500)**2 / 279**2 - (x - 300)**2 / (500**2 - 279**2) - 1  # second implicit equation
 ])
 
 # Approximations from the implicit plot (one per expected intersection point)
 start_vectors = [
-    np.array([-200,  200], dtype=float),  # Startvektor 1
-    np.array([-300, -800], dtype=float),  # Startvektor 2
-    np.array([ 200, -800], dtype=float),   # Startvektor 3
-    np.array([ 700,  700], dtype=float),   # Startvektor 4
+    np.array([-200,  200], dtype=float),  # initial vector 1
+    np.array([-300, -800], dtype=float),  # initial vector 2
+    np.array([ 200, -800], dtype=float),   # initial vector 3
+    np.array([ 700,  700], dtype=float),   # initial vector 4
 ]
 
-tol      = 1e-5                         # Abbruchschwelle für ||f(x)||
-max_iter = 100                          # maximale Iterationszahl
+tol      = 1e-5                         # stop threshold for ||f(x)||
+max_iter = 100                          # maximum number of iterations
 
 # ============================================================
 # PART 2 — Method selection
@@ -54,7 +54,7 @@ def newton_find_all_solutions(f_sym, X, start_vectors, tol, max_iter):
     def Df_eval(x_vec):
         return np.array(Df_lam(*x_vec), dtype=float).reshape(n_vars, n_vars)
 
-    print(f"{'Start':<25} {'Lösung':<30} {'Iter':<6} {'||f(x)||':<12}")
+    print(f"{'Start':<25} {'Solution':<30} {'Iter':<6} {'||f(x)||':<12}")
     print("-" * 75)
     solutions = []
     for x0 in start_vectors:

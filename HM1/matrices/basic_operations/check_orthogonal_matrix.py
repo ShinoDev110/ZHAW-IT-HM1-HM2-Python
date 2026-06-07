@@ -1,13 +1,13 @@
 # ============================================================
-# TOPIC: Matrizen — Test auf Orthogonalität
+# TOPIC: Matrices — test for orthogonality
 # DESCRIPTION:
-# Prüft ob eine quadratische Matrix orthogonal ist, indem
-# A · A^T ~= I getestet wird (np.allclose).
+# Checks whether a square matrix is orthogonal by testing
+# A · A^T ~= I (np.allclose).
 # USE WHEN:
-# Wenn nachgewiesen werden soll, dass eine Drehmatrix oder eine Q-Matrix
-# aus QR-Zerlegung tatsächlich orthogonal ist.
+# When you need to verify that a rotation matrix or a Q-matrix
+# from QR decomposition is indeed orthogonal.
 # EXAMPLE:
-# Drehmatrix [[2/3,-2/3,-1/3],[1/3,2/3,-2/3],[2/3,1/3,2/3]] -> True.
+# Rotation matrix [[2/3,-2/3,-1/3],[1/3,2/3,-2/3],[2/3,1/3,2/3]] -> True.
 # ============================================================
 
 import numpy as np
@@ -30,7 +30,7 @@ A = np.array([[2/3, -2/3, -1/3],
 def check_orthogonal_matrix(A):
     A = np.array(A)
     if A.ndim != 2 or A.shape[0] != A.shape[1]:
-        raise ValueError("A muss eine quadratische Matrix sein (n x n).")
+        raise ValueError("A must be a square matrix (n x n).")
     is_orth = np.allclose(np.dot(A, A.T), np.eye(A.shape[0]))
     print(f"Orthogonal: {is_orth}")
     return is_orth

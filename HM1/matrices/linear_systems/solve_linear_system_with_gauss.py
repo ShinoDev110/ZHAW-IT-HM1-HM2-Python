@@ -1,14 +1,14 @@
 # ============================================================
-# TOPIC: Lineare Systeme — Gauss-Elimination mit Spaltenpivot
+# TOPIC: Linear Systems — Gauss elimination with column pivoting
 # DESCRIPTION:
-# Löst Ax = b per Gauss-Elimination mit Zeilenpivot-Suche; liefert
-# zusätzlich die Determinante (Produkt der Diagonale von U mal
-# (-1)^Anzahl_Zeilenvertauschungen) und die obere Dreiecksmatrix U.
+# Solves Ax = b via Gauss elimination with row-pivot search; also returns
+# the determinant (product of the diagonal of U times
+# (-1)^number_of_row_swaps) and the upper triangular matrix U.
 # USE WHEN:
-# Wenn ein direkter, stabiler Löser ohne separate L/R-Speicherung
-# gebraucht wird oder die Determinante als Nebenprodukt benötigt wird.
+# When a direct, stable solver without separate L/R storage is needed
+# or the determinant is required as a by-product.
 # EXAMPLE:
-# 3x3-System A = [[2,1,-1],[-3,-1,2],[-2,1,2]], b = [8,-11,-3].
+# 3x3 system A = [[2,1,-1],[-3,-1,2],[-2,1,2]], b = [8,-11,-3].
 # ============================================================
 
 import numpy as np
@@ -37,29 +37,29 @@ def solve_linear_system_with_gauss(A, b):
     b = np.array(b, dtype=float).reshape(-1)
     n = A.shape[0]
     if A.shape[0] != A.shape[1]:
-        raise ValueError("Matrix A muss quadratisch sein.")
+        raise ValueError("Matrix A must be square.")
     if b.size != n:
-        raise ValueError("Dimensionen von A und b sind nicht kompatibel.")
+        raise ValueError("Dimensions of A and b are not compatible.")
 
     U = A.copy()
     rhs = b.copy()
-    anzahl_perm = 0
+    num_permutations = 0
 
     for k in range(n - 1):
         pivot_row = k + np.argmax(np.abs(U[k:, k]))
         if U[pivot_row, k] == 0.0:
-            raise ValueError("Singuläre Matrix – kein eindeutiges LGS.")
+            raise ValueError("Singular matrix — no unique linear system solution.")
         if pivot_row != k:
             U[[k, pivot_row], :] = U[[pivot_row, k], :]
             rhs[[k, pivot_row]]  = rhs[[pivot_row, k]]
-            anzahl_perm += 1
+            num_permutations += 1
 
         for i in range(k + 1, n):
-            faktor = U[i, k] / U[k, k]
-            U[i, k:] -= faktor * U[k, k:]
-            rhs[i]   -= faktor * rhs[k]
+            factor = U[i, k] / U[k, k]
+            U[i, k:] -= factor * U[k, k:]
+            rhs[i]   -= factor * rhs[k]
 
-    det = ((-1) ** anzahl_perm) * float(np.prod(np.diag(U)))
+    det = ((-1) ** num_permutations) * float(np.prod(np.diag(U)))
 
     x = np.zeros(n)
     for i in range(n - 1, -1, -1):

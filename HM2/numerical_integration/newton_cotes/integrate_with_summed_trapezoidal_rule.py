@@ -1,14 +1,13 @@
 # ============================================================
-# TOPIC: Numerische Integration — summierte Trapezregel (äquidistant)
+# TOPIC: Numerical Integration — summed trapezoidal rule (equidistant)
 # DESCRIPTION:
-# Approximiert int_a^b f(x) dx mit Tf(h) = h * ((f(a)+f(b))/2 +
-# sum_{i=1}^{n-1} f(x_i)), äquidistante Subintervalle.
+# Approximates int_a^b f(x) dx with Tf(h) = h * ((f(a)+f(b))/2 +
+# sum_{i=1}^{n-1} f(x_i)), equidistant subintervals.
 # USE WHEN:
-# Wenn ein bestimmtes Integral mit der summierten Trapezregel
-# (Newton-Cotes Ordnung 1) approximiert werden soll und f als
-# auswertbare Funktion vorliegt.
+# A definite integral is to be approximated with the summed trapezoidal rule
+# (Newton-Cotes order 1) and f is available as an evaluable function.
 # EXAMPLE:
-# Berechne int_2^4 1/x dx mit n = 4.
+# Compute int_2^4 1/x dx with n = 4.
 # ============================================================
 
 import numpy as np

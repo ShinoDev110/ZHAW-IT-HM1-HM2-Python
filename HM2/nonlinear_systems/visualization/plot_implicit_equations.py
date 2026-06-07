@@ -1,12 +1,12 @@
 # ============================================================
-# TOPIC: Implizite Funktionen plotten — mit sympy.plot_implicit
+# TOPIC: Plotting implicit functions — with sympy.plot_implicit
 # DESCRIPTION:
-# Plottet implizite Gleichungen f_i(x,y)=0 gemeinsam in ein Fenster mit
+# Plots implicit equations f_i(x,y)=0 together in one window using
 # sympy.plot_implicit().
 # USE WHEN:
-# Wenn implizite Kurven wie Hyperbeln oder Ellipsen grafisch dargestellt werden sollen.
+# When implicit curves such as hyperbolas or ellipses need to be visualized.
 # EXAMPLE:
-# Das LORAN-System zuerst grafisch mit sympy.plot_implicit() untersuchen.
+# First examine the LORAN system graphically with sympy.plot_implicit().
 # ============================================================
 
 import sympy as sp
@@ -14,16 +14,16 @@ import sympy as sp
 # ============================================================
 # PART 1 — Inputs
 # ============================================================
-x, y = sp.symbols('x y')      # symbolische Variablen
+x, y = sp.symbols('x y')      # symbolic variables
 
 # List of implicit equations f_i(x, y) = 0
 equations = [
-    x**2 / 186**2 - y**2 / (300**2 - 186**2) - 1,                 # erste implizite Gleichung
-    (y - 500)**2 / 279**2 - (x - 300)**2 / (500**2 - 279**2) - 1  # zweite implizite Gleichung
+    x**2 / 186**2 - y**2 / (300**2 - 186**2) - 1,                 # first implicit equation
+    (y - 500)**2 / 279**2 - (x - 300)**2 / (500**2 - 279**2) - 1  # second implicit equation
 ]
 
-x_range = (x, -2000, 2000)   # x-Bereich für die Darstellung
-y_range = (y, -2000, 2000)   # y-Bereich für die Darstellung
+x_range = (x, -2000, 2000)   # x range for the plot
+y_range = (y, -2000, 2000)   # y range for the plot
 
 # ============================================================
 # PART 2 — Method selection

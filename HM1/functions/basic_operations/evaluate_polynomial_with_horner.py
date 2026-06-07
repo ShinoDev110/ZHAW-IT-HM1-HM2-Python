@@ -1,15 +1,15 @@
 # ============================================================
-# TOPIC: Funktionen — Polynom p(x), p'(x) und Stammfunktion via Horner
+# TOPIC: Functions — polynomial p(x), p'(x) and antiderivative via Horner scheme
 # DESCRIPTION:
-# Wertet ein Polynom p(x) = a_0 + a_1 x + ... + a_n x^n auf einem
-# Gitter aus, berechnet zusätzlich p'(x) und die Stammfunktion P(x)
-# mit P(0) = 0. Die Auswertung erfolgt durchgehend mit dem
-# Horner-Schema.
+# Evaluates a polynomial p(x) = a_0 + a_1 x + ... + a_n x^n on a
+# grid, additionally computes p'(x) and the antiderivative P(x)
+# with P(0) = 0. All evaluations are done consistently using the
+# Horner scheme.
 # USE WHEN:
-# Wenn ein Polynom inklusive Ableitung und Integral numerisch effizient
-# auf einem Gitter gebraucht wird (z.B. zum Plotten).
+# When a polynomial including its derivative and integral is needed
+# numerically on a grid (e.g. for plotting).
 # EXAMPLE:
-# p(x) = 1 + 2x + 3x^2 - x^3 auf [-2, 2] mit 1000 Stützstellen.
+# p(x) = 1 + 2x + 3x^2 - x^3 on [-2, 2] with 1000 support points.
 # ============================================================
 
 import numpy as np
@@ -17,55 +17,55 @@ import numpy as np
 # ============================================================
 # PART 1 — Inputs
 # ============================================================
-koeffizienten        = [1.0, 2.0, 3.0, -1.0]   # [a0, a1, a2, a3]
+coefficients         = [1.0, 2.0, 3.0, -1.0]   # [a0, a1, a2, a3]
 x_min                = -2.0
 x_max                = 2.0
-anzahl_stuetzstellen = 1000
+num_support_points   = 1000
 
 # ============================================================
 # PART 2 — Method selection
 # ============================================================
-# Only one method here (Horner). Es werden immer p, p' und P berechnet.
+# Only one method here (Horner). p, p' and P are always computed.
 
 # ============================================================
 # PART 3 — Implementation
 # ============================================================
-def _horner(koeff, x_array):
-    ergebnis = np.zeros_like(x_array, dtype=float)
-    for a in koeff[::-1]:
-        ergebnis = ergebnis * x_array + a
-    return ergebnis
+def _horner(coeff, x_array):
+    result = np.zeros_like(x_array, dtype=float)
+    for a in coeff[::-1]:
+        result = result * x_array + a
+    return result
 
-def evaluate_polynomial_with_horner(koeffizienten, x_min, x_max, anzahl_stuetzstellen):
-    koeff = np.array(koeffizienten, dtype=float)
-    if koeff.ndim != 1 or koeff.size == 0:
-        raise ValueError("koeffizienten muss ein nicht-leerer 1D-Vektor sein.")
+def evaluate_polynomial_with_horner(coefficients, x_min, x_max, num_support_points):
+    coeff = np.array(coefficients, dtype=float)
+    if coeff.ndim != 1 or coeff.size == 0:
+        raise ValueError("coefficients must be a non-empty 1D vector.")
     if x_min >= x_max:
-        raise ValueError("x_min muss kleiner als x_max sein.")
+        raise ValueError("x_min must be less than x_max.")
 
-    grad   = koeff.size - 1
-    xs     = np.linspace(x_min, x_max, anzahl_stuetzstellen)
+    degree = coeff.size - 1
+    xs     = np.linspace(x_min, x_max, num_support_points)
 
-    p_vals = _horner(koeff, xs)
+    p_vals = _horner(coeff, xs)
 
-    if grad == 0:
-        dp_koeff = np.array([0.0])
+    if degree == 0:
+        dp_coeff = np.array([0.0])
     else:
-        dp_koeff = np.array([k * koeff[k] for k in range(1, grad + 1)], dtype=float)
-    dp_vals = _horner(dp_koeff, xs)
+        dp_coeff = np.array([k * coeff[k] for k in range(1, degree + 1)], dtype=float)
+    dp_vals = _horner(dp_coeff, xs)
 
-    P_koeff = np.zeros(grad + 2, dtype=float)
-    for k in range(grad + 1):
-        P_koeff[k + 1] = koeff[k] / (k + 1)
-    P_vals = _horner(P_koeff, xs)
+    P_coeff = np.zeros(degree + 2, dtype=float)
+    for k in range(degree + 1):
+        P_coeff[k + 1] = coeff[k] / (k + 1)
+    P_vals = _horner(P_coeff, xs)
 
-    print(f"p(x) bei x_min={x_min}: {p_vals[0]}")
-    print(f"p(x) bei x_max={x_max}: {p_vals[-1]}")
-    print(f"p'(x) bei x_min={x_min}: {dp_vals[0]}")
-    print(f"P(x) bei x_max={x_max} (mit P(0)=0): {P_vals[-1]}")
+    print(f"p(x) at x_min={x_min}: {p_vals[0]}")
+    print(f"p(x) at x_max={x_max}: {p_vals[-1]}")
+    print(f"p'(x) at x_min={x_min}: {dp_vals[0]}")
+    print(f"P(x) at x_max={x_max} (with P(0)=0): {P_vals[-1]}")
     return xs, p_vals, dp_vals, P_vals
 
 # ============================================================
 # PART 4 — Call
 # ============================================================
-evaluate_polynomial_with_horner(koeffizienten, x_min, x_max, anzahl_stuetzstellen)
+evaluate_polynomial_with_horner(coefficients, x_min, x_max, num_support_points)

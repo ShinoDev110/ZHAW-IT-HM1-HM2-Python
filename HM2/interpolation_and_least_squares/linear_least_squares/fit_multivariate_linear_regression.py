@@ -1,14 +1,14 @@
 # ============================================================
-# TOPIC: Mehrdimensionale lineare Regression — y = λ1·x1 + ... + λn·xn + λ_{n+1}
+# TOPIC: Multivariate linear regression — y = λ1·x1 + ... + λn·xn + λ_{n+1}
 # DESCRIPTION:
-# Löst das überbestimmte System A·lambda = y mit mehreren Einflussgrössen
-# und einem Achsenabschnitt via Normalgleichungen oder QR-Zerlegung.
+# Solves the overdetermined system A·lambda = y with multiple input features
+# and an intercept via normal equations or QR decomposition.
 # USE WHEN:
-# Wenn y als Linearkombination mehrerer unabhängiger Variablen plus Konstante
-# gefittet werden soll (multiple Regression).
+# When y is to be fitted as a linear combination of several independent variables
+# plus a constant (multiple regression).
 # EXAMPLE:
-# Masse entwichener Kohlenwasserstoff-Dämpfe als Funktion von Tanktemperatur,
-# Benzintemperatur, Tankdruck und Benzindruck.
+# Mass of escaped hydrocarbon vapors as a function of tank temperature,
+# fuel temperature, tank pressure, and fuel pressure.
 # ============================================================
 
 import numpy as np
@@ -38,7 +38,7 @@ y_data = np.array([29,24,26,22,27,21,33,34,32,34,20,36,34,23,24,32,
 # ============================================================
 # Options:
 #   "normal_equations" -> A^T A·lambda = A^T y
-#   "qr_decomposition" -> via QR (besser konditioniert)
+#   "qr_decomposition" -> via QR (better conditioned)
 method = "qr_decomposition"
 
 # ============================================================
@@ -59,16 +59,16 @@ def fit_multivariate_linear_regression(X_features, y_data, method):
     y_fit = A @ lam
     err   = np.linalg.norm(y_data - y_fit, 2)**2
 
-    print(f"Methode: {method}")
+    print(f"Method: {method}")
     print(f"lambda = {lam}")
     print(f"E(f) = ||y - A·lambda||^2 = {err:.4e}")
 
     plt.figure(figsize=(11, 5))
     idx = np.arange(n)
-    plt.plot(idx, y_data, 'ko', label='Messpunkte')
+    plt.plot(idx, y_data, 'ko', label='Measurement points')
     plt.plot(idx, y_fit,  'rx-', label='Fit')
     plt.xlabel('Index'); plt.ylabel('y'); plt.legend(); plt.grid(True)
-    plt.title('Mehrdimensionale lineare Regression')
+    plt.title('Multivariate Linear Regression')
     plt.show()
 
 # ============================================================
