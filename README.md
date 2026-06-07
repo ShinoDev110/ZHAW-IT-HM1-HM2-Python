@@ -122,6 +122,7 @@ Every script follows the same four-part structure:
 - `HM2/nonlinear_systems/newton_methods/solve_all_newton_solutions.py` — Runs Newton from multiple start vectors and lists all found solutions.
 - `HM2/nonlinear_systems/newton_methods/solve_3d_nonlinear_system_damped_newton.py` — Solves a 3D nonlinear system with the damped Newton method and prints residual/step norms per iteration.
 - `HM2/nonlinear_systems/newton_methods/fit_soil_pressure_model_damped_newton.py` — Fits the soil-pressure model parameters via damped Newton from measurement points and bisects for the minimum disc radius.
+- `HM2/nonlinear_systems/newton_methods/minimize_function_with_newton.py` — Minimizes a scalar g(x,y,…) by solving ∇g = 0 with Newton for systems (symbolic gradient + Hessian); confirms the minimum via Hessian eigenvalues.
 
 ### `HM2/nonlinear_systems/linearization/`
 - `HM2/nonlinear_systems/linearization/calculate_jacobian_matrix.py` — Computes symbolic Jacobian matrices and evaluates them at a point.
@@ -144,17 +145,22 @@ Every script follows the same four-part structure:
 - `HM2/interpolation_and_least_squares/spline_interpolation/interpolate_with_natural_cubic_spline.py` — Implements the natural cubic spline algorithm from scratch (Kap. 6.2.3).
 - `HM2/interpolation_and_least_squares/spline_interpolation/interpolate_with_scipy_cubic_spline.py` — Uses scipy.interpolate.CubicSpline with selectable boundary conditions.
 - `HM2/interpolation_and_least_squares/spline_interpolation/compare_cubic_spline_methods.py` — Compares own spline, scipy spline, and high-degree polynomial interpolation.
+- `HM2/interpolation_and_least_squares/spline_interpolation/evaluate_spline_derivatives.py` — Evaluates a natural cubic spline's value, 1st derivative (velocity) and 2nd derivative (acceleration) at a point and plots S′(t).
 
 ### `HM2/interpolation_and_least_squares/linear_least_squares/`
 - `HM2/interpolation_and_least_squares/linear_least_squares/fit_polynomial_with_normal_equations.py` — Polynomial least-squares fit via normal equations, QR-decomposition, or numpy.polyfit, with condition numbers.
 - `HM2/interpolation_and_least_squares/linear_least_squares/fit_multivariate_linear_regression.py` — Multivariate linear regression with several feature columns plus intercept.
 - `HM2/interpolation_and_least_squares/linear_least_squares/fit_data_via_log_linearization.py` — Linearizes exponential models by taking logarithms; supports extrapolation.
+- `HM2/interpolation_and_least_squares/linear_least_squares/fit_with_linear_basis_functions.py` — General linear least squares with arbitrary basis functions (e.g. 1/x, x, x²) via normal equations + QR; optional reciprocal/log y-transform; reports the error functional.
 
 ### `HM2/interpolation_and_least_squares/nonlinear_least_squares/`
 - `HM2/interpolation_and_least_squares/nonlinear_least_squares/fit_with_gauss_newton.py` — Undamped Gauss-Newton iteration with QR-based linear least-squares step.
 - `HM2/interpolation_and_least_squares/nonlinear_least_squares/fit_with_damped_gauss_newton.py` — Damped Gauss-Newton with step factor delta/2^p.
 - `HM2/interpolation_and_least_squares/nonlinear_least_squares/compare_gauss_newton_methods.py` — Compares damped vs. undamped Gauss-Newton from multiple start vectors.
 - `HM2/interpolation_and_least_squares/nonlinear_least_squares/fit_with_scipy_optimize_fmin.py` — Direct minimization of the error functional with scipy.optimize.fmin (Nelder-Mead).
+
+### `HM2/numerical_differentiation/`
+- `HM2/numerical_differentiation/differentiate_numerically_with_extrapolation.py` — Forward/backward/central difference + Richardson ("h-algorithm") extrapolation table for f′(x₀).
 
 ### `HM2/numerical_integration/newton_cotes/`
 - `HM2/numerical_integration/newton_cotes/integrate_with_summed_rectangle_rule.py` — Summed rectangle/midpoint rule for a callable f.
@@ -167,6 +173,7 @@ Every script follows the same four-part structure:
 
 ### `HM2/numerical_integration/romberg_extrapolation/`
 - `HM2/numerical_integration/romberg_extrapolation/integrate_with_romberg_extrapolation.py` — Builds the full Romberg triangle and returns T(0, m).
+- `HM2/numerical_integration/romberg_extrapolation/integrate_romberg_from_data.py` — Romberg extrapolation built directly from a table of equidistant samples (no callable f), using strides 2ᵏ.
 
 ### `HM2/numerical_integration/error_and_comparison/`
 - `HM2/numerical_integration/error_and_comparison/estimate_required_step_size.py` — Computes the maximum h (and minimum n) for a given tolerance using the error bounds from Satz 7.1.
@@ -183,9 +190,14 @@ Every script follows the same four-part structure:
 - `HM2/ordinary_differential_equations/single_step_methods/solve_ode_with_custom_runge_kutta.py` — Generic explicit s-stage Runge-Kutta from a user-supplied Butcher tableau (c, A, b).
 - `HM2/ordinary_differential_equations/single_step_methods/compare_ode_single_step_methods.py` — Runs Euler, midpoint, modified Euler, and RK4 on the same problem and plots solutions plus global error.
 
+### `HM2/ordinary_differential_equations/error_analysis/`
+- `HM2/ordinary_differential_equations/error_analysis/determine_ode_convergence_order.py` — Runs a single-step method (Euler/midpoint/RK4/custom Butcher) at several step sizes, plots the endpoint error vs. h (log-log) and infers the integer convergence order p.
+
 ### `HM2/ordinary_differential_equations/higher_order_systems/`
 - `HM2/ordinary_differential_equations/higher_order_systems/reduce_higher_order_ode_to_system.py` — Reduces a k-th order ODE to a first-order system using sympy substitution.
 - `HM2/ordinary_differential_equations/higher_order_systems/solve_ode_system_with_midpoint.py` — Solves a vector-valued first-order system with the midpoint method.
+- `HM2/ordinary_differential_equations/higher_order_systems/solve_ode_system_with_single_step_methods.py` — Vector/system solver with selectable single-step method (Euler/midpoint/mod-Euler/RK4); plots each component + the acceleration, and in compare mode the relative deviation of two methods (semilog).
 
 ### `HM2/ordinary_differential_equations/applications/`
 - `HM2/ordinary_differential_equations/applications/solve_rocket_ascent_via_integration.py` — Computes v(t) and h(t) from a given a(t) via cumulative summed trapezoidal rule, with optional comparison to analytical solutions.
+- `HM2/ordinary_differential_equations/applications/solve_ode_with_bounce_events.py` — Classical RK4 on a 2nd-order system with event-based velocity reflection (x<0 ⇒ ẋ→−ẋ); counts the bounces.
