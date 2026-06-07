@@ -22,12 +22,16 @@ Every script follows the same four-part structure:
 - `HM1/machine_numbers/sum_series_with_rounding.py` — Sums Σ 1/i^2 upwards and downwards under fixed-decimal rounding to show order-dependence.
 - `HM1/machine_numbers/approximate_e_with_powers_of_ten.py` — Computes (1 + 1/10^n)^(10^n) and compares to math.e; shows where it stops converging.
 - `HM1/machine_numbers/test_precision_loss_at_1_plus_eps.py` — Finds the n at which 1 + 10^-n ceases to be distinguishable from 1.
+- `HM1/machine_numbers/represent_and_round_floating_point.py` — Represents a value in finite mantissa (base 2 or 10) by rounding vs. truncation, reports abs/rel error; optional second value shows subtraction cancellation.
+- `HM1/machine_numbers/compare_machine_precision.py` — Compares eps = (B/2)·B^(-n) of several formats/bases to decide which machine computes more precisely.
+- `HM1/machine_numbers/analyze_custom_float_format.py` — Full report (precision, exponent range, smallest/largest number, count) for a custom |sign|exponent+bias|mantissa| bit format.
 
 ### `HM1/functions/basic_operations/`
 - `HM1/functions/basic_operations/differentiate_and_integrate_symbolic.py` — Symbolic derivative and antiderivative of a sympy function, with point evaluation.
 - `HM1/functions/basic_operations/simplify_function.py` — Symbolic simplification of an expression via sympy.simplify.
 - `HM1/functions/basic_operations/compute_condition_number_of_function.py` — κ_f(x) = |x f'(x)/f(x)| with analytic, numeric, or grid-sweep method.
 - `HM1/functions/basic_operations/evaluate_polynomial_with_horner.py` — Horner-scheme evaluation of p(x), p'(x), and antiderivative P(x) on a grid.
+- `HM1/functions/basic_operations/estimate_error_with_condition_number.py` — Error propagation via κ_f(x): input→output error, target output→max input error, and actual-vs-predicted comparison.
 
 ### `HM1/functions/root_finding/`
 - `HM1/functions/root_finding/find_root_with_bisection.py` — Classical bisection (interval halving) for f(x) = 0.
@@ -39,6 +43,7 @@ Every script follows the same four-part structure:
 - `HM1/functions/root_finding/estimate_iterations_a_priori.py` — Banach a-priori bound for required number of iterations from Lipschitz constant α and first step.
 - `HM1/functions/root_finding/estimate_convergence_order.py` — Estimates p and C in e_{k+1} ≈ C · e_k^p from an iteration history.
 - `HM1/functions/root_finding/verify_root_with_sign_change.py` — Sign-change check around an approximation gives hard bound |x* - x̂| ≤ r.
+- `HM1/functions/root_finding/estimate_error_a_posteriori_fixed_point.py` — Scalar Banach a-posteriori bound (α/(1−α))·|x_{k+1}−x_k| for a fixed-point iteration.
 
 ### `HM1/functions/visualization/`
 - `HM1/functions/visualization/plot_function_generic.py` — Generic multi-function plotter (linear / log / semilog) for sympy-parsed function strings.
@@ -46,6 +51,7 @@ Every script follows the same four-part structure:
 - `HM1/functions/visualization/plot_newton_iteration.py` — Plots f(x), marks zeros, runs Newton (or simplified Newton) from x0 and shows the iteration path.
 - `HM1/functions/visualization/plot_secant_iteration.py` — Plots f(x), marks zeros, runs secant method from (x0, x1).
 - `HM1/functions/visualization/plot_polynomial_instability_demo.py` — Demonstrates catastrophic cancellation by comparing (x-2)^7 expanded vs. compact near x = 2.
+- `HM1/functions/visualization/plot_condition_number_of_function.py` — Semilog plot of κ_f(x) with the K=threshold line; reports the x-ranges where K≤threshold and the limit behavior.
 
 ### `HM1/matrices/basic_operations/`
 - `HM1/matrices/basic_operations/invert_matrix.py` — Computes A^-1 via numpy.linalg.inv.
@@ -70,6 +76,7 @@ Every script follows the same four-part structure:
 ### `HM1/matrices/iterative_methods/`
 - `HM1/matrices/iterative_methods/solve_with_jacobi.py` — Jacobi iteration with optional a-priori / a-posteriori stopping.
 - `HM1/matrices/iterative_methods/solve_with_gauss_seidel.py` — Gauss-Seidel iteration with optional a-priori / a-posteriori stopping.
+- `HM1/matrices/iterative_methods/solve_with_relaxation.py` — Relaxation/JOR variant of Jacobi with parameter ω (B_ω = (1−ω)I − ωD⁻¹(L+R)); compares convergence to plain Jacobi.
 
 ### `HM1/matrices/error_estimation/`
 - `HM1/matrices/error_estimation/estimate_error_general.py` — Bound on rel. error of x for perturbations in BOTH A and b; supports symbolic ε.
@@ -85,6 +92,7 @@ Every script follows the same four-part structure:
 - `HM1/eigenvalue_problems/basic_operations/compute_eigenvalues_only.py` — Eigenvalues only via numpy.linalg.eigvals.
 - `HM1/eigenvalue_problems/basic_operations/compute_algebraic_multiplicity.py` — Counts algebraic multiplicities after rounding.
 - `HM1/eigenvalue_problems/basic_operations/compute_characteristic_polynomial.py` — Symbolic p(λ) = det(A - λI), expanded and factorized.
+- `HM1/eigenvalue_problems/basic_operations/find_parameter_for_repeated_eigenvalue.py` — Solves (via the char.-poly discriminant) for the parameter giving a repeated eigenvalue and checks diagonalizability.
 
 ### `HM1/eigenvalue_problems/spectral_properties/`
 - `HM1/eigenvalue_problems/spectral_properties/compute_spectral_radius.py` — ρ(B) for both Jacobi and Gauss-Seidel iteration matrices.
@@ -96,6 +104,9 @@ Every script follows the same four-part structure:
 ### `HM1/eigenvalue_problems/iterative_methods/`
 - `HM1/eigenvalue_problems/iterative_methods/compute_eigenvalues_with_qr_iteration.py` — QR iteration (fixed iters or tolerance, optional Rayleigh shift); reads eigenvalues off the (quasi-)upper-triangle.
 - `HM1/eigenvalue_problems/iterative_methods/compute_dominant_eigenvalue_with_power_method.py` — Von Mises / power method for the dominant eigenvalue + Rayleigh quotient.
+
+### `HM1/eigenvalue_problems/visualization/`
+- `HM1/eigenvalue_problems/visualization/plot_power_method_convergence.py` — Runs the von-Mises iteration and plots |λ_k − λ_ref| vs. iteration (semilog) to show convergence speed.
 
 ### `HM1/complex_dynamics/`
 - `HM1/complex_dynamics/plot_mandelbrot_set.py` — Renders the Mandelbrot set as iterations-until-escape (Z_{n+1} = Z_n^2 + C).
