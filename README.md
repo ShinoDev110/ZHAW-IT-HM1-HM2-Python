@@ -1,19 +1,19 @@
 ### `Heads up for Students:`
 
-All the code related exercise series solutions are in here. From my own experience I strongly recommend to try them 
-yourself first, otherwise you basically learn nothing... The chance that you have to edit the scripts on the final 
-exams (SEP) is very high, and if you don't understand what's going on in the code you will probably not be able to get 
-a good grade in the code part of the exam.
+All the code related exercise series solutions is in here. From  experience I strongly recommend to try them yourself 
+first, otherwise you basically learn nothing... The chance that you have to edit the scripts on the final exams (SEP) 
+is very high, and if you don't understand what's going on in the code you will probably not be able to get a good grade 
+in the code part of the exam.
 
 # ZHAW-IT-HM1-HM2-Python
 
-A collection of standalone Python scripts covering the exercise topics of the **Höhere
-Mathematik 1 and 2** courses (ZHAW Informatik). It includes implementations of the
-lecture-script exercises, the exercise sheets, and a number of past-exam tasks.
+A collection of standalone Python scripts covering the exercise topics of the **Höhere Mathematik 1 and 2** courses 
+(ZHAW Informatik). It includes implementations of the lecture-script exercises, the exercise sheets, and a number of 
+past-exam tasks.
 
-Each script is self-contained and does not depend on any other file in the repository: set
-the inputs at the top of the file, run it, and read the result. Correctness is not
-guaranteed, so results should be verified before they are relied on.
+Each script is self-contained and does not depend on any other file in the repository: set the inputs at the top of the 
+file, run it, and read the result. Correctness is not guaranteed, so results should be verified before they are relied 
+on.
 
 ## Contributing
 
