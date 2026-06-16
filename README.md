@@ -1,9 +1,9 @@
-### `Note to Students:`
+### `Heads up for Students:`
 
 All the code related exercise series solutions are in here. From my own experience I strongly recommend to try them 
 yourself first, otherwise you basically learn nothing... The chance that you have to edit the scripts on the final 
-exams (SEP) is very high, and if you don't understand what's going on in the code you will probably not be able to get a
-good grade in the code part of the exam.
+exams (SEP) is very high, and if you don't understand what's going on in the code you will probably not be able to get 
+a good grade in the code part of the exam.
 
 # ZHAW-IT-HM1-HM2-Python
 
